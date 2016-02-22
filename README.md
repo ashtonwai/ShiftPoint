@@ -31,10 +31,10 @@ IGME-590 iOS & tvOS Game Development - Project 1
 - Touch
 
 ###### Teaching the game / New user
-- Player should be able to pick up the game easily.
+- One-panel instruction screen that shows up before playing the first level. Player should be able to pick up the game easily.
 
-###### Player leaning
-- Player will have to learn to time and move to safe locations to kill and avoid enemies.
+###### Player learning
+- Players will have to learn to timing and aiming skills in order to safe locations to avoid and kill enemies.
 
 #### VII. Screenshots
 - TBA
