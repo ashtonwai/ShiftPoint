@@ -3,7 +3,7 @@ Point Shooter
 IGME-590 iOS & tvOS Game Development - Project 1
 
 #### I. High Concept
-> A space shooter game but instead your finger will be the spaceship, and it will be teleported to the point the player touches.
+> Geometry Wars, except you teleport to wherever you touch! Then, flick and release in a direction to fire at enemies.
 
 #### II. Genre
 - Arcade
@@ -12,11 +12,13 @@ IGME-590 iOS & tvOS Game Development - Project 1
 - iPad ONLY
 
 #### IV. Story
-- TBA
+- Theme - Space Shooter reminiscent of Geometry Wars
+- Mood - Fast-paced Excitement
+- Narrative - Endless enemy waves
+- Premise - "You're the last surviving ship of your fleet. With the enemy's prized space-time warper technology now in your hands, it's time to pay them back!"
 
 #### V. Esthetics
-- Abstract?
-- Cartoonish?
+- Abstract or Cartoonish, whichever we find better sprites for
 
 #### VI. Gameplay
 ###### Mechanics
