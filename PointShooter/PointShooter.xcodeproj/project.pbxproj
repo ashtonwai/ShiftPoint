@@ -39,6 +39,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D05EED41C850E750093A3A3 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				2D430A221C7F50BD0075F316 /* GameScene.sks */,
+				2D430A241C7F50BD0075F316 /* GameScene.swift */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		2D05EED51C850E830093A3A3 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				2D430A261C7F50BD0075F316 /* GameViewController.swift */,
+			);
+			name = VC;
+			sourceTree = "<group>";
+		};
+		2D05EED61C850EE00093A3A3 /* Sprites */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Sprites;
+			sourceTree = "<group>";
+		};
+		2D05EED71C850F150093A3A3 /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Lib;
+			sourceTree = "<group>";
+		};
 		2D430A141C7F50BD0075F316 = {
 			isa = PBXGroup;
 			children = (
@@ -59,11 +90,12 @@
 			isa = PBXGroup;
 			children = (
 				2D430A201C7F50BD0075F316 /* AppDelegate.swift */,
-				2D430A221C7F50BD0075F316 /* GameScene.sks */,
-				2D430A241C7F50BD0075F316 /* GameScene.swift */,
-				2D430A261C7F50BD0075F316 /* GameViewController.swift */,
-				2D430A281C7F50BD0075F316 /* Main.storyboard */,
+				2D05EED51C850E830093A3A3 /* VC */,
+				2D05EED41C850E750093A3A3 /* Scenes */,
+				2D05EED61C850EE00093A3A3 /* Sprites */,
+				2D05EED71C850F150093A3A3 /* Lib */,
 				2D430A2B1C7F50BD0075F316 /* Assets.xcassets */,
+				2D430A281C7F50BD0075F316 /* Main.storyboard */,
 				2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */,
 				2D430A301C7F50BD0075F316 /* Info.plist */,
 			);
@@ -297,6 +329,7 @@
 				2D430A351C7F50BD0075F316 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
