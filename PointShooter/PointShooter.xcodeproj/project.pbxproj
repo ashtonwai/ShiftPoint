@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D05EEDF1C85625D0093A3A3 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* MyUtils.swift */; };
 		2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A201C7F50BD0075F316 /* AppDelegate.swift */; };
 		2D430A231C7F50BD0075F316 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A221C7F50BD0075F316 /* GameScene.sks */; };
 		2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A241C7F50BD0075F316 /* GameScene.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D05EEDE1C85625D0093A3A3 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 		2D430A1D1C7F50BD0075F316 /* PointShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PointShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D430A201C7F50BD0075F316 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D430A221C7F50BD0075F316 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 		2D05EED71C850F150093A3A3 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				2D05EEDE1C85625D0093A3A3 /* MyUtils.swift */,
 			);
 			name = Lib;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */,
 				2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */,
 				2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */,
+				2D05EEDF1C85625D0093A3A3 /* MyUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
