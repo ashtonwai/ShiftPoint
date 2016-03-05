@@ -84,6 +84,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         enumerateChildNodesWithName("enemy", usingBlock: { node, stop in
             let enemy = node as! Enemy
             enemy.update(currentTime)
+            
+            /*if (enemy.position > self.playableRect) {
+                print("outside")
+            } else {
+                print("inside")
+            }*/
         })
     }
     
@@ -149,7 +155,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func playerDidCollideWithEnemy(enemy: SKShapeNode, player: SKSpriteNode) {
-        
+        enemy.removeFromParent()
+        // decrease health
     }
     
     func autoFire() {

@@ -19,6 +19,6 @@ class MainMenuScene : SKScene {
     }
     
     override func didMoveToView(view: SKView) {
-        <#code#>
+        //
     }
 }
