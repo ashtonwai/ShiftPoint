@@ -53,4 +53,12 @@ class Enemy : SKShapeNode {
         velocity = forward * delta
         position += velocity * dt
     }
+    
+    func reflectX(){
+        forward.x *= CGFloat(-1.0)
+    }
+    
+    func reflectY(){
+        forward.y *= CGFloat(-1.0)
+    }
 }

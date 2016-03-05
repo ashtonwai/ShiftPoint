@@ -66,6 +66,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         for _ in 0...numOfEnemies-1 {
             spawnEnemy()
         }
+        
+        // debug functions
+        debugDrawPlayableArea()
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -84,6 +87,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         enumerateChildNodesWithName("enemy", usingBlock: { node, stop in
             let enemy = node as! Enemy
             enemy.update(currentTime)
+            self.checkBounds(enemy)
         })
     }
     
@@ -150,6 +154,38 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func playerDidCollideWithEnemy(enemy: SKShapeNode, player: SKSpriteNode) {
         
+    }
+    
+    func debugDrawPlayableArea() {
+        let shape = SKShapeNode()
+        let path = CGPathCreateMutable()
+        CGPathAddRect(path, nil, playableRect)
+        shape.path = path
+        shape.strokeColor = SKColor.redColor()
+        shape.lineWidth = 10.0
+        addChild(shape)
+    }
+    
+    func checkBounds(enemy: Enemy) {
+        let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
+        let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
+        
+        if enemy.position.x <= bottomLeft.x {
+            enemy.position.x = bottomLeft.x
+            enemy.reflectX()
+        }
+        if enemy.position.x >= topRight.x {
+            enemy.position.x = topRight.x
+            enemy.reflectX()
+        }
+        if enemy.position.y <= bottomLeft.y {
+            enemy.position.y = bottomLeft.y
+            enemy.reflectY()
+        }
+        if enemy.position.y >= topRight.y {
+            enemy.position.y = topRight.y
+            enemy.reflectY()
+        }
     }
     
     func autoFire() {
