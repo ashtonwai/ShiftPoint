@@ -57,6 +57,16 @@ func /= (inout point: CGPoint, scalar: CGFloat) {
     point = point / scalar
 }
 
+func < (point: CGPoint, rect: CGRect) -> Bool {
+    return point.x > rect.minX && point.x < rect.maxX &&
+        point.y > rect.minY && point.y < rect.maxY
+}
+
+func > (point: CGPoint, rect: CGRect) -> Bool {
+    return point.x < rect.minX || point.x > rect.maxX ||
+        point.y < rect.minY || point.y < rect.maxY
+}
+
 
 #if !(arch(x86_64) || arch(arm64))
     func atan2(y: CGPoint, x: CGFloat) -> CGFloat {

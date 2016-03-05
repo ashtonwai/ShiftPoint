@@ -88,6 +88,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let enemy = node as! Enemy
             enemy.update(currentTime)
             self.checkBounds(enemy)
+            
+            /*if (enemy.position > self.playableRect) {
+                print("outside")
+            } else {
+                print("inside")
+            }*/
         })
     }
     
@@ -153,7 +159,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func playerDidCollideWithEnemy(enemy: SKShapeNode, player: SKSpriteNode) {
-        
+        enemy.removeFromParent()
+        // decrease health
     }
     
     func debugDrawPlayableArea() {
