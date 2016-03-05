@@ -58,8 +58,8 @@ func /= (inout point: CGPoint, scalar: CGFloat) {
 }
 
 func < (point: CGPoint, rect: CGRect) -> Bool {
-    return point.x > rect.minX && point.x < rect.maxX &&
-        point.y > rect.minY && point.y < rect.maxY
+    return point.x >= rect.minX && point.x <= rect.maxX &&
+        point.y >= rect.minY && point.y <= rect.maxY
 }
 
 func > (point: CGPoint, rect: CGRect) -> Bool {

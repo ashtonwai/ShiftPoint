@@ -13,6 +13,7 @@ class Enemy : SKShapeNode {
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat = 300.0
+    var prevPosition : CGPoint = CGPointZero
     
     var lastUpdateTime: NSTimeInterval = 0
     var deltaTime: NSTimeInterval = 0
@@ -46,6 +47,8 @@ class Enemy : SKShapeNode {
             deltaTime = 0
         }
         lastUpdateTime = currentTime
+        
+        prevPosition = position
         move(CGFloat(deltaTime))
     }
     

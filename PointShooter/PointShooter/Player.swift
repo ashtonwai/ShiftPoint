@@ -10,6 +10,8 @@ import Foundation
 import SpriteKit
 
 class Player : SKSpriteNode {
+    var prevPosition : CGPoint = CGPointZero
+    
     init(xScale: CGFloat, yScale: CGFloat) {
         let texture = SKTexture(imageNamed: "Player")
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())

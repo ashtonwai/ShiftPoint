@@ -27,6 +27,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var autoFiring = false
     
     let playableRect: CGRect
+    let spawnRectBounds: CGRect
     var spawnRects: [CGRect]
     
     let numOfEnemies = 20
@@ -41,6 +42,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let playableMargin = (size.height - playableHeight) / 2.0
         // make centered rectangle on the screen
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
+        spawnRectBounds = CGRect(
+            x: playableRect.minX - maxEnemySize.width,
+            y: playableRect.minY - maxEnemySize.height,
+            width: playableRect.width + maxEnemySize.width * 2,
+            height: playableRect.height + maxEnemySize.height * 2
+        )
+        
         
         let topSpawnRect = CGRect(
             x: playableRect.minX - maxEnemySize.width,
@@ -117,9 +125,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             self.checkBounds(enemy)
             
             /*if (enemy.position > self.playableRect) {
-                print("outside")
+            print("outside")
             } else {
-                print("inside")
+            print("inside")
             }*/
         })
     }
@@ -127,6 +135,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
+            player.prevPosition = player.position
             player.position = location
         }
     }
@@ -175,7 +184,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // player & enemy collison
         if ((firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0)) {
-               playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, player: secondBody.node as! SKSpriteNode)
+                playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, player: secondBody.node as! SKSpriteNode)
         }
     }
     
@@ -202,24 +211,47 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func checkBounds(enemy: Enemy) {
-        let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
-        let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
-        
-        if enemy.position.x <= bottomLeft.x {
-            enemy.position.x = bottomLeft.x
-            enemy.reflectX()
-        }
-        if enemy.position.x >= topRight.x {
-            enemy.position.x = topRight.x
-            enemy.reflectX()
-        }
-        if enemy.position.y <= bottomLeft.y {
-            enemy.position.y = bottomLeft.y
-            enemy.reflectY()
-        }
-        if enemy.position.y >= topRight.y {
-            enemy.position.y = topRight.y
-            enemy.reflectY()
+        if (enemy.prevPosition < playableRect) {
+            let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
+            let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
+            
+            if enemy.position.x <= bottomLeft.x {
+                enemy.position.x = bottomLeft.x
+                enemy.reflectX()
+            }
+            if enemy.position.x >= topRight.x {
+                enemy.position.x = topRight.x
+                enemy.reflectX()
+            }
+            if enemy.position.y <= bottomLeft.y {
+                enemy.position.y = bottomLeft.y
+                enemy.reflectY()
+            }
+            if enemy.position.y >= topRight.y {
+                enemy.position.y = topRight.y
+                enemy.reflectY()
+            }
+        } else {
+            let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(spawnRectBounds))
+            let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(spawnRectBounds))
+            
+            if enemy.position.x <= bottomLeft.x {
+                enemy.position.x = bottomLeft.x
+                enemy.reflectX()
+            }
+            if enemy.position.x >= topRight.x {
+                enemy.position.x = topRight.x
+                enemy.reflectX()
+            }
+            if enemy.position.y <= bottomLeft.y {
+                enemy.position.y = bottomLeft.y
+                enemy.reflectY()
+            }
+            if enemy.position.y >= topRight.y {
+                enemy.position.y = topRight.y
+                enemy.reflectY()
+            }
+
         }
     }
     
