@@ -80,6 +80,11 @@ extension CGPoint {
     var angle: CGFloat {
         return atan2(y, x)
     }
+    
+    public static func randomUnitVector()->CGPoint{
+        let vector = CGPointMake(CGFloat.random(-1.0,max:1.0),CGFloat.random(-1.0,max:1.0))
+        return vector.normalized()
+    }
 }
 
 
@@ -109,8 +114,14 @@ extension CGFloat {
         return CGFloat(Float(arc4random()) / Float(UInt32.max))
     }
     
-    static func random(min min: CGFloat, max: CGFloat) -> CGFloat {
+    static func random(min: CGFloat, max: CGFloat) -> CGFloat {
         assert(min < max)
         return CGFloat.random() * (max - min) + min
     }
+}
+
+func randomCGPointInRect(rect:CGRect,margin:CGFloat)->CGPoint{
+    let x = CGFloat.random(rect.minX + margin, max: rect.maxX - margin)
+    let y = CGFloat.random(rect.minY + margin, max: rect.maxY - margin)
+    return CGPointMake(x,y)
 }
