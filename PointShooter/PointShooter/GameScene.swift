@@ -236,7 +236,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func spawnEnemy() {
         let enemy = Enemy(rectOfSize: CGSize(width: 75, height: 75))
         enemy.name = "enemy"
-        enemy.position = randomCGPointInRect(playableRect, margin: 150)
+        let spawnRect = spawnRects[Int(arc4random_uniform(3))]
+        enemy.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
         enemy.forward = CGPoint.randomUnitVector()
         addChild(enemy)
     }
