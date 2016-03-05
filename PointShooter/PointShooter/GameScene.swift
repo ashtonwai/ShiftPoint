@@ -22,15 +22,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
     
-    var bulletSpeed: Double = 1
     let fireRate: Float = 0.1
     var fireTimer: Float = 0.0
     var autoFiring = false
     
-    var top:CGFloat = 0, bottom:CGFloat = 0, left:CGFloat = 0, right:CGFloat = 0
     let playableRect: CGRect
+    var spawnRects: [CGRect]
     
     let numOfEnemies = 20
+    let maxEnemySize = CGSize(width: 100, height: 100)
     
     override init(size: CGSize) {
         // make constant for max aspect ratio support 4:3
@@ -41,6 +41,33 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let playableMargin = (size.height - playableHeight) / 2.0
         // make centered rectangle on the screen
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
+        
+        let topSpawnRect = CGRect(
+            x: playableRect.minX - maxEnemySize.width,
+            y: playableRect.maxY,
+            width: playableRect.width + maxEnemySize.width * 2,
+            height: maxEnemySize.height
+        )
+        let botSpawnRect = CGRect(
+            x: playableRect.minX - maxEnemySize.width,
+            y: playableRect.minY - maxEnemySize.height,
+            width: playableRect.width + maxEnemySize.width * 2,
+            height: maxEnemySize.height
+        )
+        let leftSpawnRect = CGRect(
+            x: playableRect.minX - maxEnemySize.width,
+            y: playableRect.minY - maxEnemySize.height,
+            width: maxEnemySize.width,
+            height: playableRect.height + maxEnemySize.height * 2
+        )
+        let rightSpawnRect = CGRect(
+            x: playableRect.maxX,
+            y: playableRect.minY - maxEnemySize.height,
+            width: maxEnemySize.width,
+            height: playableRect.height + maxEnemySize.height * 2
+        )
+        
+        spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
         super.init(size: size)
     }
@@ -160,6 +187,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func playerDidCollideWithEnemy(enemy: SKShapeNode, player: SKSpriteNode) {
         enemy.removeFromParent()
+        spawnEnemy()
         // decrease health
     }
     
