@@ -11,6 +11,9 @@ import SpriteKit
 
 class Player : SKSpriteNode {
     var prevPosition : CGPoint = CGPointZero
+    var invincible = false
+    var lives = 5
+    var autoFiring = false
     
     init(xScale: CGFloat, yScale: CGFloat) {
         let texture = SKTexture(imageNamed: "Player")
@@ -38,5 +41,24 @@ class Player : SKSpriteNode {
         let angle = atan2(dy, dx)
         let rotate = SKAction.rotateToAngle(angle + CGFloat(M_PI/2), duration: 0.0)
         self.runAction(rotate)
+    }
+    
+    func onDamaged() {
+        lives--
+        invincible = true
+        autoFiring = false
+        
+        let blinkTimes = 6.0
+        let duration = 1.5
+        let blinkAction = SKAction.customActionWithDuration(duration) { node, elapsedTime in
+            let slice = duration / blinkTimes
+            let remainder = Double(elapsedTime) % slice
+            node.hidden = remainder > slice / 2
+        }
+        let setHidden = SKAction.runBlock() {
+            self.hidden = false
+            self.invincible = false
+        }
+        self.runAction(SKAction.sequence([blinkAction, setHidden]))
     }
 }

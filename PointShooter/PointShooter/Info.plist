@@ -37,5 +37,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Microgramma.ttf</string>
+		<string>6 Cells.otf</string>
+		<string>Inversionz.otf</string>
+	</array>
 </dict>
 </plist>

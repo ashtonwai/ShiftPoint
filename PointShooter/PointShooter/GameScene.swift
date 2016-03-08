@@ -14,24 +14,31 @@ struct PhysicsCategory {
     static let Player    : UInt32 = 0b101
 }
 
+struct GameLayer {
+    static let Background   : CGFloat = 0
+    static let Sprite       : CGFloat = 1
+    static let HUD          : CGFloat = 2
+}
+
 import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
-    var player: Player!
-    
-    var lastUpdateTime: CFTimeInterval = 0
-    var deltaTime: CFTimeInterval = 0
-    
-    let fireRate: Float = 0.1
-    var fireTimer: Float = 0.0
-    var autoFiring = false
-    
     let playableRect: CGRect
     let spawnRectBounds: CGRect
     var spawnRects: [CGRect]
     
     let numOfEnemies = 20
     let maxEnemySize = CGSize(width: 100, height: 100)
+    
+    var player: Player!
+    var lastUpdateTime: CFTimeInterval = 0
+    var deltaTime: CFTimeInterval = 0
+    let fireRate: Float = 0.1
+    var fireTimer: Float = 0.0
+    
+    var lifeLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
+    var scoreLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
+    var score = 0
     
     override init(size: CGSize) {
         // make constant for max aspect ratio support 4:3
@@ -49,7 +56,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             height: playableRect.height + maxEnemySize.height * 2
         )
         
-        
+        // create enemy spawn rects outside playable rect
         let topSpawnRect = CGRect(
             x: playableRect.minX - maxEnemySize.width,
             y: playableRect.maxY,
@@ -74,7 +81,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             width: maxEnemySize.width,
             height: playableRect.height + maxEnemySize.height * 2
         )
-        
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
         super.init(size: size)
@@ -88,10 +94,38 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
         
+        let background = SKSpriteNode(imageNamed: "Background.jpg")
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = GameLayer.Background
+        background.xScale = 1.45
+        background.yScale = 1.45
+        addChild(background)
+        
         player = Player(xScale: 0.15, yScale: 0.15)
         player.name = "player"
         player.position = CGPointMake(size.width/2, size.height/2)
+        player.zPosition = GameLayer.Sprite
         addChild(player)
+        
+        score = 0
+        
+        scoreLabel.position = CGPoint(x: 50, y: size.height - 50)
+        scoreLabel.zPosition = GameLayer.HUD
+        scoreLabel.horizontalAlignmentMode = .Left
+        scoreLabel.verticalAlignmentMode = .Top
+        scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        scoreLabel.fontSize = 80
+        scoreLabel.text = "Score: \(score)"
+        addChild(scoreLabel)
+        
+        lifeLabel.position = CGPoint(x: size.width - 50, y: size.height - 50)
+        lifeLabel.zPosition = GameLayer.HUD
+        lifeLabel.horizontalAlignmentMode = .Right
+        lifeLabel.verticalAlignmentMode = .Top
+        lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        lifeLabel.fontSize = 80
+        lifeLabel.text = "Life: \(player.lives)"
+        addChild(lifeLabel)
         
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panDetected:"))
         self.view!.addGestureRecognizer(gestureRecognizer)
@@ -103,14 +137,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
         
         // debug functions
-        debugDrawPlayableArea()
+        //debugDrawPlayableArea()
     }
     
     override func update(currentTime: CFTimeInterval) {
         deltaTime = currentTime - lastUpdateTime
         lastUpdateTime = currentTime
         
-        if (autoFiring) {
+        if (player.autoFiring) {
             if (fireTimer > 0) {
                 fireTimer -= Float(deltaTime)
             } else {
@@ -123,12 +157,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let enemy = node as! Enemy
             enemy.update(currentTime)
             self.checkBounds(enemy)
-            
-            /*if (enemy.position > self.playableRect) {
-            print("outside")
-            } else {
-            print("inside")
-            }*/
         })
     }
     
@@ -149,10 +177,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let dx = player.position.x - touchLocation.x
             player.direction(dx, dy: dy)
             
-            autoFiring = true
+            if !player.invincible {
+                player.autoFiring = true
+            }
         }
         if (recognizer.state == .Ended) {
-            autoFiring = false
+            player.autoFiring = false
         }
     }
     
@@ -178,26 +208,39 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // enemy & bullet collision
         if ((firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0)) {
-                bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, enemy: secondBody.node as! SKShapeNode)
+                bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
         }
         
         // player & enemy collison
         if ((firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0)) {
-                playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, player: secondBody.node as! SKSpriteNode)
+                playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisPlayer: secondBody.node as! SKSpriteNode)
         }
     }
     
-    func bulletDidCollideWithEnemy(bullet: SKShapeNode, enemy: SKShapeNode) {
-        bullet.removeFromParent()
-        enemy.removeFromParent()
+    func bulletDidCollideWithEnemy(thisBullet: SKShapeNode, thisEnemy: SKShapeNode) {
+        thisBullet.removeFromParent()
+        thisEnemy.removeFromParent()
+        score += 10
+        scoreLabel.text = "Score: \(score)"
         spawnEnemy()
     }
     
-    func playerDidCollideWithEnemy(enemy: SKShapeNode, player: SKSpriteNode) {
-        enemy.removeFromParent()
-        spawnEnemy()
-        // decrease health
+    func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
+        if !player.invincible {
+            thisEnemy.removeFromParent()
+            player.onDamaged()
+            lifeLabel.text = "LIFE: \(player.lives)"
+            
+            if player.lives <= 0 {
+                player.removeFromParent()
+                
+                let gameOverScene = GameOverScene(size: size)
+                gameOverScene.scaleMode = scaleMode
+                let reveal = SKTransition.crossFadeWithDuration(1.5)
+                view?.presentScene(gameOverScene, transition: reveal)
+            }
+        }
     }
     
     func debugDrawPlayableArea() {
@@ -258,6 +301,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func autoFire() {
         let bullet = Bullet(circleOfRadius: 10)
         bullet.position = CGPointMake(player.position.x, player.position.y)
+        bullet.zPosition = GameLayer.Sprite
         addChild(bullet)
         
         let dx = cos(player.zRotation + CGFloat(M_PI/2)) * 2500
@@ -270,6 +314,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         enemy.name = "enemy"
         let spawnRect = spawnRects[Int(arc4random_uniform(3))]
         enemy.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
+        enemy.zPosition = GameLayer.Sprite;
         enemy.forward = CGPoint.randomUnitVector()
         addChild(enemy)
     }

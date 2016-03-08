@@ -19,6 +19,32 @@ class MainMenuScene : SKScene {
     }
     
     override func didMoveToView(view: SKView) {
-        print("hello world")
+        let background = SKSpriteNode(imageNamed: "MainMenu.png")
+        background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        background.zPosition = 0
+        background.xScale = 1.45
+        background.yScale = 1.45
+        self.addChild(background)
+        
+        //let gameTitle = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
+        let gameTitle = SKLabelNode(fontNamed: "6 Cells")
+        gameTitle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        gameTitle.zPosition = 1
+        gameTitle.horizontalAlignmentMode = .Center
+        gameTitle.verticalAlignmentMode = .Center
+        gameTitle.fontSize = 200
+        gameTitle.text = "Point Shooter"
+        self.addChild(gameTitle)
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        sceneTapped()
+    }
+    
+    func sceneTapped() {
+        let gameScene = GameScene(size: self.size)
+        gameScene.scaleMode = self.scaleMode
+        let reveal = SKTransition.crossFadeWithDuration(1.5)
+        self.view?.presentScene(gameScene, transition: reveal)
     }
 }

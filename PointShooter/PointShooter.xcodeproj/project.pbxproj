@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2D05EEDF1C85625D0093A3A3 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* MyUtils.swift */; };
+		2D084E051C8E90350054E718 /* Microgramma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D084E041C8E90350054E718 /* Microgramma.ttf */; };
+		2D084E081C8E96560054E718 /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D084E071C8E96560054E718 /* 6 Cells.otf */; };
+		2D084E0C1C8E96AF0054E718 /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2D084E0B1C8E96AF0054E718 /* Inversionz.otf */; };
 		2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A201C7F50BD0075F316 /* AppDelegate.swift */; };
 		2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A241C7F50BD0075F316 /* GameScene.swift */; };
 		2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A261C7F50BD0075F316 /* GameViewController.swift */; };
@@ -23,6 +26,9 @@
 
 /* Begin PBXFileReference section */
 		2D05EEDE1C85625D0093A3A3 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
+		2D084E041C8E90350054E718 /* Microgramma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Microgramma.ttf; sourceTree = "<group>"; };
+		2D084E071C8E96560054E718 /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "6 Cells.otf"; sourceTree = "<group>"; };
+		2D084E0B1C8E96AF0054E718 /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inversionz.otf; sourceTree = "<group>"; };
 		2D430A1D1C7F50BD0075F316 /* PointShooter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PointShooter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D430A201C7F50BD0075F316 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D430A241C7F50BD0075F316 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -85,6 +91,16 @@
 			name = Lib;
 			sourceTree = "<group>";
 		};
+		2D084E061C8E907C0054E718 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				2D084E0B1C8E96AF0054E718 /* Inversionz.otf */,
+				2D084E071C8E96560054E718 /* 6 Cells.otf */,
+				2D084E041C8E90350054E718 /* Microgramma.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		2D430A141C7F50BD0075F316 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +125,7 @@
 				2D05EED41C850E750093A3A3 /* Scenes */,
 				2D05EED61C850EE00093A3A3 /* Sprites */,
 				2D05EED71C850F150093A3A3 /* Lib */,
+				2D084E061C8E907C0054E718 /* Fonts */,
 				2D430A2B1C7F50BD0075F316 /* Assets.xcassets */,
 				2D430A281C7F50BD0075F316 /* Main.storyboard */,
 				2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */,
@@ -176,8 +193,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D084E0C1C8E96AF0054E718 /* Inversionz.otf in Resources */,
+				2D084E051C8E90350054E718 /* Microgramma.ttf in Resources */,
 				2D430A2F1C7F50BD0075F316 /* LaunchScreen.storyboard in Resources */,
 				2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */,
+				2D084E081C8E96560054E718 /* 6 Cells.otf in Resources */,
 				2D430A2A1C7F50BD0075F316 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
