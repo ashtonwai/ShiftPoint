@@ -18,6 +18,7 @@ struct GameLayer {
     static let Background   : CGFloat = 0
     static let Sprite       : CGFloat = 1
     static let HUD          : CGFloat = 2
+    static let Debug        : CGFloat = 3
 }
 
 import SpriteKit
@@ -141,6 +142,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
         ]))
         
+        spawnSeeker()
+        
         // debug functions
         //debugDrawPlayableArea()
     }
@@ -162,6 +165,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let enemy = node as! Enemy
             enemy.update(currentTime)
             self.checkBounds(enemy)
+        })
+        
+        enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
+            let seeker = node as! Seeker
+            if let targetLocation = self.player?.position {
+                seeker.seek(currentTime, location: targetLocation)
+                print(seeker.position)
+                print(targetLocation)
+            }
         })
     }
     
@@ -317,10 +329,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func spawnEnemy() {
         let enemy = Enemy(rectOfSize: CGSize(width: 75, height: 75))
         enemy.name = "enemy"
-        let spawnRect = spawnRects[Int(arc4random_uniform(3))]
+        let spawnRect = spawnRects[Int.random(0...3)]
         enemy.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
         enemy.zPosition = GameLayer.Sprite;
         enemy.forward = CGPoint.randomUnitVector()
         addChild(enemy)
+    }
+    
+    func spawnSeeker() {
+        print("seeker spawn!!")
+        let seeker = Seeker(size: CGSize(width: 75, height: 75))
+        seeker.name = "seeker"
+        let spawnRect = spawnRects[Int.random(0...3)]
+        seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
+        seeker.zPosition = GameLayer.Sprite
+        addChild(seeker)
     }
 }

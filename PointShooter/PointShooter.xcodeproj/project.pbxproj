@@ -22,6 +22,7 @@
 		2DE088521C8A56DD00BE051C /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088511C8A56DD00BE051C /* Enemy.swift */; };
 		2DE088541C8ABE0600BE051C /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088531C8ABE0600BE051C /* MainMenuScene.swift */; };
 		2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088551C8ABE1A00BE051C /* GameOverScene.swift */; };
+		2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE880BF1C90CF92006F5CE2 /* Seeker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		2DE088511C8A56DD00BE051C /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		2DE088531C8ABE0600BE051C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		2DE088551C8ABE1A00BE051C /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		2DE880BF1C90CF92006F5CE2 /* Seeker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seeker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
 				2DE088511C8A56DD00BE051C /* Enemy.swift */,
+				2DE880BF1C90CF92006F5CE2 /* Seeker.swift */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				2D05EEDF1C85625D0093A3A3 /* MyUtils.swift in Sources */,
 				2DE088541C8ABE0600BE051C /* MainMenuScene.swift in Sources */,
 				2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */,
+				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
