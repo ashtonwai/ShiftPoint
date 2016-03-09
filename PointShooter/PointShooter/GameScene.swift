@@ -101,7 +101,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         background.yScale = 1.45
         addChild(background)
         
-        player = Player(xScale: 0.15, yScale: 0.15)
+        player = Player()
         player.name = "player"
         player.position = CGPointMake(size.width/2, size.height/2)
         player.zPosition = GameLayer.Sprite
@@ -132,9 +132,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         fireTimer = fireRate
         
-        for _ in 0...numOfEnemies-1 {
-            spawnEnemy()
-        }
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                for _ in 0...self.numOfEnemies-1 {
+                    self.spawnEnemy()
+                }
+            }
+        ]))
         
         // debug functions
         //debugDrawPlayableArea()

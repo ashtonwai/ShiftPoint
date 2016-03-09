@@ -9,6 +9,7 @@
 import Foundation
 import CoreGraphics
 
+/* Functions */
 func + (left: CGPoint, right: CGPoint) -> CGPoint {
     return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
@@ -67,6 +68,24 @@ func > (point: CGPoint, rect: CGRect) -> Bool {
         point.y < rect.minY || point.y < rect.maxY
 }
 
+func randomCGPointInRect(rect:CGRect,margin:CGFloat)->CGPoint{
+    let x = CGFloat.random(rect.minX + margin, max: rect.maxX - margin)
+    let y = CGFloat.random(rect.minY + margin, max: rect.maxY - margin)
+    return CGPointMake(x,y)
+}
+
+let π = CGFloat(M_PI)
+func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
+    let twoπ = π * 2.0
+    var angle = (angle2 - angle1) % twoπ
+    if angle >= π {
+        angle = angle - twoπ
+    }
+    if angle <= -π {
+        angle = angle + twoπ
+    }
+    return angle
+}
 
 #if !(arch(x86_64) || arch(arm64))
     func atan2(y: CGPoint, x: CGFloat) -> CGFloat {
@@ -78,6 +97,8 @@ func > (point: CGPoint, rect: CGRect) -> Bool {
     }
 #endif
 
+
+/* Extensions */
 extension CGPoint {
     func length() -> CGFloat {
         return sqrt(x*x + y*y)
@@ -97,29 +118,11 @@ extension CGPoint {
     }
 }
 
-
-let π = CGFloat(M_PI)
-
-func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
-    let twoπ = π * 2.0
-    var angle = (angle2 - angle1) % twoπ
-    if angle >= π {
-        angle = angle - twoπ
-    }
-    if angle <= -π {
-        angle = angle + twoπ
-    }
-    return angle
-}
-
 extension CGFloat {
     func sign() -> CGFloat {
         return (self >= 0.0) ? 1.0 : -1.0
     }
-}
-
-
-extension CGFloat {
+    
     static func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / Float(UInt32.max))
     }
@@ -130,8 +133,17 @@ extension CGFloat {
     }
 }
 
-func randomCGPointInRect(rect:CGRect,margin:CGFloat)->CGPoint{
-    let x = CGFloat.random(rect.minX + margin, max: rect.maxX - margin)
-    let y = CGFloat.random(rect.minY + margin, max: rect.maxY - margin)
-    return CGPointMake(x,y)
+extension Int{
+    static func random(range: Range<Int>) -> Int {
+        var offset = 0
+        
+        if range.startIndex < 0 {
+            offset = abs(range.startIndex)
+        }
+        
+        let min = UInt32(range.startIndex + offset)
+        let max = UInt32(range.endIndex   + offset)
+        
+        return Int(min + arc4random_uniform(max - min)) - offset
+    }
 }

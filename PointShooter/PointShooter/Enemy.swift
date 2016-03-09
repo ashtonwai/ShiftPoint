@@ -10,15 +10,17 @@ import Foundation
 import SpriteKit
 
 class Enemy : SKShapeNode {
+    var prevPosition : CGPoint = CGPointZero
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     var velocity: CGPoint = CGPointZero
-    var delta: CGFloat = 300.0
-    var prevPosition : CGPoint = CGPointZero
+    var delta: CGFloat
     
     var lastUpdateTime: NSTimeInterval = 0
     var deltaTime: NSTimeInterval = 0
     
     init(rectOfSize: CGSize) {
+        self.delta = CGFloat(Int.random(100...500))
+        
         super.init()
         
         let width = rectOfSize.width

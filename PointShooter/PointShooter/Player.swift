@@ -15,13 +15,13 @@ class Player : SKSpriteNode {
     var lives = 5
     var autoFiring = false
     
-    init(xScale: CGFloat, yScale: CGFloat) {
+    init() {
         let texture = SKTexture(imageNamed: "Player")
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
         self.size = size
-        self.xScale = xScale
-        self.yScale = yScale
+        self.xScale = 0.15
+        self.yScale = 0.15
         self.anchorPoint.y = 0.36
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(
