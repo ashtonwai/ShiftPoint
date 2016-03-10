@@ -24,8 +24,8 @@ class Seeker : SKShapeNode {
         
         let pathToDraw = CGPathCreateMutable()
         CGPathMoveToPoint(pathToDraw, nil, 0, size.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, -size.width/2, -size.height/2)
         CGPathAddLineToPoint(pathToDraw, nil, size.width/2, -size.height/2)
+        CGPathAddLineToPoint(pathToDraw, nil, -size.width/2, -size.height/2)
         CGPathAddLineToPoint(pathToDraw, nil, 0, size.height/2)
         CGPathCloseSubpath(pathToDraw)
         path = pathToDraw
@@ -53,7 +53,7 @@ class Seeker : SKShapeNode {
     }
     
     func rotate() {
-        let shortest = shortestAngleBetween(self.zRotation, angle2: velocity.angle)
+        let shortest = shortestAngleBetween(self.zRotation + π/2, angle2: velocity.angle)
         let amountToRotate = min(rotateSpeed * CGFloat(deltaTime), abs(shortest))
         self.zRotation += shortest.sign() * amountToRotate
     }
