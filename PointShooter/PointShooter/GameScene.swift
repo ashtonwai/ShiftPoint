@@ -161,7 +161,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 //            }
 //        ]))
         
-        spawnSeeker()
+        spawnSeekerCircle()
         
         // debug functions
         //debugDrawPlayableArea()
@@ -397,5 +397,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
         seeker.zPosition = GameLayer.Sprite
         addChild(seeker)
+    }
+    
+    func spawnSeekerCircle () {
+        for i in 0...16 {
+            let angle = CGFloat(i) * 360.0 / 16.0
+            let seeker = Seeker(size: CGSize(width: 75, height: 75))
+            seeker.name = "seeker"
+            seeker.position = CGPoint(
+                x: playableRect.width/2 + playableRect.height/2 * cos(angle),
+                y: playableRect.height/2 + playableRect.height/2 * sin(angle)
+            )
+            seeker.zPosition = GameLayer.Sprite
+            addChild(seeker)
+        }
     }
 }
