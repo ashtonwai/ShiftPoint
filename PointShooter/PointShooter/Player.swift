@@ -14,14 +14,14 @@ class Player : SKSpriteNode {
     var invincible = false
     var lives = 5
     var autoFiring = false
+    var rotateAngle: CGFloat = 0
     
     init() {
         let texture = SKTexture(imageNamed: "Player")
+        
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
         self.size = size
-        self.xScale = 0.15
-        self.yScale = 0.15
         self.anchorPoint.y = 0.36
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(
@@ -39,7 +39,8 @@ class Player : SKSpriteNode {
     
     func direction(dx: CGFloat, dy: CGFloat) {
         let angle = atan2(dy, dx)
-        let rotate = SKAction.rotateToAngle(angle + CGFloat(M_PI/2), duration: 0.0)
+        rotateAngle = angle + CGFloat(M_PI/2)
+        let rotate = SKAction.rotateToAngle(rotateAngle, duration: 0.0)
         self.runAction(rotate)
     }
     

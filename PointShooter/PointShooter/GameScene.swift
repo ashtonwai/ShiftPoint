@@ -17,8 +17,9 @@ struct PhysicsCategory {
 struct GameLayer {
     static let Background   : CGFloat = 0
     static let Sprite       : CGFloat = 1
-    static let HUD          : CGFloat = 2
-    static let Debug        : CGFloat = 3
+    static let Animation    : CGFloat = 2
+    static let HUD          : CGFloat = 3
+    static let Debug        : CGFloat = 4
 }
 
 import SpriteKit
@@ -36,6 +37,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var deltaTime: CFTimeInterval = 0
     let fireRate: Float = 0.1
     var fireTimer: Float = 0.0
+    
+    var teleportOutAnimation: SKAction
+    var teleportInAnimation: SKAction
     
     var lifeLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
     var scoreLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
@@ -83,6 +87,21 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             height: playableRect.height + maxEnemySize.height * 2
         )
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
+        
+        // teleport-out animation
+        var teleportOutTextures: [SKTexture] = []
+        for i in 2...6 {
+            teleportOutTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
+        }
+        teleportOutAnimation = SKAction.animateWithTextures(teleportOutTextures, timePerFrame: 0.1)
+        
+        // teleport-in animation
+        var teleportInTextures: [SKTexture] = []
+        for var i = 4; i > 0; i-- {
+            teleportInTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
+        }
+        teleportOutTextures.append(SKTexture(imageNamed: "teleport_6"))
+        teleportInAnimation = SKAction.animateWithTextures(teleportInTextures, timePerFrame: 0.1)
         
         super.init(size: size)
     }
@@ -133,14 +152,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         fireTimer = fireRate
         
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                for _ in 0...self.numOfEnemies-1 {
-                    self.spawnEnemy()
-                }
-            }
-        ]))
+//        runAction(SKAction.sequence([
+//            SKAction.waitForDuration(1.0),
+//            SKAction.runBlock() {
+//                for _ in 0...self.numOfEnemies-1 {
+//                    self.spawnEnemy()
+//                }
+//            }
+//        ]))
         
         spawnSeeker()
         
@@ -171,8 +190,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let seeker = node as! Seeker
             if let targetLocation = self.player?.position {
                 seeker.seek(currentTime, location: targetLocation)
-                print(seeker.position)
-                print(targetLocation)
             }
         })
     }
@@ -180,8 +197,44 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
-            player.prevPosition = player.position
-            player.position = location
+            let teleport = SKAction.sequence([
+                SKAction.runBlock() {
+                    self.player.prevPosition = self.player.position
+                    self.player.runAction(SKAction.fadeOutWithDuration(0.5))
+                    
+                    let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
+                    teleportOut.position = self.player.prevPosition
+                    teleportOut.zPosition = GameLayer.Animation
+                    teleportOut.zRotation = self.player.rotateAngle
+                    self.addChild(teleportOut)
+                    
+                    teleportOut.runAction(SKAction.sequence([
+                        self.teleportOutAnimation,
+                        SKAction.runBlock() {
+                            teleportOut.removeFromParent()
+                        }
+                    ]))
+                },
+                SKAction.waitForDuration(0.25),
+                SKAction.runBlock() {
+                    self.player.position = location
+                    self.player.runAction(SKAction.fadeInWithDuration(0.5))
+                    
+                    let teleportIn = SKSpriteNode(imageNamed: "teleport_1")
+                    teleportIn.position = self.player.position
+                    teleportIn.zPosition = GameLayer.Animation
+                    teleportIn.zRotation = self.player.rotateAngle
+                    self.addChild(teleportIn)
+                    
+                    teleportIn.runAction(SKAction.sequence([
+                        self.teleportInAnimation,
+                        SKAction.runBlock() {
+                            teleportIn.removeFromParent()
+                        }
+                    ]))
+                }
+            ])
+            self.runAction(teleport)
         }
     }
     
@@ -327,7 +380,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnEnemy() {
-        let enemy = Enemy(rectOfSize: CGSize(width: 75, height: 75))
+        let enemy = Enemy(rectOfSize: CGSize(width: 50, height: 50))
         enemy.name = "enemy"
         let spawnRect = spawnRects[Int.random(0...3)]
         enemy.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
@@ -338,7 +391,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func spawnSeeker() {
         print("seeker spawn!!")
-        let seeker = Seeker(size: CGSize(width: 75, height: 75))
+        let seeker = Seeker(size: CGSize(width: 50, height: 50))
         seeker.name = "seeker"
         let spawnRect = spawnRects[Int.random(0...3)]
         seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
