@@ -25,13 +25,16 @@ struct GameLayer {
 import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
+    // Bounding boxes
     let playableRect: CGRect
     let spawnRectBounds: CGRect
     var spawnRects: [CGRect]
     
+    // Enemy count handling
     let numOfEnemies = 20
     let maxEnemySize = CGSize(width: 100, height: 100)
     
+    // Player variables
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
@@ -41,6 +44,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var teleportOutAnimation: SKAction
     var teleportInAnimation: SKAction
     
+    // Game variables
     var lifeLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
     var scoreLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
     var score = 0
@@ -152,16 +156,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         fireTimer = fireRate
         
-//        runAction(SKAction.sequence([
-//            SKAction.waitForDuration(1.0),
-//            SKAction.runBlock() {
-//                for _ in 0...self.numOfEnemies-1 {
-//                    self.spawnEnemy()
-//                }
-//            }
-//        ]))
-        
-        spawnSeekerCircle()
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                for _ in 0...self.numOfEnemies-1 {
+                    self.spawnEnemy()
+                }
+                self.spawnSeekerCircle()
+            }
+        ]))
         
         // debug functions
         //debugDrawPlayableArea()
@@ -239,7 +242,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func panDetected(recognizer: UIPanGestureRecognizer) {
-        if (recognizer.state == .Changed) {
+        if recognizer.state == .Changed {
             var touchLocation = recognizer.locationInView(recognizer.view)
             touchLocation = self.convertPointFromView(touchLocation)
             
@@ -251,7 +254,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 player.autoFiring = true
             }
         }
-        if (recognizer.state == .Ended) {
+        if recognizer.state == .Ended {
             player.autoFiring = false
         }
     }
@@ -276,14 +279,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
         
         // enemy & bullet collision
-        if ((firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0)) {
+        if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0) {
                 bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
         }
         
         // player & enemy collison
-        if ((firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0)) {
+        if (firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0) {
                 playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisPlayer: secondBody.node as! SKSpriteNode)
         }
     }
@@ -324,47 +327,33 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func checkBounds(enemy: Enemy) {
-        if (enemy.prevPosition < playableRect) {
-            let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
-            let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
-            
-            if enemy.position.x <= bottomLeft.x {
-                enemy.position.x = bottomLeft.x
-                enemy.reflectX()
-            }
-            if enemy.position.x >= topRight.x {
-                enemy.position.x = topRight.x
-                enemy.reflectX()
-            }
-            if enemy.position.y <= bottomLeft.y {
-                enemy.position.y = bottomLeft.y
-                enemy.reflectY()
-            }
-            if enemy.position.y >= topRight.y {
-                enemy.position.y = topRight.y
-                enemy.reflectY()
-            }
+        
+        var bounds : CGRect!
+        
+        if enemy.prevPosition < playableRect {
+            // If visible on screen
+            bounds = playableRect
         } else {
-            let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(spawnRectBounds))
-            let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(spawnRectBounds))
-            
-            if enemy.position.x <= bottomLeft.x {
-                enemy.position.x = bottomLeft.x
-                enemy.reflectX()
-            }
-            if enemy.position.x >= topRight.x {
-                enemy.position.x = topRight.x
-                enemy.reflectX()
-            }
-            if enemy.position.y <= bottomLeft.y {
-                enemy.position.y = bottomLeft.y
-                enemy.reflectY()
-            }
-            if enemy.position.y >= topRight.y {
-                enemy.position.y = topRight.y
-                enemy.reflectY()
-            }
-
+            // If intially spawning off-screen
+            bounds = spawnRectBounds
+        }
+        
+        // Reflect velocity to stay in bounds
+        if enemy.position.x <= bounds.minX {
+            enemy.position.x = bounds.minX
+            enemy.reflectX()
+        }
+        if enemy.position.x >= bounds.maxX {
+            enemy.position.x = bounds.maxX
+            enemy.reflectX()
+        }
+        if enemy.position.y <= bounds.minY {
+            enemy.position.y = bounds.minY
+            enemy.reflectY()
+        }
+        if enemy.position.y >= bounds.maxY {
+            enemy.position.y = bounds.maxY
+            enemy.reflectY()
         }
     }
     
