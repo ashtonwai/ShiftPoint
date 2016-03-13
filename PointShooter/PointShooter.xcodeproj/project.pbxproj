@@ -24,6 +24,8 @@
 		2DE088541C8ABE0600BE051C /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088531C8ABE0600BE051C /* MainMenuScene.swift */; };
 		2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088551C8ABE1A00BE051C /* GameOverScene.swift */; };
 		2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE880BF1C90CF92006F5CE2 /* Seeker.swift */; };
+		679ED6B31C950DD000BC8924 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 679ED6B11C950DD000BC8924 /* Explosion.sks */; };
+		679ED6B41C950DD000BC8924 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 679ED6B21C950DD000BC8924 /* spark.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		2DE088531C8ABE0600BE051C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		2DE088551C8ABE1A00BE051C /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		2DE880BF1C90CF92006F5CE2 /* Seeker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Seeker.swift; sourceTree = "<group>"; };
+		679ED6B11C950DD000BC8924 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
+		679ED6B21C950DD000BC8924 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +140,8 @@
 				2D430A281C7F50BD0075F316 /* Main.storyboard */,
 				2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */,
 				2D430A301C7F50BD0075F316 /* Info.plist */,
+				679ED6B11C950DD000BC8924 /* Explosion.sks */,
+				679ED6B21C950DD000BC8924 /* spark.png */,
 			);
 			path = PointShooter;
 			sourceTree = "<group>";
@@ -204,6 +210,8 @@
 				2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */,
 				2DABBFFE1C91C71B00F5ABAD /* Microgramma.ttf in Resources */,
 				2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */,
+				679ED6B41C950DD000BC8924 /* spark.png in Resources */,
+				679ED6B31C950DD000BC8924 /* Explosion.sks in Resources */,
 				2D430A2A1C7F50BD0075F316 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
