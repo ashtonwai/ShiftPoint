@@ -295,6 +295,17 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func bulletDidCollideWithSeeker(thisBullet: SKShapeNode, thisSeeker: SKShapeNode) {
         thisBullet.removeFromParent()
         thisSeeker.removeFromParent()
+        
+        /*
+        // Emitter
+        let effect = SKEffectNode() // Have it not blend with the background
+        let emitter = SKEmitterNode(fileNamed: "Explosion")!
+        emitter.position = CGPointMake(0,0)
+        emitter.zPosition = 0
+        effect.addChild(emitter)
+        thisEnemy.addChild(effect)
+        */
+        
         score += 25
         scoreLabel.text = "Score: \(score)"
     }
