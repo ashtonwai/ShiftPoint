@@ -10,6 +10,7 @@ struct PhysicsCategory {
     static let None      : UInt32 = 0
     static let All       : UInt32 = UInt32.max
     static let Enemy     : UInt32 = 0b1
+    static let Seeker    : UInt32 = 0b1010
     static let Bullet    : UInt32 = 0b10
     static let Player    : UInt32 = 0b101
 }
@@ -38,8 +39,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     let fireRate: Float = 0.1
     var fireTimer: Float = 0.0
     
-    var teleportOutAnimation: SKAction
-    var teleportInAnimation: SKAction
+    let teleportOutAnimation: SKAction = anim_TeleportOut()
+    let teleportInAnimation: SKAction = anim_TeleportIn()
     
     var lifeLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
     var scoreLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
@@ -88,21 +89,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         )
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
-        // teleport-out animation
-        var teleportOutTextures: [SKTexture] = []
-        for i in 2...6 {
-            teleportOutTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
-        }
-        teleportOutAnimation = SKAction.animateWithTextures(teleportOutTextures, timePerFrame: 0.1)
-        
-        // teleport-in animation
-        var teleportInTextures: [SKTexture] = []
-        for var i = 4; i > 0; i-- {
-            teleportInTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
-        }
-        teleportOutTextures.append(SKTexture(imageNamed: "teleport_6"))
-        teleportInAnimation = SKAction.animateWithTextures(teleportInTextures, timePerFrame: 0.1)
-        
         super.init(size: size)
     }
     
@@ -144,7 +130,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         lifeLabel.verticalAlignmentMode = .Top
         lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
         lifeLabel.fontSize = 80
-        lifeLabel.text = "Life: \(player.lives)"
+        lifeLabel.text = "Life: \(player.health)"
         addChild(lifeLabel)
         
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panDetected:"))
@@ -152,14 +138,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         fireTimer = fireRate
         
-//        runAction(SKAction.sequence([
-//            SKAction.waitForDuration(1.0),
-//            SKAction.runBlock() {
-//                for _ in 0...self.numOfEnemies-1 {
-//                    self.spawnEnemy()
-//                }
-//            }
-//        ]))
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                for _ in 0...self.numOfEnemies-1 {
+                    self.spawnEnemy()
+                }
+            }
+        ]))
         
         spawnSeekerCircle()
         
@@ -201,6 +187,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 SKAction.runBlock() {
                     self.player.prevPosition = self.player.position
                     self.player.runAction(SKAction.fadeOutWithDuration(0.5))
+                    self.player.invincible = true
                     
                     let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
                     teleportOut.position = self.player.prevPosition
@@ -219,8 +206,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 SKAction.runBlock() {
                     self.player.position = location
                     self.player.runAction(SKAction.fadeInWithDuration(0.5))
+                    self.player.invincible = false
                     
-                    let teleportIn = SKSpriteNode(imageNamed: "teleport_1")
+                    let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
                     teleportIn.position = self.player.position
                     teleportIn.zPosition = GameLayer.Animation
                     teleportIn.zRotation = self.player.rotateAngle
@@ -281,6 +269,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
         }
         
+        if ((firstBody.categoryBitMask & PhysicsCategory.Seeker != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0)) {
+                bulletDidCollideWithSeeker(firstBody.node as! SKShapeNode, thisSeeker: secondBody.node as! SKShapeNode)
+        }
+        
         // player & enemy collison
         if ((firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0)) {
@@ -296,13 +289,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         spawnEnemy()
     }
     
+    func bulletDidCollideWithSeeker(thisBullet: SKShapeNode, thisSeeker: SKShapeNode) {
+        thisBullet.removeFromParent()
+        thisSeeker.removeFromParent()
+        score += 25
+        scoreLabel.text = "Score: \(score)"
+    }
+    
     func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
         if !player.invincible {
             thisEnemy.removeFromParent()
             player.onDamaged()
-            lifeLabel.text = "LIFE: \(player.lives)"
+            lifeLabel.text = "LIFE: \(player.health)"
             
-            if player.lives <= 0 {
+            if player.health <= 0 {
                 player.removeFromParent()
                 
                 let gameOverScene = GameOverScene(size: size)
@@ -310,6 +310,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 let reveal = SKTransition.crossFadeWithDuration(1.5)
                 view?.presentScene(gameOverScene, transition: reveal)
             }
+            
+            spawnEnemy()
         }
     }
     

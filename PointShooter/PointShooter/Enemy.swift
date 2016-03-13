@@ -28,8 +28,9 @@ class Enemy : SKShapeNode {
         let center = CGPoint(x: -width/2, y: -height/2)
         
         self.path = CGPathCreateWithRect(CGRect(origin: center, size: rectOfSize), nil)
-        self.fillColor = SKColor.greenColor()
-        self.lineWidth = 0
+        self.fillColor = SKColor.clearColor()
+        self.strokeColor = SKColor.greenColor()
+        self.lineWidth = 3
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: rectOfSize)
         self.physicsBody?.dynamic = true

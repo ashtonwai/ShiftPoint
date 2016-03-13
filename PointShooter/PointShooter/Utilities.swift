@@ -1,5 +1,5 @@
 //
-//  MyUtils.swift
+//  Utilities.swift
 //  PointShooter
 //
 //  Created by Ashton Wai on 3/1/16.

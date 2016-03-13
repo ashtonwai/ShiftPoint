@@ -13,7 +13,7 @@ class Seeker : SKShapeNode {
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     var velocity: CGPoint = CGPointZero
     var direction: CGPoint = CGPointZero
-    var delta: CGFloat = 300.0
+    var delta: CGFloat = 250.0
     var rotateSpeed: CGFloat = 3.0 * π
     
     var lastUpdateTime: NSTimeInterval = 0
@@ -29,8 +29,15 @@ class Seeker : SKShapeNode {
         CGPathAddLineToPoint(pathToDraw, nil, 0, size.height/2)
         CGPathCloseSubpath(pathToDraw)
         path = pathToDraw
-        lineWidth = 0
-        fillColor = UIColor.blueColor()
+        lineWidth = 3
+        strokeColor = UIColor.redColor()
+        fillColor = UIColor.clearColor()
+        
+        self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
+        self.physicsBody?.dynamic = true
+        self.physicsBody?.categoryBitMask = PhysicsCategory.Seeker
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
+        self.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
 
     required init?(coder aDecoder: NSCoder) {

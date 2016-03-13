@@ -12,7 +12,7 @@ import SpriteKit
 class Player : SKSpriteNode {
     var prevPosition : CGPoint = CGPointZero
     var invincible = false
-    var lives = 5
+    var health = 5
     var autoFiring = false
     var rotateAngle: CGFloat = 0
     
@@ -45,7 +45,7 @@ class Player : SKSpriteNode {
     }
     
     func onDamaged() {
-        lives--
+        health--
         invincible = true
         autoFiring = false
         
