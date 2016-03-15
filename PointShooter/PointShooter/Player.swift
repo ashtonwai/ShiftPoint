@@ -6,13 +6,12 @@
 //  Copyright © 2016 Ashton Wai & Zachary Bebel. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Player : SKSpriteNode {
     var prevPosition : CGPoint = CGPointZero
     var invincible = false
-    var health = 5
+    var health = 100
     var autoFiring = false
     var rotateAngle: CGFloat = 0
     
@@ -21,6 +20,7 @@ class Player : SKSpriteNode {
         
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
+        self.name = "player"
         self.size = size
         self.anchorPoint.y = 0.36
         

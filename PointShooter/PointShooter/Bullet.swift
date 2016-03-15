@@ -6,7 +6,6 @@
 //  Copyright © 2016 Ashton Wai & Zachary Bebel. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Bullet : SKShapeNode {
@@ -18,6 +17,8 @@ class Bullet : SKShapeNode {
         let diameter = circleOfRadius * 2
         let center = CGPoint(x: -circleOfRadius, y: -circleOfRadius)
         let size = CGSize(width: diameter, height: diameter)
+        
+        self.name = "bullet"
         
         self.path = CGPathCreateWithEllipseInRect(CGRect(origin: center, size: size), nil)
         self.fillColor = SKColor.redColor()

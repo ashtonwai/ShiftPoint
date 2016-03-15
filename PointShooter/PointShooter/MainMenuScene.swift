@@ -26,8 +26,7 @@ class MainMenuScene : SKScene {
         background.yScale = 1.45
         self.addChild(background)
         
-        //let gameTitle = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
-        let gameTitle = SKLabelNode(fontNamed: "6 Cells")
+        let gameTitle = SKLabelNode(fontNamed: Constants.Font.TitleFont)
         gameTitle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameTitle.zPosition = 1
         gameTitle.horizontalAlignmentMode = .Center

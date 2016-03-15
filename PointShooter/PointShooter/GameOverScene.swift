@@ -26,8 +26,7 @@ class GameOverScene : SKScene {
         background.yScale = 2
         self.addChild(background)
         
-        //let gameTitle = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
-        let gameover = SKLabelNode(fontNamed: "Inversionz")
+        let gameover = SKLabelNode(fontNamed: Constants.Font.GameOverFont)
         gameover.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameover.zPosition = 1
         gameover.horizontalAlignmentMode = .Center

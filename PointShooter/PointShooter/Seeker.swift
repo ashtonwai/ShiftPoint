@@ -6,7 +6,6 @@
 //  Copyright © 2016 Ashton Wai & Zachary Bebel. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Seeker : SKShapeNode {
@@ -15,9 +14,6 @@ class Seeker : SKShapeNode {
     var direction: CGPoint = CGPointZero
     var delta: CGFloat = 250.0
     var rotateSpeed: CGFloat = 3.0 * π
-    
-    var lastUpdateTime: NSTimeInterval = 0
-    var deltaTime: NSTimeInterval = 0
     
     init(size: CGSize) {
         super.init()
@@ -33,9 +29,11 @@ class Seeker : SKShapeNode {
         strokeColor = UIColor.redColor()
         fillColor = UIColor.clearColor()
         
+        self.name = "seeker"
+        
         self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
         self.physicsBody?.dynamic = true
-        self.physicsBody?.categoryBitMask = PhysicsCategory.Seeker
+        self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
@@ -44,22 +42,13 @@ class Seeker : SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func seek(currentTime: NSTimeInterval, location: CGPoint) {
-        if lastUpdateTime > 0 {
-            deltaTime = currentTime - lastUpdateTime
-        } else {
-            deltaTime = 0
-        }
-        lastUpdateTime = currentTime
-        
+    func seek(deltaTime: NSTimeInterval, location: CGPoint) {
         let offset = location - self.position
         direction = offset.normalized()
         velocity = direction * delta
         position += velocity * CGFloat(deltaTime)
-        rotate()
-    }
-    
-    func rotate() {
+        
+        // rotation
         let shortest = shortestAngleBetween(self.zRotation + π/2, angle2: velocity.angle)
         let amountToRotate = min(rotateSpeed * CGFloat(deltaTime), abs(shortest))
         self.zRotation += shortest.sign() * amountToRotate

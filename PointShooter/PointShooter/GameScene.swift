@@ -10,17 +10,8 @@ struct PhysicsCategory {
     static let None      : UInt32 = 0
     static let All       : UInt32 = UInt32.max
     static let Enemy     : UInt32 = 0b1
-    static let Seeker    : UInt32 = 0b1010
     static let Bullet    : UInt32 = 0b10
     static let Player    : UInt32 = 0b101
-}
-
-struct GameLayer {
-    static let Background   : CGFloat = 0
-    static let Sprite       : CGFloat = 1
-    static let Animation    : CGFloat = 2
-    static let HUD          : CGFloat = 3
-    static let Debug        : CGFloat = 4
 }
 
 import SpriteKit
@@ -32,22 +23,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var spawnRects: [CGRect]
     
     // Enemy count handling
-    let numOfEnemies = 20
+    let numOfEnemies = Constants.Setup.MAX_BOUNCER
     let maxEnemySize = CGSize(width: 100, height: 100)
     
     // Player variables
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
-    let fireRate: Float = 0.1
+    let fireRate: Float = Constants.Setup.FIRE_RATE
     var fireTimer: Float = 0.0
     
     let teleportOutAnimation: SKAction = anim_TeleportOut()
     let teleportInAnimation: SKAction = anim_TeleportIn()
     
     // Game variables
-    var lifeLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
-    var scoreLabel = SKLabelNode(fontNamed: "MicrogrammaDOT-MediumExtended")
+    var lifeLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+    var scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
     var score = 0
     
     override init(size: CGSize) {
@@ -104,9 +95,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
         
+        playBackgroundMusic("BGM.mp3")
+        
         let background = SKSpriteNode(imageNamed: "Background.jpg")
         background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = GameLayer.Background
+        background.zPosition = Constants.GameLayer.Background
         background.xScale = 1.45
         background.yScale = 1.45
         addChild(background)
@@ -114,13 +107,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         player = Player()
         player.name = "player"
         player.position = CGPointMake(size.width/2, size.height/2)
-        player.zPosition = GameLayer.Sprite
+        player.zPosition = Constants.GameLayer.Sprite
         addChild(player)
         
         score = 0
         
         scoreLabel.position = CGPoint(x: 50, y: size.height - 50)
-        scoreLabel.zPosition = GameLayer.HUD
+        scoreLabel.zPosition = Constants.GameLayer.HUD
         scoreLabel.horizontalAlignmentMode = .Left
         scoreLabel.verticalAlignmentMode = .Top
         scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
@@ -129,7 +122,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(scoreLabel)
         
         lifeLabel.position = CGPoint(x: size.width - 50, y: size.height - 50)
-        lifeLabel.zPosition = GameLayer.HUD
+        lifeLabel.zPosition = Constants.GameLayer.HUD
         lifeLabel.horizontalAlignmentMode = .Right
         lifeLabel.verticalAlignmentMode = .Top
         lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
@@ -146,7 +139,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             SKAction.waitForDuration(1.0),
             SKAction.runBlock() {
                 for _ in 0...self.numOfEnemies-1 {
-                    self.spawnEnemy()
+                    self.spawnBouncer()
                 }
                 self.spawnSeekerCircle()
             }
@@ -157,7 +150,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(currentTime: CFTimeInterval) {
-        deltaTime = currentTime - lastUpdateTime
+        if lastUpdateTime > 0 {
+            deltaTime = currentTime - lastUpdateTime
+        } else {
+            deltaTime = 0
+        }
         lastUpdateTime = currentTime
         
         if (player.autoFiring) {
@@ -169,16 +166,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        enumerateChildNodesWithName("enemy", usingBlock: { node, stop in
-            let enemy = node as! Enemy
-            enemy.update(currentTime)
-            self.checkBounds(enemy)
+        enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
+            let bouncer = node as! Bouncer
+            bouncer.move(self.deltaTime)
+            self.checkBounds(bouncer)
         })
         
         enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
             let seeker = node as! Seeker
             if let targetLocation = self.player?.position {
-                seeker.seek(currentTime, location: targetLocation)
+                seeker.seek(self.deltaTime, location: targetLocation)
             }
         })
     }
@@ -187,6 +184,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         for touch in touches {
             let location = touch.locationInNode(self)
             let teleport = SKAction.sequence([
+                teleportSound,
                 SKAction.runBlock() {
                     self.player.prevPosition = self.player.position
                     self.player.runAction(SKAction.fadeOutWithDuration(0.5))
@@ -194,7 +192,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
                     teleportOut.position = self.player.prevPosition
-                    teleportOut.zPosition = GameLayer.Animation
+                    teleportOut.zPosition = Constants.GameLayer.Animation
                     teleportOut.zRotation = self.player.rotateAngle
                     self.addChild(teleportOut)
                     
@@ -213,7 +211,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
                     teleportIn.position = self.player.position
-                    teleportIn.zPosition = GameLayer.Animation
+                    teleportIn.zPosition = Constants.GameLayer.Animation
                     teleportIn.zRotation = self.player.rotateAngle
                     self.addChild(teleportIn)
                     
@@ -269,32 +267,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // enemy & bullet collision
         if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0) {
-                bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
+            bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
         }
         
-        if ((firstBody.categoryBitMask & PhysicsCategory.Seeker != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0)) {
-                bulletDidCollideWithSeeker(firstBody.node as! SKShapeNode, thisSeeker: secondBody.node as! SKShapeNode)
-        }
-        
-        // player & enemy collison
+        // player & enemy collision
         if (firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0) {
-                playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisPlayer: secondBody.node as! SKSpriteNode)
+            playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisPlayer: secondBody.node as! SKSpriteNode)
         }
     }
     
     func bulletDidCollideWithEnemy(thisBullet: SKShapeNode, thisEnemy: SKShapeNode) {
-        thisBullet.removeFromParent()
-        thisEnemy.removeFromParent()
-        score += 10
-        scoreLabel.text = "Score: \(score)"
-        spawnEnemy()
-    }
-    
-    func bulletDidCollideWithSeeker(thisBullet: SKShapeNode, thisSeeker: SKShapeNode) {
-        thisBullet.removeFromParent()
-        thisSeeker.removeFromParent()
+        runAction(scoreSound)
         
         /*
         // Emitter
@@ -306,26 +290,25 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         thisEnemy.addChild(effect)
         */
         
-        score += 25
+        thisBullet.removeFromParent()
+        thisEnemy.removeFromParent()
+        score += 10
         scoreLabel.text = "Score: \(score)"
+        spawnBouncer()
     }
     
     func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
         if !player.invincible {
             thisEnemy.removeFromParent()
             player.onDamaged()
-            lifeLabel.text = "LIFE: \(player.health)"
+            lifeLabel.text = "Life: \(player.health)"
             
             if player.health <= 0 {
                 player.removeFromParent()
-                
-                let gameOverScene = GameOverScene(size: size)
-                gameOverScene.scaleMode = scaleMode
-                let reveal = SKTransition.crossFadeWithDuration(1.5)
-                view?.presentScene(gameOverScene, transition: reveal)
+                gameOver()
             }
             
-            spawnEnemy()
+            spawnBouncer()
         }
     }
     
@@ -339,19 +322,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(shape)
     }
     
-    func checkBounds(enemy: Enemy) {
-        
+    func checkBounds(enemy: Bouncer) {
         var bounds : CGRect!
         
         if enemy.prevPosition < playableRect {
-            // If visible on screen
+            // if visible on screen
             bounds = playableRect
         } else {
-            // If intially spawning off-screen
+            // if intially spawning off-screen
             bounds = spawnRectBounds
         }
         
-        // Reflect velocity to stay in bounds
+        // reflect velocity to stay in bounds
         if enemy.position.x <= bounds.minX {
             enemy.position.x = bounds.minX
             enemy.reflectX()
@@ -373,31 +355,31 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func autoFire() {
         let bullet = Bullet(circleOfRadius: 10)
         bullet.position = CGPointMake(player.position.x, player.position.y)
-        bullet.zPosition = GameLayer.Sprite
+        bullet.zPosition = Constants.GameLayer.Sprite
         addChild(bullet)
         
         let dx = cos(player.zRotation + CGFloat(M_PI/2)) * 2500
         let dy = sin(player.zRotation + CGFloat(M_PI/2)) * 2500
         bullet.move(dx, dy: dy)
+        
+        runAction(bulletFireSound)
     }
     
-    func spawnEnemy() {
-        let enemy = Enemy(rectOfSize: CGSize(width: 50, height: 50))
-        enemy.name = "enemy"
+    func spawnBouncer() {
+        let bouncer = Bouncer(rectOfSize: CGSize(width: 50, height: 50))
         let spawnRect = spawnRects[Int.random(0...3)]
-        enemy.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        enemy.zPosition = GameLayer.Sprite;
-        enemy.forward = CGPoint.randomUnitVector()
-        addChild(enemy)
+        bouncer.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
+        bouncer.zPosition = Constants.GameLayer.Sprite;
+        bouncer.forward = CGPoint.randomUnitVector()
+        addChild(bouncer)
     }
     
     func spawnSeeker() {
         print("seeker spawn!!")
         let seeker = Seeker(size: CGSize(width: 50, height: 50))
-        seeker.name = "seeker"
         let spawnRect = spawnRects[Int.random(0...3)]
         seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        seeker.zPosition = GameLayer.Sprite
+        seeker.zPosition = Constants.GameLayer.Sprite
         addChild(seeker)
     }
     
@@ -410,8 +392,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 x: playableRect.width/2 + playableRect.height/2 * cos(angle),
                 y: playableRect.height/2 + playableRect.height/2 * sin(angle)
             )
-            seeker.zPosition = GameLayer.Sprite
+            seeker.zPosition = Constants.GameLayer.Sprite
             addChild(seeker)
         }
+    }
+    
+    func gameOver() {
+        backgroundMusicPlayer.stop()
+        let gameOverScene = GameOverScene(size: size)
+        gameOverScene.scaleMode = scaleMode
+        let reveal = SKTransition.crossFadeWithDuration(1.5)
+        view?.presentScene(gameOverScene, transition: reveal)
     }
 }
