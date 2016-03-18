@@ -76,9 +76,9 @@ class GameOverScene : SKScene {
         
         runAction(SKAction.sequence([
             SKAction.runBlock() {
-                gameover.runAction(SKAction.moveToY(self.size.height/2+400, duration: 1.5))
+                gameover.runAction(SKAction.moveToY(self.size.height/2+400, duration: 1.0))
             },
-            SKAction.waitForDuration(1.5),
+            SKAction.waitForDuration(1.0),
             SKAction.runBlock() {
                 tagLabel.runAction(SKAction.fadeInWithDuration(1.0))
                 scoreLabel.runAction(SKAction.fadeInWithDuration(1.0))
