@@ -10,7 +10,11 @@ import Foundation
 import SpriteKit
 
 class MainMenuScene : SKScene {
+    let startButton: SKLabelNode
+    
     override init(size: CGSize) {
+        self.startButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        
         super.init(size: size)
     }
 
@@ -24,7 +28,7 @@ class MainMenuScene : SKScene {
         background.zPosition = 0
         background.xScale = 1.45
         background.yScale = 1.45
-        self.addChild(background)
+        addChild(background)
         
         let gameTitle = SKLabelNode(fontNamed: Constants.Font.TitleFont)
         gameTitle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -33,14 +37,46 @@ class MainMenuScene : SKScene {
         gameTitle.verticalAlignmentMode = .Center
         gameTitle.fontSize = 200
         gameTitle.text = "Point Shooter"
-        self.addChild(gameTitle)
+        addChild(gameTitle)
+        
+        startButton.position = CGPoint(x: self.size.width/2, y: self.size.height/2-200)
+        startButton.zPosition = 1
+        startButton.horizontalAlignmentMode = .Center
+        startButton.verticalAlignmentMode = .Center
+        startButton.fontSize = 80
+        startButton.text = "Start"
+        startButton.alpha = 0
+        addChild(startButton)
+        
+        runAction(SKAction.sequence([
+            SKAction.runBlock() {
+                gameTitle.runAction(SKAction.moveToY(self.size.height/2+300, duration: 1.0))
+            },
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                self.startButton.runAction(SKAction.fadeInWithDuration(1.0))
+            }
+        ]))
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        sceneTapped()
+        for touch: AnyObject in touches {
+            if nodeAtPoint(touch.locationInNode(self)) == startButton {
+                startButton.fontColor = UIColor.cyanColor()
+            }
+        }
     }
     
-    func sceneTapped() {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        startButton.fontColor = UIColor.whiteColor()
+        for touch: AnyObject in touches {
+            if nodeAtPoint(touch.locationInNode(self)) == startButton {
+                startGame()
+            }
+        }
+    }
+    
+    func startGame() {
         let gameScene = GameScene(size: self.size)
         gameScene.scaleMode = self.scaleMode
         let reveal = SKTransition.crossFadeWithDuration(1.5)

@@ -39,7 +39,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     // Game variables
     var lifeLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
     var scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+    var highScoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+    let userDefaults = NSUserDefaults.standardUserDefaults()
     var score = 0
+    var highScore = 0
     
     override init(size: CGSize) {
         // make constant for max aspect ratio support 4:3
@@ -84,6 +87,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         )
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
+        if let myHighScore = userDefaults.valueForKey("highScore") as? Int {
+            highScore = myHighScore
+            print(highScore)
+        } else {
+            userDefaults.setValue(0, forKey: "highScore")
+            userDefaults.synchronize()
+        }
+        
         super.init(size: size)
     }
     
@@ -112,14 +123,23 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         score = 0
         
-        scoreLabel.position = CGPoint(x: 50, y: size.height - 50)
+        scoreLabel.position = CGPoint(x: 50, y: size.height - 150)
         scoreLabel.zPosition = Constants.GameLayer.HUD
         scoreLabel.horizontalAlignmentMode = .Left
         scoreLabel.verticalAlignmentMode = .Top
         scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
         scoreLabel.fontSize = 80
-        scoreLabel.text = "Score: \(score)"
+        scoreLabel.text = "\(score)"
         addChild(scoreLabel)
+        
+        highScoreLabel.position = CGPoint(x: 50, y: size.height - 50)
+        highScoreLabel.zPosition = Constants.GameLayer.HUD
+        highScoreLabel.horizontalAlignmentMode = .Left
+        highScoreLabel.verticalAlignmentMode = .Top
+        highScoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        highScoreLabel.fontSize = 80
+        highScoreLabel.text = "\(highScore)"
+        addChild(highScoreLabel)
         
         lifeLabel.position = CGPoint(x: size.width - 50, y: size.height - 50)
         lifeLabel.zPosition = Constants.GameLayer.HUD
@@ -280,20 +300,27 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func bulletDidCollideWithEnemy(thisBullet: SKShapeNode, thisEnemy: SKShapeNode) {
         runAction(scoreSound)
         
-        /*
         // Emitter
-        let effect = SKEffectNode() // Have it not blend with the background
         let emitter = SKEmitterNode(fileNamed: "Explosion")!
-        emitter.position = CGPointMake(0,0)
-        emitter.zPosition = 0
-        effect.addChild(emitter)
-        thisEnemy.addChild(effect)
-        */
+        emitter.position = thisEnemy.position
+        emitter.zPosition = Constants.GameLayer.Sprite
+        addChild(emitter)
         
         thisBullet.removeFromParent()
         thisEnemy.removeFromParent()
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(0.3),
+            SKAction.runBlock() {
+                emitter.removeFromParent()
+            }
+        ]))
+        
         score += 10
-        scoreLabel.text = "Score: \(score)"
+        scoreLabel.text = "\(score)"
+        if score > highScore {
+            highScoreLabel.text = "\(score)"
+        }
+        
         spawnBouncer()
     }
     
@@ -398,8 +425,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func gameOver() {
+        if score > highScore {
+            userDefaults.setValue(score, forKey: "highScore")
+            userDefaults.synchronize()
+        }
+        
         backgroundMusicPlayer.stop()
-        let gameOverScene = GameOverScene(size: size)
+        let gameOverScene = GameOverScene(size: size, score: score)
         gameOverScene.scaleMode = scaleMode
         let reveal = SKTransition.crossFadeWithDuration(1.5)
         view?.presentScene(gameOverScene, transition: reveal)

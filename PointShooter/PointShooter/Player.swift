@@ -11,7 +11,7 @@ import SpriteKit
 class Player : SKSpriteNode {
     var prevPosition : CGPoint = CGPointZero
     var invincible = false
-    var health = 100
+    var health = 10
     var autoFiring = false
     var rotateAngle: CGFloat = 0
     

@@ -6,11 +6,18 @@
 //  Copyright © 2016 Ashton Wai & Zachary Bebel. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class GameOverScene : SKScene {
-    override init(size: CGSize) {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let highscore: Int
+    let score: Int
+    let playButton: SKLabelNode
+    
+    init(size: CGSize, score: Int) {
+        self.score = score
+        self.highscore = (userDefaults.valueForKey("highScore") as? Int)!
+        self.playButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
         super.init(size: size)
     }
 
@@ -24,7 +31,7 @@ class GameOverScene : SKScene {
         background.zPosition = 0
         background.xScale = 2
         background.yScale = 2
-        self.addChild(background)
+        addChild(background)
         
         let gameover = SKLabelNode(fontNamed: Constants.Font.GameOverFont)
         gameover.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -34,14 +41,73 @@ class GameOverScene : SKScene {
         gameover.fontColor = UIColor.redColor()
         gameover.fontSize = 250
         gameover.text = "Game Over"
-        self.addChild(gameover)
+        addChild(gameover)
+        
+        let tagLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        tagLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2+50)
+        tagLabel.zPosition = 1
+        tagLabel.fontColor = UIColor.greenColor()
+        tagLabel.fontSize = 50
+        if score > highscore {
+            tagLabel.text = "NEW HIGH SCORE"
+            userDefaults.setValue(score, forKey: "highScore")
+            userDefaults.synchronize()
+        } else {
+            tagLabel.text = "Your Score"
+        }
+        tagLabel.alpha = 0
+        addChild(tagLabel)
+        
+        let scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        scoreLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2-50)
+        scoreLabel.zPosition = 1
+        scoreLabel.fontColor = UIColor.greenColor()
+        scoreLabel.fontSize = 100
+        scoreLabel.text = "\(score)"
+        scoreLabel.alpha = 0
+        addChild(scoreLabel)
+        
+        playButton.position = CGPoint(x: self.size.width/2, y: self.size.height/2-400)
+        playButton.zPosition = 1
+        playButton.fontSize = 75
+        playButton.text = "Play Again"
+        playButton.alpha = 0
+        addChild(playButton)
+        
+        runAction(SKAction.sequence([
+            SKAction.runBlock() {
+                gameover.runAction(SKAction.moveToY(self.size.height/2+400, duration: 1.5))
+            },
+            SKAction.waitForDuration(1.5),
+            SKAction.runBlock() {
+                tagLabel.runAction(SKAction.fadeInWithDuration(1.0))
+                scoreLabel.runAction(SKAction.fadeInWithDuration(1.0))
+            },
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                self.playButton.runAction(SKAction.fadeInWithDuration(1.0))
+            }
+        ]))
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        sceneTapped()
+        for touch: AnyObject in touches {
+            if nodeAtPoint(touch.locationInNode(self)) == playButton {
+                playButton.fontColor = UIColor.cyanColor()
+            }
+        }
     }
     
-    func sceneTapped() {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        playButton.fontColor = UIColor.whiteColor()
+        for touch: AnyObject in touches {
+            if nodeAtPoint(touch.locationInNode(self)) == playButton {
+                startGame()
+            }
+        }
+    }
+    
+    func startGame() {
         let gameScene = GameScene(size: self.size)
         gameScene.scaleMode = self.scaleMode
         let reveal = SKTransition.crossFadeWithDuration(1.5)
