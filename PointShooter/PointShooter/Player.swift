@@ -45,7 +45,7 @@ class Player : SKSpriteNode {
     }
     
     func onDamaged() {
-        health--
+        health -= 1
         invincible = true
         autoFiring = false
         

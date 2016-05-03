@@ -17,6 +17,7 @@ struct PhysicsCategory {
 import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
+    var gameManager: GameManager
     // Bounding boxes
     let playableRect: CGRect
     let spawnRectBounds: CGRect
@@ -44,7 +45,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var score = 0
     var highScore = 0
     
-    override init(size: CGSize) {
+    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
+        self.gameManager = gameManager
         // make constant for max aspect ratio support 4:3
         let maxAspectRatio: CGFloat = 4.0 / 3.0
         // calculate playable height
@@ -150,7 +152,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         lifeLabel.text = "Life: \(player.health)"
         addChild(lifeLabel)
         
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panDetected:"))
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
         self.view!.addGestureRecognizer(gestureRecognizer)
         
         fireTimer = fireRate
@@ -431,9 +433,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
         
         backgroundMusicPlayer.stop()
-        let gameOverScene = GameOverScene(size: size, score: score)
-        gameOverScene.scaleMode = scaleMode
-        let reveal = SKTransition.crossFadeWithDuration(1.5)
-        view?.presentScene(gameOverScene, transition: reveal)
+        gameManager.loadGameOverScene(score)
     }
 }

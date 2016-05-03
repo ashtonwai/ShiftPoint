@@ -10,12 +10,15 @@ import Foundation
 import SpriteKit
 
 class MainMenuScene : SKScene {
+    let gameManager: GameManager
     let startButton: SKLabelNode
     
-    override init(size: CGSize) {
+    // MARK: - Initialization -
+    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
+        self.gameManager = gameManager
         self.startButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
-        
         super.init(size: size)
+        self.scaleMode = scaleMode
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,6 +62,7 @@ class MainMenuScene : SKScene {
         ]))
     }
     
+    // MARK: - Event Handlers -
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == startButton {
@@ -71,15 +75,8 @@ class MainMenuScene : SKScene {
         startButton.fontColor = UIColor.whiteColor()
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == startButton {
-                startGame()
+                gameManager.loadGameScene()
             }
         }
-    }
-    
-    func startGame() {
-        let gameScene = GameScene(size: self.size)
-        gameScene.scaleMode = self.scaleMode
-        let reveal = SKTransition.crossFadeWithDuration(1.5)
-        self.view?.presentScene(gameScene, transition: reveal)
     }
 }

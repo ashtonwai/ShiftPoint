@@ -21,6 +21,7 @@
 		2D430A2A1C7F50BD0075F316 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A281C7F50BD0075F316 /* Main.storyboard */; };
 		2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2B1C7F50BD0075F316 /* Assets.xcassets */; };
 		2D430A2F1C7F50BD0075F316 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */; };
+		2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAAEC0E1CD860A70080A957 /* GameManager.swift */; };
 		2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */; };
 		2DABBFFC1C91C6FC00F5ABAD /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */; };
 		2DABBFFE1C91C71B00F5ABAD /* Microgramma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */; };
@@ -51,6 +52,7 @@
 		2D430A2B1C7F50BD0075F316 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D430A2E1C7F50BD0075F316 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D430A301C7F50BD0075F316 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DAAEC0E1CD860A70080A957 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inversionz.otf; path = Fonts/Inversionz.otf; sourceTree = "<group>"; };
 		2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "6 Cells.otf"; path = "Fonts/6 Cells.otf"; sourceTree = "<group>"; };
 		2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Microgramma.ttf; path = Fonts/Microgramma.ttf; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			children = (
 				2D430A201C7F50BD0075F316 /* AppDelegate.swift */,
 				2D05EED51C850E830093A3A3 /* VC */,
+				2DAAEC101CD860AF0080A957 /* Protocols */,
 				2D05EED41C850E750093A3A3 /* Scenes */,
 				2D05EED61C850EE00093A3A3 /* Sprites */,
 				2D05EED71C850F150093A3A3 /* Lib */,
@@ -170,6 +173,14 @@
 				679ED6B21C950DD000BC8924 /* spark.png */,
 			);
 			path = PointShooter;
+			sourceTree = "<group>";
+		};
+		2DAAEC101CD860AF0080A957 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				2DAAEC0E1CD860A70080A957 /* GameManager.swift */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 				2D2A59481C950D3800086DCB /* Actions.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Constants.swift in Sources */,
+				2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

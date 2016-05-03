@@ -9,36 +9,51 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GameManager {
+    let debugMode = true;
+    let debugPhysics = false;
+    let screenSize = CGSize(width: 2048, height: 1536)
+    let scaleMode = SKSceneScaleMode.AspectFill
+    var skView: SKView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let scene = MainMenuScene(size:CGSize(width: 2048, height: 1536))
-        let skView = self.view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-        //skView.showsPhysics = true;
+        self.becomeFirstResponder()
+        skView = self.view as! SKView
         skView.ignoresSiblingOrder = true
-        scene.scaleMode = .AspectFill
-        skView.presentScene(scene)
+        loadMainMenuScene()
     }
-
+    
+    // MARK: - Scene Navigation -
+    func loadMainMenuScene() {
+        let menuScene = MainMenuScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
+        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        skView.presentScene(menuScene, transition: reveal)
+    }
+    
+    func loadGameScene() {
+        let gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
+        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        skView.presentScene(gameScene, transition: reveal)
+    }
+    
+    func loadGameOverScene(score: Int) {
+        let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, score: score)
+        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        skView.presentScene(gameOverScene, transition: reveal)
+    }
+    
+    // MARK: - View Lifecycle -
     override func shouldAutorotate() -> Bool {
         return true
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return .AllButUpsideDown
-        } else {
-            return .All
-        }
+        return .Landscape
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
     override func prefersStatusBarHidden() -> Bool {

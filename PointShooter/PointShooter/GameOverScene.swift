@@ -9,12 +9,14 @@
 import SpriteKit
 
 class GameOverScene : SKScene {
+    var gameManager: GameManager
     let userDefaults = NSUserDefaults.standardUserDefaults()
     let highscore: Int
     let score: Int
     let playButton: SKLabelNode
     
-    init(size: CGSize, score: Int) {
+    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, score: Int) {
+        self.gameManager = gameManager
         self.score = score
         self.highscore = (userDefaults.valueForKey("highScore") as? Int)!
         self.playButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
@@ -102,15 +104,8 @@ class GameOverScene : SKScene {
         playButton.fontColor = UIColor.whiteColor()
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == playButton {
-                startGame()
+                gameManager.loadGameScene()
             }
         }
-    }
-    
-    func startGame() {
-        let gameScene = GameScene(size: self.size)
-        gameScene.scaleMode = self.scaleMode
-        let reveal = SKTransition.crossFadeWithDuration(1.5)
-        self.view?.presentScene(gameScene, transition: reveal)
     }
 }

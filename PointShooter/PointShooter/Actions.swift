@@ -22,7 +22,7 @@ func anim_TeleportOut() -> SKAction {
 
 func anim_TeleportIn() -> SKAction {
     var teleportInTextures: [SKTexture] = []
-    for var i = 4; i > 0; i-- {
+    for i in 4.stride(to: 1, by: -1) {
         teleportInTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
     }
     return SKAction.animateWithTextures(teleportInTextures, timePerFrame: 0.1)
