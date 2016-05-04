@@ -16,7 +16,7 @@ class MainMenuScene : SKScene {
     // MARK: - Initialization -
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.gameManager = gameManager
-        self.startButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        self.startButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         super.init(size: size)
         self.scaleMode = scaleMode
     }
@@ -33,13 +33,13 @@ class MainMenuScene : SKScene {
         background.yScale = 1.45
         addChild(background)
         
-        let gameTitle = SKLabelNode(fontNamed: Constants.Font.TitleFont)
+        let gameTitle = SKLabelNode(fontNamed: Config.Font.TitleFont)
         gameTitle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameTitle.zPosition = 1
         gameTitle.horizontalAlignmentMode = .Center
         gameTitle.verticalAlignmentMode = .Center
         gameTitle.fontSize = 200
-        gameTitle.text = "Point Shooter"
+        gameTitle.text = "Shift Point"
         addChild(gameTitle)
         
         startButton.position = CGPoint(x: self.size.width/2, y: self.size.height/2-200)

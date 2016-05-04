@@ -13,7 +13,7 @@ class Player : SKSpriteNode {
     var teleporting: Bool = false
     var invincible: Bool = false
     var autoFiring: Bool = false
-    var life: Int = Constants.GameConfig.PLAYER_LIFE
+    var life: Int = Config.Player.PLAYER_LIFE
     var rotateAngle: CGFloat = 0
     
     // MARK: - Initialization -
@@ -50,7 +50,7 @@ class Player : SKSpriteNode {
     
     // MARK: - Event Handler -
     func onDamaged() {
-        if Constants.Developer.GodMode {
+        if Config.Developer.GodMode {
             return
         }
         

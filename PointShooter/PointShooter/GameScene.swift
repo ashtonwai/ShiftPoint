@@ -25,19 +25,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var spawnRects: [CGRect]
     
     // Enemy count handling
-    let numOfEnemies = Constants.GameConfig.MAX_BOUNCER
+    let numOfEnemies = Config.GameLimit.MAX_BOUNCER
     let maxEnemySize = CGSize(width: 100, height: 100)
     
     // Player variables
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
-    let fireRate: Float = Constants.GameConfig.FIRE_RATE
+    let fireRate: Float = Config.Player.FIRE_RATE
     var fireTimer: Float = 0.0
     
     // Game variables
-    var lifeLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
-    var scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+    var lifeLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
     var score = 0
     
     
@@ -114,7 +114,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.view!.addGestureRecognizer(panGesture)
         
         // debug mode
-        if Constants.Developer.DebugMode {
+        if Config.Developer.DebugMode {
             debugDrawPlayableArea()
         }
     }
@@ -167,7 +167,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         
                         let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
                         teleportOut.position = self.player.prevPosition
-                        teleportOut.zPosition = Constants.GameLayer.Animation
+                        teleportOut.zPosition = Config.GameLayer.Animation
                         teleportOut.zRotation = self.player.rotateAngle
                         self.addChild(teleportOut)
                         
@@ -184,7 +184,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
                     teleportIn.position = self.player.position
-                    teleportIn.zPosition = Constants.GameLayer.Animation
+                    teleportIn.zPosition = Config.GameLayer.Animation
                     teleportIn.zRotation = self.player.rotateAngle
                     self.addChild(teleportIn)
                     
@@ -256,7 +256,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // Emitter
         let emitter = SKEmitterNode(fileNamed: "Explosion")!
         emitter.position = thisEnemy.position
-        emitter.zPosition = Constants.GameLayer.Sprite
+        emitter.zPosition = Config.GameLayer.Sprite
         
         runAction(SKAction.sequence([
             SKAction.group([
@@ -285,7 +285,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             player.onDamaged()
             lifeLabel.text = "Life: \(player.life)"
             
-            if player.life <= 0 && !Constants.Developer.Endless {
+            if player.life <= 0 && !Config.Developer.Endless {
                 player.removeFromParent()
                 gameOver()
             }
@@ -302,7 +302,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         let background = SKSpriteNode(imageNamed: "Background.jpg")
         background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = Constants.GameLayer.Background
+        background.zPosition = Config.GameLayer.Background
         background.xScale = 1.45
         background.yScale = 1.45
         addChild(background)
@@ -310,14 +310,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         player = Player()
         player.name = "player"
         player.position = CGPointMake(size.width/2, size.height/2)
-        player.zPosition = Constants.GameLayer.Sprite
+        player.zPosition = Config.GameLayer.Sprite
         addChild(player)
     }
     
     func setupHUD() {
-        let scoreTextLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        let scoreTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         scoreTextLabel.position = CGPointMake(50, size.height-50)
-        scoreTextLabel.zPosition = Constants.GameLayer.HUD
+        scoreTextLabel.zPosition = Config.GameLayer.HUD
         scoreTextLabel.horizontalAlignmentMode = .Left
         scoreTextLabel.verticalAlignmentMode = .Top
         scoreTextLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
@@ -326,7 +326,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(scoreTextLabel)
         
         scoreLabel.position = CGPoint(x: 50, y: size.height-100)
-        scoreLabel.zPosition = Constants.GameLayer.HUD
+        scoreLabel.zPosition = Config.GameLayer.HUD
         scoreLabel.horizontalAlignmentMode = .Left
         scoreLabel.verticalAlignmentMode = .Top
         scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
@@ -335,7 +335,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(scoreLabel)
         
         lifeLabel.position = CGPoint(x: size.width-50, y: size.height-50)
-        lifeLabel.zPosition = Constants.GameLayer.HUD
+        lifeLabel.zPosition = Config.GameLayer.HUD
         lifeLabel.horizontalAlignmentMode = .Right
         lifeLabel.verticalAlignmentMode = .Top
         lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
@@ -379,7 +379,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             SKAction.runBlock() {
                 let bullet = Bullet(circleOfRadius: 10)
                 bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
-                bullet.zPosition = Constants.GameLayer.Sprite
+                bullet.zPosition = Config.GameLayer.Sprite
                 self.addChild(bullet)
                 
                 let dx = cos(self.player.zRotation + CGFloat(M_PI/2)) * 2500
@@ -394,7 +394,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let bouncer = Bouncer(rectOfSize: CGSize(width: 50, height: 50))
         let spawnRect = spawnRects[Int.random(0...3)]
         bouncer.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        bouncer.zPosition = Constants.GameLayer.Sprite;
+        bouncer.zPosition = Config.GameLayer.Sprite;
         bouncer.forward = CGPoint.randomUnitVector()
         addChild(bouncer)
     }
@@ -404,7 +404,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let seeker = Seeker(size: CGSize(width: 50, height: 50))
         let spawnRect = spawnRects[Int.random(0...3)]
         seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        seeker.zPosition = Constants.GameLayer.Sprite
+        seeker.zPosition = Config.GameLayer.Sprite
         addChild(seeker)
     }
     
@@ -417,7 +417,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 x: playableRect.width/2 + playableRect.height/2 * cos(angle),
                 y: playableRect.height/2 + playableRect.height/2 * sin(angle)
             )
-            seeker.zPosition = Constants.GameLayer.Sprite
+            seeker.zPosition = Config.GameLayer.Sprite
             addChild(seeker)
         }
     }

@@ -33,11 +33,11 @@ class GameViewController: UIViewController, GameManager {
     func loadGameScene() {
         let gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
         let reveal = SKTransition.crossFadeWithDuration(1.0)
-        if Constants.Developer.DebugMode {
+        if Config.Developer.DebugMode {
             skView.showsFPS = true
             skView.showsNodeCount = true
         }
-        if Constants.Developer.DebugPhysics {
+        if Config.Developer.DebugPhysics {
             skView.showsPhysics = true
         }
         skView.presentScene(gameScene, transition: reveal)
