@@ -9,42 +9,39 @@
 struct PhysicsCategory {
     static let None      : UInt32 = 0
     static let All       : UInt32 = UInt32.max
-    static let Enemy     : UInt32 = 0b1
-    static let Bullet    : UInt32 = 0b10
-    static let Player    : UInt32 = 0b101
+    static let Enemy     : UInt32 = 0b1 // 1
+    static let Bullet    : UInt32 = 0b10 // 2
+    static let Player    : UInt32 = 0b101 // 4
 }
 
 import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
     var gameManager: GameManager
+    
     // Bounding boxes
     let playableRect: CGRect
     let spawnRectBounds: CGRect
     var spawnRects: [CGRect]
     
     // Enemy count handling
-    let numOfEnemies = Constants.Setup.MAX_BOUNCER
+    let numOfEnemies = Constants.GameConfig.MAX_BOUNCER
     let maxEnemySize = CGSize(width: 100, height: 100)
     
     // Player variables
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
-    let fireRate: Float = Constants.Setup.FIRE_RATE
+    let fireRate: Float = Constants.GameConfig.FIRE_RATE
     var fireTimer: Float = 0.0
-    
-    let teleportOutAnimation: SKAction = anim_TeleportOut()
-    let teleportInAnimation: SKAction = anim_TeleportIn()
     
     // Game variables
     var lifeLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
     var scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
-    var highScoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
-    let userDefaults = NSUserDefaults.standardUserDefaults()
     var score = 0
-    var highScore = 0
     
+    
+    // MARK: - Initialization -
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.gameManager = gameManager
         // make constant for max aspect ratio support 4:3
@@ -89,13 +86,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         )
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
-        if let myHighScore = userDefaults.valueForKey("highScore") as? Int {
-            highScore = myHighScore
-            print(highScore)
-        } else {
-            userDefaults.setValue(0, forKey: "highScore")
-            userDefaults.synchronize()
-        }
+        fireTimer = fireRate
         
         super.init(size: size)
     }
@@ -105,57 +96,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMoveToView(view: SKView) {
-        physicsWorld.gravity = CGVectorMake(0, 0)
-        physicsWorld.contactDelegate = self
-        
         playBackgroundMusic("BGM.mp3")
-        
-        let background = SKSpriteNode(imageNamed: "Background.jpg")
-        background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = Constants.GameLayer.Background
-        background.xScale = 1.45
-        background.yScale = 1.45
-        addChild(background)
-        
-        player = Player()
-        player.name = "player"
-        player.position = CGPointMake(size.width/2, size.height/2)
-        player.zPosition = Constants.GameLayer.Sprite
-        addChild(player)
-        
-        score = 0
-        
-        scoreLabel.position = CGPoint(x: 50, y: size.height - 150)
-        scoreLabel.zPosition = Constants.GameLayer.HUD
-        scoreLabel.horizontalAlignmentMode = .Left
-        scoreLabel.verticalAlignmentMode = .Top
-        scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        scoreLabel.fontSize = 80
-        scoreLabel.text = "\(score)"
-        addChild(scoreLabel)
-        
-        highScoreLabel.position = CGPoint(x: 50, y: size.height - 50)
-        highScoreLabel.zPosition = Constants.GameLayer.HUD
-        highScoreLabel.horizontalAlignmentMode = .Left
-        highScoreLabel.verticalAlignmentMode = .Top
-        highScoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        highScoreLabel.fontSize = 80
-        highScoreLabel.text = "\(highScore)"
-        addChild(highScoreLabel)
-        
-        lifeLabel.position = CGPoint(x: size.width - 50, y: size.height - 50)
-        lifeLabel.zPosition = Constants.GameLayer.HUD
-        lifeLabel.horizontalAlignmentMode = .Right
-        lifeLabel.verticalAlignmentMode = .Top
-        lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        lifeLabel.fontSize = 80
-        lifeLabel.text = "Life: \(player.health)"
-        addChild(lifeLabel)
-        
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
-        self.view!.addGestureRecognizer(gestureRecognizer)
-        
-        fireTimer = fireRate
+        setupWorld()
+        setupHUD()
         
         runAction(SKAction.sequence([
             SKAction.waitForDuration(1.0),
@@ -167,10 +110,17 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
         ]))
         
-        // debug functions
-        //debugDrawPlayableArea()
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
+        self.view!.addGestureRecognizer(panGesture)
+        
+        // debug mode
+        if Constants.Developer.DebugMode {
+            debugDrawPlayableArea()
+        }
     }
     
+    
+    // MARK - Update -
     override func update(currentTime: CFTimeInterval) {
         if lastUpdateTime > 0 {
             deltaTime = currentTime - lastUpdateTime
@@ -202,34 +152,35 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         })
     }
     
+    
+    // MARK: - Event Handlers -
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
             let teleport = SKAction.sequence([
-                teleportSound,
-                SKAction.runBlock() {
-                    self.player.prevPosition = self.player.position
-                    self.player.runAction(SKAction.fadeOutWithDuration(0.5))
-                    self.player.invincible = true
-                    
-                    let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
-                    teleportOut.position = self.player.prevPosition
-                    teleportOut.zPosition = Constants.GameLayer.Animation
-                    teleportOut.zRotation = self.player.rotateAngle
-                    self.addChild(teleportOut)
-                    
-                    teleportOut.runAction(SKAction.sequence([
-                        self.teleportOutAnimation,
-                        SKAction.runBlock() {
-                            teleportOut.removeFromParent()
-                        }
-                    ]))
-                },
+                SKAction.group([
+                    teleportSound,
+                    SKAction.runBlock() {
+                        self.player.teleporting = true
+                        self.player.prevPosition = self.player.position
+                        self.player.runAction(SKAction.fadeOutWithDuration(0.5))
+                        
+                        let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
+                        teleportOut.position = self.player.prevPosition
+                        teleportOut.zPosition = Constants.GameLayer.Animation
+                        teleportOut.zRotation = self.player.rotateAngle
+                        self.addChild(teleportOut)
+                        
+                        teleportOut.runAction(SKAction.sequence([
+                            teleportOutAnimation,
+                            SKAction.removeFromParent()
+                        ]))
+                    }
+                ]),
                 SKAction.waitForDuration(0.25),
                 SKAction.runBlock() {
                     self.player.position = location
                     self.player.runAction(SKAction.fadeInWithDuration(0.5))
-                    self.player.invincible = false
                     
                     let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
                     teleportIn.position = self.player.position
@@ -238,11 +189,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     self.addChild(teleportIn)
                     
                     teleportIn.runAction(SKAction.sequence([
-                        self.teleportInAnimation,
-                        SKAction.runBlock() {
-                            teleportIn.removeFromParent()
-                        }
+                        teleportInAnimation,
+                        SKAction.removeFromParent()
                     ]))
+                    
+                    self.player.teleporting = false
                 }
             ])
             self.runAction(teleport)
@@ -258,7 +209,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let dx = player.position.x - touchLocation.x
             player.direction(dx, dy: dy)
             
-            if !player.invincible {
+            if !player.invincible && !player.teleporting {
                 player.autoFiring = true
             }
         }
@@ -267,6 +218,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    
+    // MARK - Collision Detections -
     func didBeginContact(contact: SKPhysicsContact) {
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
@@ -300,39 +253,39 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func bulletDidCollideWithEnemy(thisBullet: SKShapeNode, thisEnemy: SKShapeNode) {
-        runAction(scoreSound)
-        
         // Emitter
         let emitter = SKEmitterNode(fileNamed: "Explosion")!
         emitter.position = thisEnemy.position
         emitter.zPosition = Constants.GameLayer.Sprite
-        addChild(emitter)
         
-        thisBullet.removeFromParent()
-        thisEnemy.removeFromParent()
         runAction(SKAction.sequence([
+            SKAction.group([
+                scoreSound,
+                SKAction.runBlock() {
+                    self.addChild(emitter)
+                    
+                    thisBullet.removeFromParent()
+                    thisEnemy.removeFromParent()
+                    
+                    self.score += 10
+                    self.scoreLabel.text = "\(self.score)"
+                }
+            ]),
             SKAction.waitForDuration(0.3),
             SKAction.runBlock() {
                 emitter.removeFromParent()
+                self.spawnBouncer()
             }
         ]))
-        
-        score += 10
-        scoreLabel.text = "\(score)"
-        if score > highScore {
-            highScoreLabel.text = "\(score)"
-        }
-        
-        spawnBouncer()
     }
     
     func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
-        if !player.invincible {
+        if !player.invincible && !player.teleporting {
             thisEnemy.removeFromParent()
             player.onDamaged()
-            lifeLabel.text = "Life: \(player.health)"
+            lifeLabel.text = "Life: \(player.life)"
             
-            if player.health <= 0 {
+            if player.life <= 0 && !Constants.Developer.Endless {
                 player.removeFromParent()
                 gameOver()
             }
@@ -341,14 +294,54 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func debugDrawPlayableArea() {
-        let shape = SKShapeNode()
-        let path = CGPathCreateMutable()
-        CGPathAddRect(path, nil, playableRect)
-        shape.path = path
-        shape.strokeColor = SKColor.redColor()
-        shape.lineWidth = 10.0
-        addChild(shape)
+    
+    // MARK: - Helper Functions -
+    func setupWorld() {
+        physicsWorld.gravity = CGVectorMake(0, 0)
+        physicsWorld.contactDelegate = self
+        
+        let background = SKSpriteNode(imageNamed: "Background.jpg")
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = Constants.GameLayer.Background
+        background.xScale = 1.45
+        background.yScale = 1.45
+        addChild(background)
+        
+        player = Player()
+        player.name = "player"
+        player.position = CGPointMake(size.width/2, size.height/2)
+        player.zPosition = Constants.GameLayer.Sprite
+        addChild(player)
+    }
+    
+    func setupHUD() {
+        let scoreTextLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        scoreTextLabel.position = CGPointMake(50, size.height-50)
+        scoreTextLabel.zPosition = Constants.GameLayer.HUD
+        scoreTextLabel.horizontalAlignmentMode = .Left
+        scoreTextLabel.verticalAlignmentMode = .Top
+        scoreTextLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        scoreTextLabel.fontSize = 50
+        scoreTextLabel.text = "Score"
+        addChild(scoreTextLabel)
+        
+        scoreLabel.position = CGPoint(x: 50, y: size.height-100)
+        scoreLabel.zPosition = Constants.GameLayer.HUD
+        scoreLabel.horizontalAlignmentMode = .Left
+        scoreLabel.verticalAlignmentMode = .Top
+        scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        scoreLabel.fontSize = 80
+        scoreLabel.text = "\(score)"
+        addChild(scoreLabel)
+        
+        lifeLabel.position = CGPoint(x: size.width-50, y: size.height-50)
+        lifeLabel.zPosition = Constants.GameLayer.HUD
+        lifeLabel.horizontalAlignmentMode = .Right
+        lifeLabel.verticalAlignmentMode = .Top
+        lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        lifeLabel.fontSize = 80
+        lifeLabel.text = "Life: \(player.life)"
+        addChild(lifeLabel)
     }
     
     func checkBounds(enemy: Bouncer) {
@@ -382,16 +375,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func autoFire() {
-        let bullet = Bullet(circleOfRadius: 10)
-        bullet.position = CGPointMake(player.position.x, player.position.y)
-        bullet.zPosition = Constants.GameLayer.Sprite
-        addChild(bullet)
-        
-        let dx = cos(player.zRotation + CGFloat(M_PI/2)) * 2500
-        let dy = sin(player.zRotation + CGFloat(M_PI/2)) * 2500
-        bullet.move(dx, dy: dy)
-        
-        runAction(bulletFireSound)
+        runAction(SKAction.group([
+            SKAction.runBlock() {
+                let bullet = Bullet(circleOfRadius: 10)
+                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
+                bullet.zPosition = Constants.GameLayer.Sprite
+                self.addChild(bullet)
+                
+                let dx = cos(self.player.zRotation + CGFloat(M_PI/2)) * 2500
+                let dy = sin(self.player.zRotation + CGFloat(M_PI/2)) * 2500
+                bullet.move(dx, dy: dy)
+            },
+            bulletFireSound
+        ]))
     }
     
     func spawnBouncer() {
@@ -427,12 +423,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func gameOver() {
-        if score > highScore {
-            userDefaults.setValue(score, forKey: "highScore")
-            userDefaults.synchronize()
-        }
-        
         backgroundMusicPlayer.stop()
         gameManager.loadGameOverScene(score)
+    }
+    
+    
+    // MARK: - Debug -
+    func debugDrawPlayableArea() {
+        let shape = SKShapeNode()
+        let path = CGPathCreateMutable()
+        CGPathAddRect(path, nil, playableRect)
+        shape.path = path
+        shape.strokeColor = SKColor.redColor()
+        shape.lineWidth = 10.0
+        addChild(shape)
     }
 }

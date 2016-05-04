@@ -9,20 +9,21 @@
 import SpriteKit
 
 class Player : SKSpriteNode {
-    var prevPosition : CGPoint = CGPointZero
-    var invincible = false
-    var health = 10
-    var autoFiring = false
+    var prevPosition: CGPoint = CGPointZero
+    var teleporting: Bool = false
+    var invincible: Bool = false
+    var autoFiring: Bool = false
+    var life: Int = Constants.GameConfig.PLAYER_LIFE
     var rotateAngle: CGFloat = 0
     
+    // MARK: - Initialization -
     init() {
         let texture = SKTexture(imageNamed: "Player")
-        
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
         self.name = "player"
         self.size = size
-        self.anchorPoint.y = 0.36
+        self.anchorPoint.y = 0.35
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(
             width: texture.size().width * xScale,
@@ -37,6 +38,8 @@ class Player : SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Movement Controls -
     func direction(dx: CGFloat, dy: CGFloat) {
         let angle = atan2(dy, dx)
         rotateAngle = angle + CGFloat(M_PI/2)
@@ -44,8 +47,14 @@ class Player : SKSpriteNode {
         self.runAction(rotate)
     }
     
+    
+    // MARK: - Event Handler -
     func onDamaged() {
-        health -= 1
+        if Constants.Developer.GodMode {
+            return
+        }
+        
+        life -= 1
         invincible = true
         autoFiring = false
         

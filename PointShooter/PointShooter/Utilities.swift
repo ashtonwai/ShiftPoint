@@ -10,7 +10,7 @@ import Foundation
 import CoreGraphics
 import AVFoundation
 
-/* Functions */
+// MARK: - Functions -
 func + (left: CGPoint, right: CGPoint) -> CGPoint {
     return CGPoint(x: left.x + right.x, y: left.y + right.y)
 }
@@ -101,7 +101,7 @@ func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
 #endif
 
 
-/* Extensions */
+// MARK: - Extensions -
 extension CGPoint {
     func length() -> CGFloat {
         return sqrt(x*x + y*y)
@@ -152,7 +152,7 @@ extension Int{
 }
 
 
-/* Background Music */
+// MARK: - Music -
 var backgroundMusicPlayer: AVAudioPlayer!
 
 func playBackgroundMusic(filename: String) {

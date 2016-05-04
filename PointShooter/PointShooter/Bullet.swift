@@ -9,8 +9,9 @@
 import SpriteKit
 
 class Bullet : SKShapeNode {
-    let bulletSpeed: Double = 1
+    let bulletSpeed: Double = Constants.GameConfig.BULLET_SPEED
     
+    // MARK: - Initialization -
     init(circleOfRadius: CGFloat) {
         super.init()
         
@@ -36,6 +37,8 @@ class Bullet : SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Movement Controls -
     func move(dx: CGFloat, dy: CGFloat) {
         let move = SKAction.moveBy(CGVector(dx: dx, dy: dy), duration: bulletSpeed)
         let delete = SKAction.removeFromParent()

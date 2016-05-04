@@ -15,6 +15,7 @@ class Seeker : SKShapeNode {
     var delta: CGFloat = 250.0
     var rotateSpeed: CGFloat = 3.0 * π
     
+    // MARK: - Initialization -
     init(size: CGSize) {
         super.init()
         
@@ -42,6 +43,8 @@ class Seeker : SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Movement Controls -
     func seek(deltaTime: NSTimeInterval, location: CGPoint) {
         let offset = location - self.position
         direction = offset.normalized()

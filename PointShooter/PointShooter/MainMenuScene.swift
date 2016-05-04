@@ -75,6 +75,7 @@ class MainMenuScene : SKScene {
         startButton.fontColor = UIColor.whiteColor()
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == startButton {
+                startButton.fontColor = UIColor.whiteColor()
                 gameManager.loadGameScene()
             }
         }

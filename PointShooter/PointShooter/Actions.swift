@@ -8,10 +8,14 @@
 
 import SpriteKit
 
+// MARK: - Sounds -
 let bulletFireSound: SKAction = SKAction.playSoundFileNamed("Laser.mp3", waitForCompletion: false)
 let teleportSound: SKAction = SKAction.playSoundFileNamed("Teleport.mp3", waitForCompletion: false)
 let scoreSound: SKAction = SKAction.playSoundFileNamed("Score.mp3", waitForCompletion: false)
 
+
+// MARK: - Animations -
+let teleportOutAnimation: SKAction = anim_TeleportOut()
 func anim_TeleportOut() -> SKAction {
     var teleportOutTextures: [SKTexture] = []
     for i in 2...6 {
@@ -20,6 +24,7 @@ func anim_TeleportOut() -> SKAction {
     return SKAction.animateWithTextures(teleportOutTextures, timePerFrame: 0.1)
 }
 
+let teleportInAnimation: SKAction = anim_TeleportIn()
 func anim_TeleportIn() -> SKAction {
     var teleportInTextures: [SKTexture] = []
     for i in 4.stride(to: 1, by: -1) {
