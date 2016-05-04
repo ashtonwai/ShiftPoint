@@ -25,7 +25,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var spawnRects: [CGRect]
     
     // Enemy count handling
-    let numOfEnemies = Config.GameLimit.MAX_BOUNCER
+    var numOfEnemies = 0 //Config.GameLimit.MAX_BOUNCER
     let maxEnemySize = CGSize(width: 100, height: 100)
     
     // Player variables
@@ -39,6 +39,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var lifeLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
     var scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
     var score = 0
+    var highScore = 0
+    var wave = 2
     
     
     // MARK: - Initialization -
@@ -100,15 +102,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         setupWorld()
         setupHUD()
         
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                for _ in 0...self.numOfEnemies-1 {
-                    self.spawnBouncer()
-                }
-                self.spawnSeekerCircle()
-            }
-        ]))
+        spawnWave()
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
         self.view!.addGestureRecognizer(panGesture)
@@ -117,6 +111,25 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         if Config.Developer.DebugMode {
             debugDrawPlayableArea()
         }
+    }
+    
+    func spawnWave() {
+        
+        var waveEnemyCount = wave * wave / 2 + wave % 2
+        
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                if self.wave > 5 && self.wave % 3 == 0 {
+                    self.spawnSeekerCircle()
+                    waveEnemyCount /= 2
+                }
+                for _ in 0...waveEnemyCount-1 {
+                    self.spawnBouncer()
+                }
+                
+            }
+            ]))
     }
     
     
@@ -269,14 +282,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     self.score += 10
                     self.scoreLabel.text = "\(self.score)"
+                    
+                    self.numOfEnemies -= 1
+                    if self.numOfEnemies <= 0 {
+                        self.wave += 1
+                        self.spawnWave()
+                    }
                 }
             ]),
             SKAction.waitForDuration(0.3),
             SKAction.runBlock() {
                 emitter.removeFromParent()
-                self.spawnBouncer()
             }
         ]))
+        
     }
     
     func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
@@ -288,9 +307,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             if player.life <= 0 && !Config.Developer.Endless {
                 player.removeFromParent()
                 gameOver()
+                return
             }
             
-            spawnBouncer()
+            numOfEnemies -= 1
+            if numOfEnemies <= 0 {
+                wave += 1
+                spawnWave()
+            }
         }
     }
     
@@ -397,6 +421,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         bouncer.zPosition = Config.GameLayer.Sprite;
         bouncer.forward = CGPoint.randomUnitVector()
         addChild(bouncer)
+        numOfEnemies += 1
     }
     
     func spawnSeeker() {
@@ -406,6 +431,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
         seeker.zPosition = Config.GameLayer.Sprite
         addChild(seeker)
+        numOfEnemies += 1
     }
     
     func spawnSeekerCircle () {
@@ -419,6 +445,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             )
             seeker.zPosition = Config.GameLayer.Sprite
             addChild(seeker)
+            numOfEnemies += 1
         }
     }
     
