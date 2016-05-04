@@ -10,8 +10,6 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController, GameManager {
-    let debugMode = true;
-    let debugPhysics = false;
     let screenSize = CGSize(width: 2048, height: 1536)
     let scaleMode = SKSceneScaleMode.AspectFill
     var skView: SKView!
@@ -24,6 +22,7 @@ class GameViewController: UIViewController, GameManager {
         loadMainMenuScene()
     }
     
+    
     // MARK: - Scene Navigation -
     func loadMainMenuScene() {
         let menuScene = MainMenuScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
@@ -34,6 +33,13 @@ class GameViewController: UIViewController, GameManager {
     func loadGameScene() {
         let gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
         let reveal = SKTransition.crossFadeWithDuration(1.0)
+        if Constants.Developer.DebugMode {
+            skView.showsFPS = true
+            skView.showsNodeCount = true
+        }
+        if Constants.Developer.DebugPhysics {
+            skView.showsPhysics = true
+        }
         skView.presentScene(gameScene, transition: reveal)
     }
     
@@ -42,6 +48,7 @@ class GameViewController: UIViewController, GameManager {
         let reveal = SKTransition.crossFadeWithDuration(1.0)
         skView.presentScene(gameOverScene, transition: reveal)
     }
+    
     
     // MARK: - View Lifecycle -
     override func shouldAutorotate() -> Bool {

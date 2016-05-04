@@ -14,6 +14,7 @@ class Bouncer : SKShapeNode {
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat
     
+    // MARK: - Initialization -
     init(rectOfSize: CGSize) {
         self.delta = CGFloat(Int.random(100...500))
         
@@ -41,6 +42,8 @@ class Bouncer : SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Movement Controls -
     func move(deltaTime: NSTimeInterval) {
         prevPosition = position
         velocity = forward * delta

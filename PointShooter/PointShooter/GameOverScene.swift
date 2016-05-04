@@ -104,6 +104,7 @@ class GameOverScene : SKScene {
         playButton.fontColor = UIColor.whiteColor()
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == playButton {
+                playButton.fontColor = UIColor.whiteColor()
                 gameManager.loadGameScene()
             }
         }

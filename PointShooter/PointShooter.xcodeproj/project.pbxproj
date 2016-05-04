@@ -163,14 +163,13 @@
 				2D05EED41C850E750093A3A3 /* Scenes */,
 				2D05EED61C850EE00093A3A3 /* Sprites */,
 				2D05EED71C850F150093A3A3 /* Lib */,
+				2DAAEC171CD96CB60080A957 /* Emitter */,
 				2D084E061C8E907C0054E718 /* Fonts */,
 				2D3F96891C97CBDB00272995 /* Sounds */,
 				2D430A2B1C7F50BD0075F316 /* Assets.xcassets */,
 				2D430A281C7F50BD0075F316 /* Main.storyboard */,
 				2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */,
 				2D430A301C7F50BD0075F316 /* Info.plist */,
-				679ED6B11C950DD000BC8924 /* Explosion.sks */,
-				679ED6B21C950DD000BC8924 /* spark.png */,
 			);
 			path = PointShooter;
 			sourceTree = "<group>";
@@ -181,6 +180,15 @@
 				2DAAEC0E1CD860A70080A957 /* GameManager.swift */,
 			);
 			name = Protocols;
+			sourceTree = "<group>";
+		};
+		2DAAEC171CD96CB60080A957 /* Emitter */ = {
+			isa = PBXGroup;
+			children = (
+				679ED6B11C950DD000BC8924 /* Explosion.sks */,
+				679ED6B21C950DD000BC8924 /* spark.png */,
+			);
+			name = Emitter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
