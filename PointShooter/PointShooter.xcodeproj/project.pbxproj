@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* Utilities.swift */; };
 		2D2A59481C950D3800086DCB /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A59471C950D3800086DCB /* Actions.swift */; };
-		2D3F96881C97A5DA00272995 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F96871C97A5DA00272995 /* Constants.swift */; };
+		2D3F96881C97A5DA00272995 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F96871C97A5DA00272995 /* Config.swift */; };
 		2D3F96951C97CC9500272995 /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96941C97CC9500272995 /* Teleport.mp3 */; };
 		2D3F96971C97CCAE00272995 /* BGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96961C97CCAE00272995 /* BGM.mp3 */; };
 		2D3F96991C97CCBC00272995 /* Laser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96981C97CCBC00272995 /* Laser.mp3 */; };
@@ -38,7 +38,7 @@
 /* Begin PBXFileReference section */
 		2D05EEDE1C85625D0093A3A3 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2D2A59471C950D3800086DCB /* Actions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
-		2D3F96871C97A5DA00272995 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2D3F96871C97A5DA00272995 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		2D3F96941C97CC9500272995 /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Sounds/Teleport.mp3; sourceTree = "<group>"; };
 		2D3F96961C97CCAE00272995 /* BGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BGM.mp3; path = Sounds/BGM.mp3; sourceTree = "<group>"; };
 		2D3F96981C97CCBC00272995 /* Laser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Laser.mp3; path = Sounds/Laser.mp3; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				2D2A59471C950D3800086DCB /* Actions.swift */,
-				2D3F96871C97A5DA00272995 /* Constants.swift */,
+				2D3F96871C97A5DA00272995 /* Config.swift */,
 				2D05EEDE1C85625D0093A3A3 /* Utilities.swift */,
 			);
 			name = Lib;
@@ -284,7 +284,7 @@
 				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
 				2D2A59481C950D3800086DCB /* Actions.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
-				2D3F96881C97A5DA00272995 /* Constants.swift in Sources */,
+				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
 				2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,6 +400,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = PointShooter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.PointShooter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -412,6 +413,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = PointShooter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.PointShooter;
 				PRODUCT_NAME = "$(TARGET_NAME)";

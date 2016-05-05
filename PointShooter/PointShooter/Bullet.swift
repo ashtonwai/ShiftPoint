@@ -9,7 +9,7 @@
 import SpriteKit
 
 class Bullet : SKShapeNode {
-    let bulletSpeed: Double = Constants.GameConfig.BULLET_SPEED
+    let bulletSpeed: Double = Config.Player.BULLET_SPEED
     
     // MARK: - Initialization -
     init(circleOfRadius: CGFloat) {

@@ -19,7 +19,7 @@ class GameOverScene : SKScene {
         self.gameManager = gameManager
         self.score = score
         self.highscore = (userDefaults.valueForKey("highScore") as? Int)!
-        self.playButton = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        self.playButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         super.init(size: size)
     }
 
@@ -35,7 +35,7 @@ class GameOverScene : SKScene {
         background.yScale = 2
         addChild(background)
         
-        let gameover = SKLabelNode(fontNamed: Constants.Font.GameOverFont)
+        let gameover = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         gameover.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameover.zPosition = 1
         gameover.horizontalAlignmentMode = .Center
@@ -45,7 +45,7 @@ class GameOverScene : SKScene {
         gameover.text = "Game Over"
         addChild(gameover)
         
-        let tagLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        let tagLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         tagLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2+50)
         tagLabel.zPosition = 1
         tagLabel.fontColor = UIColor.greenColor()
@@ -60,7 +60,7 @@ class GameOverScene : SKScene {
         tagLabel.alpha = 0
         addChild(tagLabel)
         
-        let scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
+        let scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         scoreLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2-50)
         scoreLabel.zPosition = 1
         scoreLabel.fontColor = UIColor.greenColor()

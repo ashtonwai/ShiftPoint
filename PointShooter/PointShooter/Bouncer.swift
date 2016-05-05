@@ -9,7 +9,8 @@
 import SpriteKit
 
 class Bouncer : SKShapeNode {
-    var prevPosition : CGPoint = CGPointZero
+    let scorePoints: Int = Config.Enemy.BOUNCER_SCORE
+    var prevPosition: CGPoint = CGPointZero
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat

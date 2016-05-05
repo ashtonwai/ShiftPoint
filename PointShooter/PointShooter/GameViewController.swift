@@ -13,6 +13,7 @@ class GameViewController: UIViewController, GameManager {
     let screenSize = CGSize(width: 2048, height: 1536)
     let scaleMode = SKSceneScaleMode.AspectFill
     var skView: SKView!
+    var gameScene: GameScene?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,7 @@ class GameViewController: UIViewController, GameManager {
         skView = self.view as! SKView
         skView.ignoresSiblingOrder = true
         loadMainMenuScene()
+        setupNotifications()
     }
     
     
@@ -31,22 +33,51 @@ class GameViewController: UIViewController, GameManager {
     }
     
     func loadGameScene() {
-        let gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
+        gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
         let reveal = SKTransition.crossFadeWithDuration(1.0)
-        if Constants.Developer.DebugMode {
+        if Config.Developer.DebugMode {
             skView.showsFPS = true
             skView.showsNodeCount = true
         }
-        if Constants.Developer.DebugPhysics {
+        if Config.Developer.DebugPhysics {
             skView.showsPhysics = true
         }
-        skView.presentScene(gameScene, transition: reveal)
+        skView.presentScene(gameScene!, transition: reveal)
     }
     
     func loadGameOverScene(score: Int) {
         let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, score: score)
         let reveal = SKTransition.crossFadeWithDuration(1.0)
         skView.presentScene(gameOverScene, transition: reveal)
+    }
+    
+    
+    // MARK: - Notifications -
+    func setupNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(GameViewController.willResignActive(_:)),
+            name: UIApplicationWillResignActiveNotification,
+            object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(GameViewController.didBecomeActive(_:)),
+            name: UIApplicationDidBecomeActiveNotification,
+            object: nil)
+    }
+    
+    func willResignActive(n:NSNotification){
+        print("willResignActive notification")
+        gameScene?.gameActive = false
+    }
+    
+    func didBecomeActive(n:NSNotification){
+        print("didBecomeActive notification")
+        gameScene?.gameActive = true
+    }
+    
+    func teardownNotifications(){
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     
