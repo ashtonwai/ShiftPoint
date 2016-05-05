@@ -38,6 +38,7 @@ class MainMenuScene : SKScene {
         gameTitle.zPosition = 1
         gameTitle.horizontalAlignmentMode = .Center
         gameTitle.verticalAlignmentMode = .Center
+        gameTitle.fontColor = UIColor.greenColor()
         gameTitle.fontSize = 200
         gameTitle.text = "Shift Point"
         addChild(gameTitle)

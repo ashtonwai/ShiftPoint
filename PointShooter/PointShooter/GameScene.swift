@@ -18,6 +18,7 @@ import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
     var gameManager: GameManager
+    var gamePaused: Bool
     
     // Bounding boxes
     let playableRect: CGRect
@@ -36,6 +37,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var fireTimer: Float = 0.0
     
     // Game variables
+    var pauseOverlay: SKShapeNode
+    var pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+    var resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
     var lifeLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
     var scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
     var score = 0
@@ -46,6 +50,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     // MARK: - Initialization -
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.gameManager = gameManager
+        self.gamePaused = false
+        self.pauseOverlay = SKShapeNode(rectOfSize: size)
+        
         // make constant for max aspect ratio support 4:3
         let maxAspectRatio: CGFloat = 4.0 / 3.0
         // calculate playable height
@@ -101,7 +108,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         playBackgroundMusic("BGM.mp3")
         setupWorld()
         setupHUD()
-        
         spawnWave()
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
@@ -113,56 +119,40 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnWave() {
-        
-        var waveEnemyCount = wave * wave / 2 + wave % 2
-        
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                if self.wave > 5 && self.wave % 3 == 0 {
-                    self.spawnSeekerCircle()
-                    waveEnemyCount /= 2
-                }
-                for _ in 0...waveEnemyCount-1 {
-                    self.spawnBouncer()
-                }
-                
-            }
-            ]))
-    }
-    
     
     // MARK - Update -
     override func update(currentTime: CFTimeInterval) {
-        if lastUpdateTime > 0 {
-            deltaTime = currentTime - lastUpdateTime
-        } else {
-            deltaTime = 0
-        }
-        lastUpdateTime = currentTime
-        
-        if (player.autoFiring) {
-            if (fireTimer > 0) {
-                fireTimer -= Float(deltaTime)
+        if !gamePaused {
+            if lastUpdateTime > 0 {
+                deltaTime = currentTime - lastUpdateTime
             } else {
-                autoFire()
-                fireTimer = fireRate
+                deltaTime = 0
             }
+            lastUpdateTime = currentTime
+            
+            if (player.autoFiring) {
+                if (fireTimer > 0) {
+                    fireTimer -= Float(deltaTime)
+                } else {
+                    autoFire()
+                    fireTimer = fireRate
+                }
+            }
+            
+            enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
+                let bouncer = node as! Bouncer
+                bouncer.move(self.deltaTime)
+                self.checkBounds(bouncer)
+            })
+            
+            enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
+                let seeker = node as! Seeker
+                if let targetLocation = self.player?.position {
+                    seeker.seek(self.deltaTime, location: targetLocation)
+                }
+            })
+
         }
-        
-        enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
-            let bouncer = node as! Bouncer
-            bouncer.move(self.deltaTime)
-            self.checkBounds(bouncer)
-        })
-        
-        enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
-            let seeker = node as! Seeker
-            if let targetLocation = self.player?.position {
-                seeker.seek(self.deltaTime, location: targetLocation)
-            }
-        })
     }
     
     
@@ -170,6 +160,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
+            
+            if nodeAtPoint(location) == resumeButton {
+                resumeButton.fontColor = UIColor.cyanColor()
+            }
+            
             let teleport = SKAction.sequence([
                 SKAction.group([
                     teleportSound,
@@ -209,25 +204,39 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     self.player.teleporting = false
                 }
             ])
-            self.runAction(teleport)
+            
+            if !gamePaused {
+                self.runAction(teleport)
+            }
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) { 
+        for touch: AnyObject in touches {
+            if nodeAtPoint(touch.locationInNode(self)) == resumeButton {
+                resumeButton.fontColor = UIColor.whiteColor()
+                runUnpauseAction()
+            }
         }
     }
     
     func panDetected(recognizer: UIPanGestureRecognizer) {
-        if recognizer.state == .Changed {
-            var touchLocation = recognizer.locationInView(recognizer.view)
-            touchLocation = self.convertPointFromView(touchLocation)
-            
-            let dy = player.position.y - touchLocation.y
-            let dx = player.position.x - touchLocation.x
-            player.direction(dx, dy: dy)
-            
-            if !player.invincible && !player.teleporting {
-                player.autoFiring = true
+        if !gamePaused {
+            if recognizer.state == .Changed {
+                var touchLocation = recognizer.locationInView(recognizer.view)
+                touchLocation = self.convertPointFromView(touchLocation)
+                
+                let dy = player.position.y - touchLocation.y
+                let dx = player.position.x - touchLocation.x
+                player.direction(dx, dy: dy)
+                
+                if !player.invincible && !player.teleporting {
+                    player.autoFiring = true
+                }
             }
-        }
-        if recognizer.state == .Ended {
-            player.autoFiring = false
+            if recognizer.state == .Ended {
+                player.autoFiring = false
+            }
         }
     }
     
@@ -316,6 +325,79 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 spawnWave()
             }
         }
+    }
+    
+    
+    // MARK: - Game Pausing -
+    var gameActive: Bool = true {
+        didSet {
+            lastUpdateTime = 0
+            deltaTime = 0
+            if !gameActive {
+                runPauseAction()
+            }
+        }
+    }
+    
+    func runPauseAction() {
+        // pause game
+        gamePaused = true
+        backgroundMusicPlayer.pause()
+        pauseScreen()
+        self.view?.paused = true
+    }
+    
+    func runUnpauseAction() {
+        // unpause game
+        runAction(SKAction.sequence([
+            SKAction.group([
+                SKAction.runBlock() {
+                    self.pauseLabel.runAction(SKAction.sequence([
+                        SKAction.fadeOutWithDuration(0.5),
+                        SKAction.removeFromParent()
+                    ]))
+                },
+                SKAction.runBlock() {
+                    self.resumeButton.runAction(SKAction.sequence([
+                        SKAction.fadeOutWithDuration(0.5),
+                        SKAction.removeFromParent()
+                    ]))
+                },
+                SKAction.runBlock() {
+                    self.pauseOverlay.runAction(SKAction.sequence([
+                        SKAction.fadeOutWithDuration(1.0),
+                        SKAction.removeFromParent()
+                    ]))
+                }
+            ]),
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                self.gamePaused = false
+                backgroundMusicPlayer.play()
+                self.view?.paused = false
+            }
+        ]))
+    }
+    
+    func pauseScreen() {
+        pauseOverlay.position = CGPointMake(size.width/2, size.height/2)
+        pauseOverlay.zPosition = Config.GameLayer.Overlay
+        pauseOverlay.fillColor = UIColor.blackColor()
+        pauseOverlay.alpha = 0.75
+        addChild(pauseOverlay)
+        
+        pauseLabel.position = CGPointMake(size.width/2, size.height/2+250)
+        pauseLabel.zPosition = Config.GameLayer.Overlay
+        pauseLabel.fontColor = UIColor.cyanColor()
+        pauseLabel.fontSize = 200
+        pauseLabel.text = "Paused"
+        addChild(pauseLabel)
+        
+        resumeButton.position = CGPointMake(size.width/2, size.height/2-250)
+        resumeButton.zPosition = Config.GameLayer.Overlay
+        resumeButton.fontSize = 60
+        resumeButton.text = "Resume"
+        addChild(resumeButton)
     }
     
     
@@ -411,6 +493,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 bullet.move(dx, dy: dy)
             },
             bulletFireSound
+        ]))
+    }
+    
+    func spawnWave() {
+        var waveEnemyCount = wave * wave / 2 + wave % 2
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                if self.wave > 5 && self.wave % 3 == 0 {
+                    self.spawnSeekerCircle()
+                    waveEnemyCount /= 2
+                }
+                for _ in 0...waveEnemyCount-1 {
+                    self.spawnBouncer()
+                }
+            }
         ]))
     }
     

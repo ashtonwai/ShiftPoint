@@ -18,7 +18,7 @@ struct Config {
     struct Developer {
         static let DebugMode = true
         static let DebugPhysics = false
-        static let GodMode = true
+        static let GodMode = false
         static let Endless = false
     }
     
@@ -37,6 +37,7 @@ struct Config {
         static let Animation    : CGFloat = 2
         static let HUD          : CGFloat = 3
         static let Debug        : CGFloat = 4
+        static let Overlay      : CGFloat = 5
     }
     
     struct Player {
