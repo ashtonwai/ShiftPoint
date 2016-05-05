@@ -40,7 +40,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var scoreLabel = SKLabelNode(fontNamed: Constants.Font.MainFont)
     var score = 0
     var highScore = 0
-    var wave = 2
+    var wave = 1
     
     
     // MARK: - Initialization -
@@ -115,7 +115,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func spawnWave() {
         
-        var waveEnemyCount = wave * wave / 2 + wave % 2
+        // http://www.meta-calculator.com/online/9j13df5xtv8b
+        var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
         
         runAction(SKAction.sequence([
             SKAction.waitForDuration(1.0),
