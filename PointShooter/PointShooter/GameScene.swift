@@ -274,16 +274,25 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
-        // Emitter
+        // emitter
         let emitter = thisEnemy.explosion()
         emitter.position = thisEnemy.position
         emitter.zPosition = Config.GameLayer.Sprite
+        
+        // points
+        let pointsLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
+        pointsLabel.position = thisEnemy.position
+        pointsLabel.zPosition = Config.GameLayer.Sprite
+        pointsLabel.fontColor = UIColor.cyanColor()
+        pointsLabel.fontSize = 30
+        pointsLabel.text = "\(thisEnemy.scorePoints)"
         
         runAction(SKAction.sequence([
             SKAction.group([
                 scoreSound,
                 SKAction.runBlock() {
                     self.addChild(emitter)
+                    self.addChild(pointsLabel)
                     
                     thisBullet.onHit()
                     thisEnemy.onDamaged()
@@ -301,6 +310,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             SKAction.waitForDuration(0.3),
             SKAction.runBlock() {
                 emitter.removeFromParent()
+                pointsLabel.runAction(SKAction.sequence([
+                    SKAction.fadeOutWithDuration(0.5),
+                    SKAction.removeFromParent()
+                ]))
             }
         ]))
         
