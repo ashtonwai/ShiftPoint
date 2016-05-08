@@ -44,4 +44,10 @@ class Bullet : SKShapeNode {
         let delete = SKAction.removeFromParent()
         self.runAction(SKAction.sequence([move, delete]))
     }
+    
+    
+    // MARK: - Event Handlers -
+    func onHit() {
+        self.removeFromParent()
+    }
 }

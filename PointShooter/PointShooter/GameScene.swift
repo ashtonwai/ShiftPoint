@@ -263,19 +263,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // enemy & bullet collision
         if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
             (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0) {
-            bulletDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisEnemy: secondBody.node as! SKShapeNode)
+            bulletDidCollideWithEnemy(firstBody.node as! Enemy, thisBullet: secondBody.node as! Bullet)
         }
         
-        // player & enemy collision
-        if (firstBody.categoryBitMask & PhysicsCategory.Player != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0) {
-            playerDidCollideWithEnemy(firstBody.node as! SKShapeNode, thisPlayer: secondBody.node as! SKSpriteNode)
+        // enemy & player collision
+        if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
+            (secondBody.categoryBitMask & PhysicsCategory.Player != 0) {
+            playerDidCollideWithEnemy(firstBody.node as! Enemy, thisPlayer: secondBody.node as! Player)
         }
     }
     
-    func bulletDidCollideWithEnemy(thisBullet: SKShapeNode, thisEnemy: SKShapeNode) {
+    func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
         // Emitter
-        let emitter = SKEmitterNode(fileNamed: "Explosion")!
+        let emitter = thisEnemy.explosion()
         emitter.position = thisEnemy.position
         emitter.zPosition = Config.GameLayer.Sprite
         
@@ -285,10 +285,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 SKAction.runBlock() {
                     self.addChild(emitter)
                     
-                    thisBullet.removeFromParent()
-                    thisEnemy.removeFromParent()
+                    thisBullet.onHit()
+                    thisEnemy.onDamaged()
                     
-                    self.score += 10
+                    self.score += thisEnemy.scorePoints
                     self.scoreLabel.text = "\(self.score)"
                     
                     self.numOfEnemies -= 1
@@ -306,14 +306,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func playerDidCollideWithEnemy(thisEnemy: SKShapeNode, thisPlayer: SKSpriteNode) {
+    func playerDidCollideWithEnemy(thisEnemy: Enemy, thisPlayer: Player) {
         if !player.invincible && !player.teleporting {
-            thisEnemy.removeFromParent()
+            thisEnemy.onDestroy()
             player.onDamaged()
             lifeLabel.text = "Life: \(player.life)"
             
             if player.life <= 0 && !Config.Developer.Endless {
-                player.removeFromParent()
+                player.onDestroy()
                 gameOver()
                 return
             }
@@ -378,27 +378,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         ]))
     }
     
-    func pauseScreen() {
-        pauseOverlay.position = CGPointMake(size.width/2, size.height/2)
-        pauseOverlay.zPosition = Config.GameLayer.Overlay
-        pauseOverlay.fillColor = UIColor.blackColor()
-        pauseOverlay.alpha = 0.75
-        addChild(pauseOverlay)
-        
-        pauseLabel.position = CGPointMake(size.width/2, size.height/2+250)
-        pauseLabel.zPosition = Config.GameLayer.Overlay
-        pauseLabel.fontColor = UIColor.cyanColor()
-        pauseLabel.fontSize = 200
-        pauseLabel.text = "Paused"
-        addChild(pauseLabel)
-        
-        resumeButton.position = CGPointMake(size.width/2, size.height/2-250)
-        resumeButton.zPosition = Config.GameLayer.Overlay
-        resumeButton.fontSize = 60
-        resumeButton.text = "Resume"
-        addChild(resumeButton)
-    }
-    
     
     // MARK: - Helper Functions -
     func setupWorld() {
@@ -449,6 +428,27 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(lifeLabel)
     }
     
+    func pauseScreen() {
+        pauseOverlay.position = CGPointMake(size.width/2, size.height/2)
+        pauseOverlay.zPosition = Config.GameLayer.Overlay
+        pauseOverlay.fillColor = UIColor.blackColor()
+        pauseOverlay.alpha = 0.75
+        addChild(pauseOverlay)
+        
+        pauseLabel.position = CGPointMake(size.width/2, size.height/2+250)
+        pauseLabel.zPosition = Config.GameLayer.Overlay
+        pauseLabel.fontColor = UIColor.cyanColor()
+        pauseLabel.fontSize = 200
+        pauseLabel.text = "Paused"
+        addChild(pauseLabel)
+        
+        resumeButton.position = CGPointMake(size.width/2, size.height/2-250)
+        resumeButton.zPosition = Config.GameLayer.Overlay
+        resumeButton.fontSize = 60
+        resumeButton.text = "Resume"
+        addChild(resumeButton)
+    }
+    
     func checkBounds(enemy: Bouncer) {
         var bounds : CGRect!
         
@@ -496,7 +496,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnWave() {
-        
         // http://www.meta-calculator.com/online/9j13df5xtv8b
         var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
         
@@ -510,9 +509,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 for _ in 0...waveEnemyCount-1 {
                     self.spawnBouncer()
                 }
-                
             }
-            ]))
+        ]))
     }
     
     func spawnBouncer() {

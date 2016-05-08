@@ -71,4 +71,8 @@ class Player : SKSpriteNode {
         }
         self.runAction(SKAction.sequence([blinkAction, setHidden]))
     }
+    
+    func onDestroy() {
+        self.removeFromParent()
+    }
 }

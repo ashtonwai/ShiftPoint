@@ -8,8 +8,10 @@
 
 import SpriteKit
 
-class Seeker : SKShapeNode {
-    var forward: CGPoint = CGPointMake(0.0, 1.0)
+class Seeker : Enemy {
+    let points: Int = Config.Enemy.Seeker.SEEKER_SCORE
+    let hp: Int = Config.Enemy.Seeker.SEEKER_HEALTH
+    let color: SKColor = Config.Enemy.Seeker.SEEKER_COLOR
     var velocity: CGPoint = CGPointZero
     var direction: CGPoint = CGPointZero
     var delta: CGFloat = 250.0
@@ -17,7 +19,7 @@ class Seeker : SKShapeNode {
     
     // MARK: - Initialization -
     init(size: CGSize) {
-        super.init()
+        super.init(scorePoints: points, hitPoints: hp, typeColor: color)
         
         let pathToDraw = CGPathCreateMutable()
         CGPathMoveToPoint(pathToDraw, nil, 0, size.height/2)

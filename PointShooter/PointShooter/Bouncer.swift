@@ -8,10 +8,11 @@
 
 import SpriteKit
 
-class Bouncer : SKShapeNode {
-    let scorePoints: Int = Config.Enemy.BOUNCER_SCORE
+class Bouncer : Enemy {
+    let score: Int = Config.Enemy.Bouncer.BOUNCER_SCORE
+    let hp: Int = Config.Enemy.Bouncer.BOUNCER_HEALTH
+    let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
     var prevPosition: CGPoint = CGPointZero
-    var forward: CGPoint = CGPointMake(0.0, 1.0)
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat
     
@@ -19,7 +20,7 @@ class Bouncer : SKShapeNode {
     init(rectOfSize: CGSize) {
         self.delta = CGFloat(Int.random(100...500))
         
-        super.init()
+        super.init(scorePoints: score, hitPoints: hp, typeColor: color)
         
         let width = rectOfSize.width
         let height = rectOfSize.height

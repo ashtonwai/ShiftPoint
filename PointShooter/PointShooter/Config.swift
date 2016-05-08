@@ -23,7 +23,16 @@ struct Config {
     }
     
     struct Enemy {
-        static let BOUNCER_SCORE : Int = 10
+        struct Bouncer {
+            static let BOUNCER_SCORE  : Int = 10
+            static let BOUNCER_HEALTH : Int = 1
+            static let BOUNCER_COLOR  : SKColor = SKColor.greenColor()
+        }
+        struct Seeker {
+            static let SEEKER_SCORE   : Int = 25
+            static let SEEKER_HEALTH  : Int = 1
+            static let SEEKER_COLOR   : SKColor = SKColor.redColor()
+        }
     }
     
     struct GameLimit {
