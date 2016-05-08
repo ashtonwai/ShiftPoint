@@ -12,20 +12,22 @@ class Seeker : Enemy {
     let points: Int = Config.Enemy.Seeker.SEEKER_SCORE
     let hp: Int = Config.Enemy.Seeker.SEEKER_HEALTH
     let color: SKColor = Config.Enemy.Seeker.SEEKER_COLOR
+    let seekerSize: CGSize = Config.Enemy.Seeker.SEEKER_SIZE
+    
     var velocity: CGPoint = CGPointZero
     var direction: CGPoint = CGPointZero
     var delta: CGFloat = 250.0
     var rotateSpeed: CGFloat = 3.0 * π
     
     // MARK: - Initialization -
-    init(size: CGSize) {
-        super.init(scorePoints: points, hitPoints: hp, typeColor: color)
+    init() {
+        super.init(size: seekerSize, scorePoints: points, hitPoints: hp, typeColor: color)
         
         let pathToDraw = CGPathCreateMutable()
-        CGPathMoveToPoint(pathToDraw, nil, 0, size.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, size.width/2, -size.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, -size.width/2, -size.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, 0, size.height/2)
+        CGPathMoveToPoint(pathToDraw, nil, 0, seekerSize.height/2)
+        CGPathAddLineToPoint(pathToDraw, nil, seekerSize.width/2, -seekerSize.height/2)
+        CGPathAddLineToPoint(pathToDraw, nil, -seekerSize.width/2, -seekerSize.height/2)
+        CGPathAddLineToPoint(pathToDraw, nil, 0, seekerSize.height/2)
         CGPathCloseSubpath(pathToDraw)
         path = pathToDraw
         lineWidth = 3

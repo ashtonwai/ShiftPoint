@@ -9,13 +9,15 @@
 import SpriteKit
 
 class Enemy : SKShapeNode {
+    var size: CGSize
     var scorePoints: Int
     var hitPoints: Int
     var typeColor: SKColor
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     
     // MARK: - Initialization -
-    init(scorePoints: Int, hitPoints: Int, typeColor: SKColor) {
+    init(size: CGSize, scorePoints: Int, hitPoints: Int, typeColor: SKColor) {
+        self.size = size
         self.scorePoints = scorePoints
         self.hitPoints = hitPoints
         self.typeColor = typeColor

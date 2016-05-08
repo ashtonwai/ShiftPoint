@@ -25,10 +25,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     let spawnRectBounds: CGRect
     var spawnRects: [CGRect]
     
-    // Enemy count handling
-    var numOfEnemies = 0 //Config.GameLimit.MAX_BOUNCER
-    let maxEnemySize = CGSize(width: 100, height: 100)
-    
     // Player variables
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
@@ -38,13 +34,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // Game variables
     var pauseOverlay: SKShapeNode
-    var pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
-    var resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var lifeLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var score = 0
-    var highScore = 0
-    var wave = 1
+    var pauseLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+    var resumeButton: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var lifeLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var scoreLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var score: Int = 0
+    var wave: Int = 1
+    var numOfEnemies: Int = 0
+    let maxEnemySize: CGSize = CGSize(width: 100, height: 100)
     
     
     // MARK: - Initialization -
@@ -508,6 +505,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         ]))
     }
     
+    func createEnemy(enemyType: EnemyTypes) -> Enemy {
+        var enemy: Enemy
+        
+        switch enemyType {
+        case .Bouncer:
+            enemy = Bouncer()
+            enemy.forward = CGPoint.randomUnitVector()
+            break
+        case .Seeker:
+            enemy = Seeker()
+            break
+        }
+        
+        return enemy
+    }
+    
     func spawnWave() {
         // http://www.meta-calculator.com/online/9j13df5xtv8b
         var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
@@ -519,38 +532,26 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     self.spawnSeekerCircle()
                     waveEnemyCount /= 2
                 }
-                for _ in 0...waveEnemyCount-1 {
-                    self.spawnBouncer()
-                }
+                self.spawnEnemy(.Bouncer, count: waveEnemyCount-1)
             }
         ]))
     }
     
-    func spawnBouncer() {
-        let bouncer = Bouncer(rectOfSize: CGSize(width: 50, height: 50))
+    func spawnEnemy(type: EnemyTypes, count: Int) {
         let spawnRect = spawnRects[Int.random(0...3)]
-        bouncer.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        bouncer.zPosition = Config.GameLayer.Sprite;
-        bouncer.forward = CGPoint.randomUnitVector()
-        addChild(bouncer)
-        numOfEnemies += 1
-    }
-    
-    func spawnSeeker() {
-        print("seeker spawn!!")
-        let seeker = Seeker(size: CGSize(width: 50, height: 50))
-        let spawnRect = spawnRects[Int.random(0...3)]
-        seeker.position = randomCGPointInRect(spawnRect, margin: maxEnemySize.width/2)
-        seeker.zPosition = Config.GameLayer.Sprite
-        addChild(seeker)
-        numOfEnemies += 1
+        for _ in 0...count {
+            let enemy = createEnemy(type)
+            enemy.position = randomCGPointInRect(spawnRect, margin: enemy.size.width/2)
+            enemy.zPosition = Config.GameLayer.Sprite
+            addChild(enemy)
+            numOfEnemies += 1
+        }
     }
     
     func spawnSeekerCircle () {
         for i in 0...16 {
             let angle = CGFloat(i) * 360.0 / 16.0
-            let seeker = Seeker(size: CGSize(width: 75, height: 75))
-            seeker.name = "seeker"
+            let seeker = Seeker()
             seeker.position = CGPoint(
                 x: playableRect.width/2 + playableRect.height/2 * cos(angle),
                 y: playableRect.height/2 + playableRect.height/2 * sin(angle)

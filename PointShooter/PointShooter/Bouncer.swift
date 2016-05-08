@@ -12,28 +12,30 @@ class Bouncer : Enemy {
     let score: Int = Config.Enemy.Bouncer.BOUNCER_SCORE
     let hp: Int = Config.Enemy.Bouncer.BOUNCER_HEALTH
     let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
+    let bouncerSize: CGSize = Config.Enemy.Bouncer.BOUNCER_SIZE
+    
     var prevPosition: CGPoint = CGPointZero
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat
     
     // MARK: - Initialization -
-    init(rectOfSize: CGSize) {
+    init() {
         self.delta = CGFloat(Int.random(100...500))
         
-        super.init(scorePoints: score, hitPoints: hp, typeColor: color)
+        super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
         
-        let width = rectOfSize.width
-        let height = rectOfSize.height
+        let width = bouncerSize.width
+        let height = bouncerSize.height
         let center = CGPoint(x: -width/2, y: -height/2)
         
         self.name = "bouncer"
         
-        self.path = CGPathCreateWithRect(CGRect(origin: center, size: rectOfSize), nil)
+        self.path = CGPathCreateWithRect(CGRect(origin: center, size: bouncerSize), nil)
         self.fillColor = SKColor.clearColor()
         self.strokeColor = SKColor.greenColor()
         self.lineWidth = 3
         
-        self.physicsBody = SKPhysicsBody(rectangleOfSize: rectOfSize)
+        self.physicsBody = SKPhysicsBody(rectangleOfSize: bouncerSize)
         self.physicsBody?.dynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet

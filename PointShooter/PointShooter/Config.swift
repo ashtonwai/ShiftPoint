@@ -16,10 +16,10 @@ struct Config {
     }
     
     struct Developer {
-        static let DebugMode = true
-        static let DebugPhysics = false
-        static let GodMode = false
-        static let Endless = false
+        static let DebugMode     : Bool = true
+        static let DebugPhysics  : Bool = false
+        static let GodMode       : Bool = false
+        static let Endless       : Bool = false
     }
     
     struct Enemy {
@@ -27,17 +27,14 @@ struct Config {
             static let BOUNCER_SCORE  : Int = 10
             static let BOUNCER_HEALTH : Int = 1
             static let BOUNCER_COLOR  : SKColor = SKColor.greenColor()
+            static let BOUNCER_SIZE   : CGSize = CGSize(width: 50, height: 50)
         }
         struct Seeker {
             static let SEEKER_SCORE   : Int = 25
             static let SEEKER_HEALTH  : Int = 1
             static let SEEKER_COLOR   : SKColor = SKColor.redColor()
+            static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
         }
-    }
-    
-    struct GameLimit {
-        static let MAX_BOUNCER  : Int = 20
-        static let MAX_SEEKER   : Int = 4
     }
     
     struct GameLayer {

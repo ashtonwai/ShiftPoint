@@ -25,6 +25,7 @@
 		2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */; };
 		2DABBFFC1C91C6FC00F5ABAD /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */; };
 		2DABBFFE1C91C71B00F5ABAD /* Microgramma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */; };
+		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
 		2DE088501C8A45C800BE051C /* Bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884F1C8A45C800BE051C /* Bullet.swift */; };
 		2DE088521C8A56DD00BE051C /* Bouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE088511C8A56DD00BE051C /* Bouncer.swift */; };
@@ -57,6 +58,7 @@
 		2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inversionz.otf; path = Fonts/Inversionz.otf; sourceTree = "<group>"; };
 		2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "6 Cells.otf"; path = "Fonts/6 Cells.otf"; sourceTree = "<group>"; };
 		2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Microgramma.ttf; path = Fonts/Microgramma.ttf; sourceTree = "<group>"; };
+		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		2DE0884F1C8A45C800BE051C /* Bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bullet.swift; sourceTree = "<group>"; };
 		2DE088511C8A56DD00BE051C /* Bouncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bouncer.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				2D05EED51C850E830093A3A3 /* VC */,
 				2DAAEC101CD860AF0080A957 /* Protocols */,
 				2D05EED41C850E750093A3A3 /* Scenes */,
+				2DB1E2401CDF158700655701 /* Enums */,
 				2D05EED61C850EE00093A3A3 /* Sprites */,
 				2D05EED71C850F150093A3A3 /* Lib */,
 				2DAAEC171CD96CB60080A957 /* Emitter */,
@@ -192,6 +195,14 @@
 				679ED6B21C950DD000BC8924 /* spark.png */,
 			);
 			name = Emitter;
+			sourceTree = "<group>";
+		};
+		2DB1E2401CDF158700655701 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */,
+			);
+			name = Enums;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +291,7 @@
 				2DE088521C8A56DD00BE051C /* Bouncer.swift in Sources */,
 				2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */,
 				2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */,
+				2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */,
 				2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */,
 				2DE0884E1C88895800BE051C /* Player.swift in Sources */,
 				2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */,
