@@ -50,7 +50,7 @@ struct Config {
     }
     
     struct Player {
-        static let FIRE_RATE    : Float = 0.1
+        static let FIRE_RATE    : Float = 0.2
         static let BULLET_SPEED : Double = 1.0
         static let PLAYER_LIFE  : Int = 5
     }

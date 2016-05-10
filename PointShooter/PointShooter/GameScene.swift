@@ -29,8 +29,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var player: Player!
     var lastUpdateTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
-    let fireRate: Float = Config.Player.FIRE_RATE
-    var fireTimer: Float = 0.0
     
     // Game variables
     var pauseOverlay: SKShapeNode
@@ -95,8 +93,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         )
         spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
-        fireTimer = fireRate
-        
         super.init(size: size)
     }
     
@@ -128,15 +124,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 deltaTime = 0
             }
             lastUpdateTime = currentTime
-            
-            if (player.autoFiring) {
-                if (fireTimer > 0) {
-                    fireTimer -= Float(deltaTime)
-                } else {
-                    autoFire()
-                    fireTimer = fireRate
-                }
-            }
             
             enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
                 let bouncer = node as! Bouncer
@@ -229,12 +216,21 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 let dx = player.position.x - touchLocation.x
                 player.direction(dx, dy: dy)
                 
-                if !player.invincible && !player.teleporting {
+                // Shoot bullets
+                if !player.invincible && !player.teleporting && !player.autoFiring {
                     player.autoFiring = true
+                    runAction(SKAction.repeatActionForever(
+                        SKAction.sequence([
+                            SKAction.runBlock(autoFire),
+                            SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
+                            ])
+                        ), withKey: "autoFire")
                 }
+
             }
             if recognizer.state == .Ended {
                 player.autoFiring = false
+                removeActionForKey("autoFire")
             }
         }
     }
@@ -500,7 +496,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             enemy.position.x = bounds.minX
             enemy.reflectX()
         }
-        if enemy.position.x >= bounds.maxX {
+        else if enemy.position.x >= bounds.maxX {
             enemy.position.x = bounds.maxX
             enemy.reflectX()
         }
@@ -508,7 +504,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             enemy.position.y = bounds.minY
             enemy.reflectY()
         }
-        if enemy.position.y >= bounds.maxY {
+        else if enemy.position.y >= bounds.maxY {
             enemy.position.y = bounds.maxY
             enemy.reflectY()
         }
