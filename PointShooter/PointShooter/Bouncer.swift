@@ -32,7 +32,7 @@ class Bouncer : Enemy {
         
         self.path = CGPathCreateWithRect(CGRect(origin: center, size: bouncerSize), nil)
         self.fillColor = SKColor.clearColor()
-        self.strokeColor = SKColor.greenColor()
+        self.strokeColor = color
         self.lineWidth = 3
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: bouncerSize)

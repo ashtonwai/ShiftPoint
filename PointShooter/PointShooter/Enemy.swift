@@ -40,7 +40,7 @@ class Enemy : SKShapeNode {
     
     
     // MARK: - Event Handlers -
-    func onDamaged() {
+    func onHit() {
         hitPoints -= 1
         if hitPoints <= 0 {
             self.onDestroy()

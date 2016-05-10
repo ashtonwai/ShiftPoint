@@ -34,10 +34,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // Game variables
     var pauseOverlay: SKShapeNode
-    var pauseLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.GameOverFont)
-    var resumeButton: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var pauseLabel: SKLabelNode
+    var resumeButton: SKLabelNode
     var lifeLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
     var scoreLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var waveLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
     var score: Int = 0
     var wave: Int = 1
     var numOfEnemies: Int = 0
@@ -49,6 +50,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.gameManager = gameManager
         self.gamePaused = false
         self.pauseOverlay = SKShapeNode(rectOfSize: size)
+        self.pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+        self.resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         
         // make constant for max aspect ratio support 4:3
         let maxAspectRatio: CGFloat = 4.0 / 3.0
@@ -277,22 +280,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         emitter.zPosition = Config.GameLayer.Sprite
         
         // points
-        let pointsLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-        pointsLabel.position = thisEnemy.position
-        pointsLabel.zPosition = Config.GameLayer.Sprite
-        pointsLabel.fontColor = UIColor.cyanColor()
-        pointsLabel.fontSize = 30
-        pointsLabel.text = "\(thisEnemy.scorePoints)"
+        let scoreMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
+        scoreMarker.position = thisEnemy.position
+        scoreMarker.zPosition = Config.GameLayer.Sprite
+        scoreMarker.fontColor = UIColor.cyanColor()
+        scoreMarker.fontSize = 30
+        scoreMarker.text = "\(thisEnemy.scorePoints)"
         
         runAction(SKAction.sequence([
             SKAction.group([
                 scoreSound,
                 SKAction.runBlock() {
                     self.addChild(emitter)
-                    self.addChild(pointsLabel)
+                    self.addChild(scoreMarker)
                     
                     thisBullet.onHit()
-                    thisEnemy.onDamaged()
+                    thisEnemy.onHit()
                     
                     self.score += thisEnemy.scorePoints
                     self.scoreLabel.text = "\(self.score)"
@@ -307,7 +310,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             SKAction.waitForDuration(0.3),
             SKAction.runBlock() {
                 emitter.removeFromParent()
-                pointsLabel.runAction(SKAction.sequence([
+                scoreMarker.runAction(SKAction.sequence([
                     SKAction.fadeOutWithDuration(0.5),
                     SKAction.removeFromParent()
                 ]))
@@ -350,9 +353,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func runPauseAction() {
         // pause game
-        gamePaused = true
-        backgroundMusicPlayer.pause()
-        pauseScreen()
+        pauseGame()
         self.view?.paused = true
     }
     
@@ -414,8 +415,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         scoreTextLabel.zPosition = Config.GameLayer.HUD
         scoreTextLabel.horizontalAlignmentMode = .Left
         scoreTextLabel.verticalAlignmentMode = .Top
-        scoreTextLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        scoreTextLabel.fontSize = 50
+        scoreTextLabel.fontColor = Config.Font.GameUIColor
+        scoreTextLabel.fontSize = Config.Font.GameTextSize
         scoreTextLabel.text = "Score"
         addChild(scoreTextLabel)
         
@@ -423,28 +424,51 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = Config.GameLayer.HUD
         scoreLabel.horizontalAlignmentMode = .Left
         scoreLabel.verticalAlignmentMode = .Top
-        scoreLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        scoreLabel.fontSize = 80
+        scoreLabel.fontColor = Config.Font.GameUIColor
+        scoreLabel.fontSize = Config.Font.GameLabelSize
         scoreLabel.text = "\(score)"
         addChild(scoreLabel)
+        
+        let waveTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
+        waveTextLabel.position = CGPointMake(size.width/2, size.height-50)
+        waveTextLabel.zPosition = Config.GameLayer.HUD
+        waveTextLabel.horizontalAlignmentMode = .Center
+        waveTextLabel.verticalAlignmentMode = .Top
+        waveTextLabel.fontColor = Config.Font.GameUIColor
+        waveTextLabel.fontSize = Config.Font.GameTextSize
+        waveTextLabel.text = "Wave"
+        addChild(waveTextLabel)
+        
+        waveLabel.position = CGPointMake(size.width/2, size.height-100)
+        waveLabel.zPosition = Config.GameLayer.HUD
+        waveLabel.horizontalAlignmentMode = .Center
+        waveLabel.verticalAlignmentMode = .Top
+        waveLabel.fontColor = Config.Font.GameUIColor
+        waveLabel.fontSize = Config.Font.GameLabelSize
+        waveLabel.text = "\(wave)"
+        addChild(waveLabel)
         
         lifeLabel.position = CGPoint(x: size.width-50, y: size.height-50)
         lifeLabel.zPosition = Config.GameLayer.HUD
         lifeLabel.horizontalAlignmentMode = .Right
         lifeLabel.verticalAlignmentMode = .Top
-        lifeLabel.fontColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
-        lifeLabel.fontSize = 80
+        lifeLabel.fontColor = Config.Font.GameUIColor
+        lifeLabel.fontSize = Config.Font.GameLabelSize
         lifeLabel.text = "Life: \(player.life)"
         addChild(lifeLabel)
     }
     
-    func pauseScreen() {
+    func pauseGame() {
+        gamePaused = true
+        backgroundMusicPlayer.pause()
+        
         pauseOverlay.position = CGPointMake(size.width/2, size.height/2)
         pauseOverlay.zPosition = Config.GameLayer.Overlay
         pauseOverlay.fillColor = UIColor.blackColor()
         pauseOverlay.alpha = 0.75
         addChild(pauseOverlay)
         
+        pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         pauseLabel.position = CGPointMake(size.width/2, size.height/2+250)
         pauseLabel.zPosition = Config.GameLayer.Overlay
         pauseLabel.fontColor = UIColor.cyanColor()
@@ -452,6 +476,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         pauseLabel.text = "Paused"
         addChild(pauseLabel)
         
+        resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         resumeButton.position = CGPointMake(size.width/2, size.height/2-250)
         resumeButton.zPosition = Config.GameLayer.Overlay
         resumeButton.fontSize = 60
@@ -503,22 +528,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             },
             bulletFireSound
         ]))
-    }
-    
-    func createEnemy(enemyType: EnemyTypes) -> Enemy {
-        var enemy: Enemy
-        
-        switch enemyType {
-        case .Bouncer:
-            enemy = Bouncer()
-            enemy.forward = CGPoint.randomUnitVector()
-            break
-        case .Seeker:
-            enemy = Seeker()
-            break
-        }
-        
-        return enemy
     }
     
     func spawnWave() {

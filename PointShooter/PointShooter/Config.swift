@@ -13,6 +13,9 @@ struct Config {
         static let TitleFont = "6 Cells"
         static let GameOverFont = "Inversionz"
         static let MainFont = "MicrogrammaDOT-MediumExtended"
+        static let GameUIColor      : UIColor = UIColor(red: 0.75, green: 0.75, blue: 0.75, alpha: 0.75)
+        static let GameTextSize     : CGFloat = 50
+        static let GameLabelSize    : CGFloat = 80
     }
     
     struct Developer {

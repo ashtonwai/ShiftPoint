@@ -31,8 +31,8 @@ class Seeker : Enemy {
         CGPathCloseSubpath(pathToDraw)
         path = pathToDraw
         lineWidth = 3
-        strokeColor = UIColor.redColor()
-        fillColor = UIColor.clearColor()
+        strokeColor = color
+        fillColor = SKColor.clearColor()
         
         self.name = "seeker"
         

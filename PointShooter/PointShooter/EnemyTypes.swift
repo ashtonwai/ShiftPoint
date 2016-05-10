@@ -12,3 +12,19 @@ enum EnemyTypes {
     case Bouncer
     case Seeker
 }
+
+func createEnemy(enemyType: EnemyTypes) -> Enemy {
+    var enemy: Enemy
+    
+    switch enemyType {
+    case .Bouncer:
+        enemy = Bouncer()
+        enemy.forward = CGPoint.randomUnitVector()
+        break
+    case .Seeker:
+        enemy = Seeker()
+        break
+    }
+    
+    return enemy
+}
