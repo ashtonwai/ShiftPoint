@@ -17,30 +17,30 @@ struct PhysicsCategory {
 import SpriteKit
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
-    var gameManager: GameManager
-    var gamePaused: Bool
+    var gameManager         : GameManager
+    var gamePaused          : Bool
     
     // Bounding boxes
-    let playableRect: CGRect
-    let spawnRectBounds: CGRect
-    var spawnRects: [CGRect]
+    let playableRect        : CGRect
+    let spawnRectBounds     : CGRect
+    var spawnRects          : [CGRect]
     
     // Player variables
-    var player: Player!
-    var lastUpdateTime: CFTimeInterval = 0
-    var deltaTime: CFTimeInterval = 0
+    var player              : Player!
+    var lastUpdateTime      : CFTimeInterval = 0
+    var deltaTime           : CFTimeInterval = 0
     
     // Game variables
-    var pauseOverlay: SKShapeNode
-    var pauseLabel: SKLabelNode
-    var resumeButton: SKLabelNode
-    var lifeLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var scoreLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var waveLabel: SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var score: Int = 0
-    var wave: Int = 1
-    var numOfEnemies: Int = 0
-    let maxEnemySize: CGSize = CGSize(width: 100, height: 100)
+    var pauseOverlay        : SKShapeNode
+    var pauseLabel          : SKLabelNode
+    var resumeButton        : SKLabelNode
+    var scoreLabel          : SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var waveLabel           : SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    let maxEnemySize        : CGSize = Config.Enemy.ENEMY_MAX_SIZE
+    var numOfEnemies        : Int = 0
+    var score               : Int = 0
+    var wave                : Int = 1
+    var lives               : [SKSpriteNode] = []
     
     
     // MARK: - Initialization -
@@ -319,7 +319,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         if !player.invincible && !player.teleporting {
             thisEnemy.onDestroy()
             player.onDamaged()
-            lifeLabel.text = "Life: \(player.life)"
+            let heart = lives.removeLast()
+            heart.runAction(SKAction.sequence([
+                SKAction.fadeOutWithDuration(0.2),
+                SKAction.removeFromParent()
+            ]))
             
             if player.life <= 0 && !Config.Developer.Endless {
                 player.onDestroy()
@@ -444,14 +448,36 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         waveLabel.text = "\(wave)"
         addChild(waveLabel)
         
-        lifeLabel.position = CGPoint(x: size.width-50, y: size.height-50)
-        lifeLabel.zPosition = Config.GameLayer.HUD
-        lifeLabel.horizontalAlignmentMode = .Right
-        lifeLabel.verticalAlignmentMode = .Top
-        lifeLabel.fontColor = Config.Font.GameUIColor
-        lifeLabel.fontSize = Config.Font.GameLabelSize
-        lifeLabel.text = "Life: \(player.life)"
-        addChild(lifeLabel)
+        let lifeTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
+        lifeTextLabel.position = CGPointMake(size.width-50, size.height-50)
+        lifeTextLabel.zPosition = Config.GameLayer.HUD
+        lifeTextLabel.horizontalAlignmentMode = .Right
+        lifeTextLabel.verticalAlignmentMode = .Top
+        lifeTextLabel.fontColor = Config.Font.GameUIColor
+        lifeTextLabel.fontSize = Config.Font.GameTextSize
+        lifeTextLabel.text = "Life"
+        addChild(lifeTextLabel)
+        
+        for i in 1...player.life {
+            let heart = SKSpriteNode(imageNamed: "Heart")
+            heart.size = CGSize(width: 55, height: 50)
+            let xPos = size.width - (25 + heart.size.width) * CGFloat(i)
+            let yPos = size.height - (75 + heart.size.height)
+            heart.position = CGPointMake(xPos, yPos)
+            heart.zPosition = Config.GameLayer.HUD
+            heart.alpha = 0.75
+            
+            let dot = SKShapeNode(circleOfRadius: 5)
+            dot.position = CGPointMake(xPos, yPos)
+            dot.zPosition = Config.GameLayer.HUD
+            dot.fillColor = Config.Font.GameUIColor
+            dot.lineWidth = 0
+            dot.alpha = 0.25
+            
+            addChild(dot)
+            addChild(heart)
+            lives.append(heart)
+        }
     }
     
     func pauseGame() {

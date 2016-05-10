@@ -26,6 +26,7 @@ struct Config {
     }
     
     struct Enemy {
+        static let ENEMY_MAX_SIZE     : CGSize = CGSize(width: 100, height: 100)
         struct Bouncer {
             static let BOUNCER_SCORE  : Int = 10
             static let BOUNCER_HEALTH : Int = 1
@@ -50,8 +51,9 @@ struct Config {
     }
     
     struct Player {
-        static let FIRE_RATE    : Float = 0.2
-        static let BULLET_SPEED : Double = 1.0
-        static let PLAYER_LIFE  : Int = 5
+        static let FIRE_RATE        : Float = 0.2
+        static let BULLET_SPEED     : Double = 1.0
+        static let PLAYER_LIFE      : Int = 5
+        static let PLAYER_MAX_LIFE  : Int = 5
     }
 }

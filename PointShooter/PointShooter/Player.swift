@@ -9,12 +9,13 @@
 import SpriteKit
 
 class Player : SKSpriteNode {
-    var prevPosition: CGPoint = CGPointZero
-    var teleporting: Bool = false
-    var invincible: Bool = false
-    var autoFiring: Bool = false
-    var life: Int = Config.Player.PLAYER_LIFE
-    var rotateAngle: CGFloat = 0
+    var prevPosition    : CGPoint = CGPointZero
+    var rotateAngle     : CGFloat = 0
+    var teleporting     : Bool = false
+    var invincible      : Bool = false
+    var autoFiring      : Bool = false
+    var life            : Int = Config.Player.PLAYER_LIFE
+    let maxLife         : Int = Config.Player.PLAYER_MAX_LIFE
     
     // MARK: - Initialization -
     init() {
