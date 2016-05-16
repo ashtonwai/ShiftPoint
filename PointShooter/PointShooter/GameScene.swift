@@ -12,6 +12,8 @@ struct PhysicsCategory {
     static let Enemy     : UInt32 = 0b1 // 1
     static let Bullet    : UInt32 = 0b10 // 2
     static let Player    : UInt32 = 0b101 // 4
+    static let ScreenBounds : UInt32 = 0b1001 // 8
+    static let OuterBounds  : UInt32 = 0b10001 // 16
 }
 
 import SpriteKit
@@ -23,7 +25,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     // Bounding boxes
     let playableRect        : CGRect
     let spawnRectBounds     : CGRect
-    var spawnRects          : [CGRect]
+    let spawnZoneBounds     : CGRect
     
     // Player variables
     var player              : Player!
@@ -65,33 +67,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             width: playableRect.width + maxEnemySize.width * 2,
             height: playableRect.height + maxEnemySize.height * 2
         )
-        
-        // create enemy spawn rects outside playable rect
-        let topSpawnRect = CGRect(
-            x: playableRect.minX - maxEnemySize.width,
-            y: playableRect.maxY,
-            width: playableRect.width + maxEnemySize.width * 2,
-            height: maxEnemySize.height
+        spawnZoneBounds = CGRect(
+            x: playableRect.minX - maxEnemySize.width/2,
+            y: playableRect.minY - maxEnemySize.height/2,
+            width: playableRect.width + maxEnemySize.width,
+            height: playableRect.height + maxEnemySize.height
         )
-        let botSpawnRect = CGRect(
-            x: playableRect.minX - maxEnemySize.width,
-            y: playableRect.minY - maxEnemySize.height,
-            width: playableRect.width + maxEnemySize.width * 2,
-            height: maxEnemySize.height
-        )
-        let leftSpawnRect = CGRect(
-            x: playableRect.minX - maxEnemySize.width,
-            y: playableRect.minY - maxEnemySize.height,
-            width: maxEnemySize.width,
-            height: playableRect.height + maxEnemySize.height * 2
-        )
-        let rightSpawnRect = CGRect(
-            x: playableRect.maxX,
-            y: playableRect.minY - maxEnemySize.height,
-            width: maxEnemySize.width,
-            height: playableRect.height + maxEnemySize.height * 2
-        )
-        spawnRects = [topSpawnRect, botSpawnRect, leftSpawnRect, rightSpawnRect]
         
         super.init(size: size)
     }
@@ -561,16 +542,38 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     self.spawnSeekerCircle()
                     waveEnemyCount /= 2
                 }
-                self.spawnEnemy(.Bouncer, count: waveEnemyCount-1)
+                self.spawnEnemy(.Bouncer, count: waveEnemyCount)
             }
         ]))
     }
     
+    // Spawn outside playableRect
+    func getRandomSpawnLocation() -> CGPoint {
+        var location = CGPoint(
+            x: CGFloat.random(spawnZoneBounds.minX, max: spawnZoneBounds.maxX),
+            y: CGFloat.random(spawnZoneBounds.minY, max: spawnZoneBounds.maxY)
+        )
+        let zone = Int.random(1...4)
+        
+        switch zone {
+        case 1: location.y = spawnZoneBounds.maxY   // Top
+            break
+        case 2: location.x = spawnZoneBounds.minX   // Left
+            break
+        case 3: location.y = spawnZoneBounds.minY   // Bottom
+            break
+        case 4: location.x = spawnZoneBounds.maxX   // Right
+            break
+        default: break
+        }
+        
+        return location
+    }
+    
     func spawnEnemy(type: EnemyTypes, count: Int) {
-        let spawnRect = spawnRects[Int.random(0...3)]
-        for _ in 0...count {
+        for _ in 0..<count {
             let enemy = createEnemy(type)
-            enemy.position = randomCGPointInRect(spawnRect, margin: enemy.size.width/2)
+            enemy.position = getRandomSpawnLocation()
             enemy.zPosition = Config.GameLayer.Sprite
             addChild(enemy)
             numOfEnemies += 1
@@ -578,7 +581,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnSeekerCircle () {
-        for i in 0...16 {
+        for i in 0..<16 {
             let angle = CGFloat(i) * 360.0 / 16.0
             let seeker = Seeker()
             seeker.position = CGPoint(
