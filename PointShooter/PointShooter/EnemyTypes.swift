@@ -11,6 +11,7 @@ import SpriteKit
 enum EnemyTypes {
     case Bouncer
     case Seeker
+    case NinjaStar
 }
 
 func createEnemy(enemyType: EnemyTypes) -> Enemy {
@@ -24,6 +25,9 @@ func createEnemy(enemyType: EnemyTypes) -> Enemy {
     case .Seeker:
         enemy = Seeker()
         break
+    case .NinjaStar:
+        enemy = NinjaStar()
+        break;
     }
     
     return enemy

@@ -39,6 +39,12 @@ struct Config {
             static let SEEKER_COLOR   : SKColor = SKColor.redColor()
             static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
         }
+        struct NinjaStar {
+            static let NINJA_SCORE   : Int = 50
+            static let NINJA_HEALTH  : Int = 1
+            static let NINJA_COLOR   : SKColor = SKColor.yellowColor()
+            static let NINJA_SIZE    : CGSize = CGSize(width: 60, height: 60)
+        }
     }
     
     struct GameLayer {

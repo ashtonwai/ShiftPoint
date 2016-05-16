@@ -137,7 +137,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     seeker.seek(self.deltaTime, location: targetLocation)
                 }
             })
-
         }
     }
     
@@ -403,7 +402,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(background)
         
         player = Player()
-        player.name = "player"
         player.position = CGPointMake(size.width/2, size.height/2)
         player.zPosition = Config.GameLayer.Sprite
         addChild(player)
