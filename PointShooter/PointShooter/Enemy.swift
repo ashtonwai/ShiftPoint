@@ -38,6 +38,10 @@ class Enemy : SKShapeNode {
         return emitter
     }
     
+    func move() {
+        fatalError("Must Override")
+    }
+    
     
     // MARK: - Event Handlers -
     func onHit() {

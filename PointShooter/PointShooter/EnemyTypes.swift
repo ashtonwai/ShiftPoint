@@ -20,7 +20,6 @@ func createEnemy(enemyType: EnemyTypes) -> Enemy {
     switch enemyType {
     case .Bouncer:
         enemy = Bouncer()
-        enemy.forward = CGPoint.randomUnitVector()
         break
     case .Seeker:
         enemy = Seeker()
