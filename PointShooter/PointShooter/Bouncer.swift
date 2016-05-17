@@ -14,15 +14,16 @@ class Bouncer : Enemy {
     let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
     let bouncerSize: CGSize = Config.Enemy.Bouncer.BOUNCER_SIZE
     
-    var prevPosition: CGPoint = CGPointZero
     var velocity: CGPoint = CGPointZero
     var delta: CGFloat
     
     // MARK: - Initialization -
     init() {
-        self.delta = CGFloat(Int.random(100...500))
+        self.delta = CGFloat(Int.random(20...30))
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
+        
+        self.forward = CGPoint.randomUnitVector()
         
         let width = bouncerSize.width
         let height = bouncerSize.height
@@ -39,26 +40,21 @@ class Bouncer : Enemy {
         self.physicsBody?.dynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
-        self.physicsBody?.collisionBitMask = PhysicsCategory.None
+        self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds
+        self.physicsBody?.angularDamping = 0
+        self.physicsBody?.linearDamping = 0
+        self.physicsBody?.restitution = 1
+        self.physicsBody?.friction = 0
+        self.physicsBody?.allowsRotation = false
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Movement Controls -
-    func move(deltaTime: NSTimeInterval) {
-        prevPosition = position
-        velocity = forward * delta
-        position += velocity * CGFloat(deltaTime)
+    override func move() {
+        self.physicsBody?.applyImpulse(CGVector(dx: forward.x * delta, dy: forward.y * delta))
     }
     
-    func reflectX(){
-        forward.x *= CGFloat(-1.0)
-    }
-    
-    func reflectY(){
-        forward.y *= CGFloat(-1.0)
-    }
 }
