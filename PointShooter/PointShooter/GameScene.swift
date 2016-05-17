@@ -254,6 +254,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             return
         }
         
+        // bounds & bullet collision
+        if firstNode?.physicsBody?.categoryBitMask == PhysicsCategory.OuterBounds, let bullet = secondNode as? Bullet {
+            bullet.onHit()
+        }
+        
         // enemy & bullet collision
         if let enemy = firstNode as? Enemy, let bullet = secondNode as? Bullet {
             bulletDidCollideWithEnemy(enemy, thisBullet: bullet)
@@ -519,8 +524,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 bullet.zPosition = Config.GameLayer.Sprite
                 self.addChild(bullet)
                 
-                let dx = cos(self.player.zRotation + CGFloat(M_PI/2)) * 2500
-                let dy = sin(self.player.zRotation + CGFloat(M_PI/2)) * 2500
+                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
+                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
                 bullet.move(dx, dy: dy)
             },
             bulletFireSound

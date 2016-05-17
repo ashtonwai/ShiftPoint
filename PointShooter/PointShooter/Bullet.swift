@@ -9,7 +9,7 @@
 import SpriteKit
 
 class Bullet : SKShapeNode {
-    let bulletSpeed: Double = Config.Player.BULLET_SPEED
+    let bulletSpeed: CGFloat = CGFloat(Config.Player.BULLET_SPEED)
     
     // MARK: - Initialization -
     init(circleOfRadius: CGFloat) {
@@ -29,7 +29,7 @@ class Bullet : SKShapeNode {
         self.physicsBody?.dynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Bullet
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
-        self.physicsBody?.collisionBitMask = PhysicsCategory.None
+        self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds
         self.physicsBody?.usesPreciseCollisionDetection = true
     }
 
@@ -40,9 +40,7 @@ class Bullet : SKShapeNode {
     
     // MARK: - Movement Controls -
     func move(dx: CGFloat, dy: CGFloat) {
-        let move = SKAction.moveBy(CGVector(dx: dx, dy: dy), duration: bulletSpeed)
-        let delete = SKAction.removeFromParent()
-        self.runAction(SKAction.sequence([move, delete]))
+        self.physicsBody?.applyImpulse(CGVector(dx: dx * bulletSpeed, dy: dy * bulletSpeed))
     }
     
     

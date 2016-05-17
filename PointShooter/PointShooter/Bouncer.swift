@@ -52,16 +52,9 @@ class Bouncer : Enemy {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Movement Controls -
     override func move() {
-        self.physicsBody?.applyImpulse(CGVector(dx: forward.x * delta, dy: forward.y * delta))    }
-    
-    func reflectX(){
-        forward.x *= CGFloat(-1.0)
+        self.physicsBody?.applyImpulse(CGVector(dx: forward.x * delta, dy: forward.y * delta))
     }
     
-    func reflectY(){
-        forward.y *= CGFloat(-1.0)
-    }
 }
