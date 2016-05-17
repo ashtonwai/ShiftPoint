@@ -9,11 +9,11 @@
 struct PhysicsCategory {
     static let None      : UInt32 = 0
     static let All       : UInt32 = UInt32.max
-    static let Enemy     : UInt32 = 0b1 // 1
-    static let Bullet    : UInt32 = 0b10 // 2
-    static let Player    : UInt32 = 0b101 // 4
-    static let ScreenBounds : UInt32 = 0b1001 // 8
-    static let OuterBounds  : UInt32 = 0b10001 // 16
+    static let OuterBounds  : UInt32 = 0b1 // 1
+    static let PlayBounds   : UInt32 = 0b10 // 2
+    static let Enemy    : UInt32 = 0b101 // 4
+    static let Player   : UInt32 = 0b1001 // 8
+    static let Bullet   : UInt32 = 0b10001 // 16
 }
 
 import SpriteKit
@@ -61,6 +61,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let playableMargin = (size.height - playableHeight) / 2.0
         // make centered rectangle on the screen
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
+        
+        // Spawn Rects
         spawnRectBounds = CGRect(
             x: playableRect.minX - maxEnemySize.width,
             y: playableRect.minY - maxEnemySize.height,
@@ -75,6 +77,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         )
         
         super.init(size: size)
+        
+        // Physics for Spawn Rects
+        
+        // OuterBounds
+        let outerBoundingBox = SKShapeNode()
+        outerBoundingBox.path = CGPathCreateWithRect(spawnRectBounds, nil)
+        outerBoundingBox.physicsBody = SKPhysicsBody(edgeLoopFromRect: spawnRectBounds)
+        outerBoundingBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterBounds
+        addChild(outerBoundingBox)
+        
+        // PlayBounds
+        let boundingBox = SKShapeNode()
+        boundingBox.path = CGPathCreateWithRect(playableRect, nil)
+        boundingBox.physicsBody = SKPhysicsBody(edgeLoopFromRect: playableRect)
+        boundingBox.physicsBody?.categoryBitMask = PhysicsCategory.PlayBounds
+        addChild(boundingBox)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -108,7 +126,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             
             enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
                 let bouncer = node as! Bouncer
-                bouncer.move(self.deltaTime)
                 self.checkBounds(bouncer)
             })
             
@@ -219,35 +236,35 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // MARK - Collision Detections -
     func didBeginContact(contact: SKPhysicsContact) {
-        var firstBody: SKPhysicsBody
-        var secondBody: SKPhysicsBody
+        
+        var firstNode: SKNode?
+        var secondNode: SKNode?
         
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            firstBody = contact.bodyA
-            secondBody = contact.bodyB
+            firstNode = contact.bodyA.node
+            secondNode = contact.bodyB.node
         } else {
-            firstBody = contact.bodyB
-            secondBody = contact.bodyA
+            firstNode = contact.bodyB.node
+            secondNode = contact.bodyA.node
         }
         
-        guard firstBody.node != nil else {
+        guard firstNode != nil else {
             return
         }
-        guard secondBody.node != nil else {
+        guard secondNode != nil else {
             return
         }
         
         // enemy & bullet collision
-        if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Bullet != 0) {
-            bulletDidCollideWithEnemy(firstBody.node as! Enemy, thisBullet: secondBody.node as! Bullet)
+        if let enemy = firstNode as? Enemy, let bullet = secondNode as? Bullet {
+            bulletDidCollideWithEnemy(enemy, thisBullet: bullet)
         }
         
         // enemy & player collision
-        if (firstBody.categoryBitMask & PhysicsCategory.Enemy != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Player != 0) {
-            playerDidCollideWithEnemy(firstBody.node as! Enemy, thisPlayer: secondBody.node as! Player)
+        else if let enemy = firstNode as? Enemy, let player = secondNode as? Player {
+            playerDidCollideWithEnemy(enemy, thisPlayer: player)
         }
+        
     }
     
     func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
@@ -318,6 +335,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 spawnWave()
             }
         }
+    }
+    
+    func checkBounds(enemy: Enemy) {
+        
+        if enemy.position < playableRect {
+            // if visible on screen
+            enemy.physicsBody?.collisionBitMask = PhysicsCategory.PlayBounds
+        }
+        
     }
     
     
@@ -487,36 +513,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(resumeButton)
     }
     
-    func checkBounds(enemy: Bouncer) {
-        var bounds : CGRect!
-        
-        if enemy.prevPosition < playableRect {
-            // if visible on screen
-            bounds = playableRect
-        } else {
-            // if intially spawning off-screen
-            bounds = spawnRectBounds
-        }
-        
-        // reflect velocity to stay in bounds
-        if enemy.position.x <= bounds.minX {
-            enemy.position.x = bounds.minX
-            enemy.reflectX()
-        }
-        else if enemy.position.x >= bounds.maxX {
-            enemy.position.x = bounds.maxX
-            enemy.reflectX()
-        }
-        if enemy.position.y <= bounds.minY {
-            enemy.position.y = bounds.minY
-            enemy.reflectY()
-        }
-        else if enemy.position.y >= bounds.maxY {
-            enemy.position.y = bounds.maxY
-            enemy.reflectY()
-        }
-    }
-    
     func autoFire() {
         runAction(SKAction.group([
             SKAction.runBlock() {
@@ -579,6 +575,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             enemy.zPosition = Config.GameLayer.Sprite
             addChild(enemy)
             numOfEnemies += 1
+            enemy.move()
         }
     }
     
