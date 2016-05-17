@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */; };
 		2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* Utilities.swift */; };
 		2D2A59481C950D3800086DCB /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A59471C950D3800086DCB /* Actions.swift */; };
 		2D3F96881C97A5DA00272995 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F96871C97A5DA00272995 /* Config.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 		2D05EEDE1C85625D0093A3A3 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2D2A59471C950D3800086DCB /* Actions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		2D3F96871C97A5DA00272995 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				2D430A241C7F50BD0075F316 /* GameScene.swift */,
+				2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */,
 				2DE088531C8ABE0600BE051C /* MainMenuScene.swift */,
 				2DE088551C8ABE1A00BE051C /* GameOverScene.swift */,
 			);
@@ -305,6 +308,7 @@
 				2D2A59481C950D3800086DCB /* Actions.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
+				2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */,
 				2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

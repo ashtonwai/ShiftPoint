@@ -32,6 +32,15 @@ class GameViewController: UIViewController, GameManager {
         skView.presentScene(menuScene, transition: reveal)
     }
     
+    func loadTutorialScene() {
+        let tutorialScene = TutorialScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
+        tutorialScene.size = screenSize
+        tutorialScene.scaleMode = scaleMode
+        tutorialScene.gameManager = self
+        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        skView.presentScene(tutorialScene, transition: reveal)
+    }
+    
     func loadGameScene() {
         gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
         let reveal = SKTransition.crossFadeWithDuration(1.0)
