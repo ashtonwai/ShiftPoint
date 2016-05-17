@@ -15,6 +15,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     var player: Player
     var targetCircle: SKShapeNode
     var instruction: SKLabelNode
+    var skipButton: SKLabelNode
     
     var targetPoint1: CGPoint
     var targetPoint2: CGPoint
@@ -35,6 +36,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         self.targetPoints = [targetPoint1, targetPoint2, targetPoint3, targetPoint4]
         self.targetCircle = SKShapeNode(circleOfRadius: 70)
         self.instruction = SKLabelNode(fontNamed: Config.Font.MainFont)
+        self.skipButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         self.shootPos = SKShapeNode(circleOfRadius: 100)
         self.arrow = SKSpriteNode(imageNamed: "Arrow")
         self.player = Player()
@@ -58,6 +60,15 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         instruction.fontColor = Config.Font.GameUIColor
         instruction.fontSize = Config.Font.GameTextSize
         addChild(instruction)
+        
+        skipButton.position = CGPointMake(size.width-50, 50)
+        skipButton.zPosition = Config.GameLayer.HUD
+        skipButton.horizontalAlignmentMode = .Right
+        skipButton.verticalAlignmentMode = .Bottom
+        skipButton.fontColor = Config.Font.GameUIColor
+        skipButton.fontSize = 80
+        skipButton.text = "Skip"
+        addChild(skipButton)
         
         setupWorld()
     }
@@ -109,6 +120,11 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
             ])
             
             self.runAction(teleport)
+            
+            if nodeAtPoint(touch.locationInNode(self)) == skipButton {
+                skipButton.fontColor = SKColor.cyanColor()
+                gameManager?.loadGameScene()
+            }
             
             if nodeAtPoint(touch.locationInNode(self)) == targetCircle {
                 if currentPoint < 3 {
