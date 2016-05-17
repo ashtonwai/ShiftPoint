@@ -158,6 +158,13 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         if recognizer.state == .Ended {
             player.autoFiring = false
             removeActionForKey("autoFire")
+            
+            runAction(SKAction.sequence([
+                SKAction.waitForDuration(1.0),
+                SKAction.runBlock() {
+                    self.completeTutorial()
+                }
+            ]))
         }
     }
     
@@ -174,6 +181,32 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 bullet.move(dx, dy: dy)
             },
             bulletFireSound
+        ]))
+    }
+    
+    func completeTutorial() {
+        userDefaults.setBool(true, forKey: "skipTutorial")
+        
+        let overlay = SKShapeNode(rectOfSize: size)
+        overlay.position = CGPointMake(size.width/2, size.height/2)
+        overlay.zPosition = Config.GameLayer.Overlay
+        overlay.fillColor = UIColor.blackColor()
+        overlay.alpha = 0.75
+        addChild(overlay)
+        
+        let completeLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+        completeLabel.position = CGPoint(x: size.width/2, y: size.height/2)
+        completeLabel.zPosition = Config.GameLayer.Overlay
+        completeLabel.fontColor = SKColor.greenColor()
+        completeLabel.fontSize = 120
+        completeLabel.text = "You Are Ready To Shift!"
+        addChild(completeLabel)
+        
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                self.gameManager?.loadGameScene()
+            }
         ]))
     }
     

@@ -23,6 +23,7 @@ struct Config {
         static let DebugPhysics  : Bool = false
         static let GodMode       : Bool = false
         static let Endless       : Bool = false
+        static let SkipTutorial  : Bool = false
     }
     
     struct Enemy {

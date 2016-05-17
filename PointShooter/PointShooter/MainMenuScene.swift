@@ -10,6 +10,7 @@ import Foundation
 import SpriteKit
 
 class MainMenuScene : SKScene {
+    let userDefaults = NSUserDefaults.standardUserDefaults()
     let gameManager: GameManager
     let startButton: SKLabelNode
     
@@ -77,8 +78,12 @@ class MainMenuScene : SKScene {
         for touch: AnyObject in touches {
             if nodeAtPoint(touch.locationInNode(self)) == startButton {
                 startButton.fontColor = UIColor.whiteColor()
-                //gameManager.loadGameScene()
-                gameManager.loadTutorialScene()
+                
+                if userDefaults.boolForKey("skipTutorial") && Config.Developer.SkipTutorial {
+                    gameManager.loadGameScene()
+                } else {
+                    gameManager.loadTutorialScene()
+                }
             }
         }
     }
