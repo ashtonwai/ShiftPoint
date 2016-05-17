@@ -25,6 +25,8 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     var shootPos: SKShapeNode?
     var arrow: SKSpriteNode?
     
+    
+    // MARK: - Initialization -
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.targetPoint1 = CGPoint(x: size.width-500, y: size.height-300)
         self.targetPoint2 = CGPoint(x: 500, y: size.height-300)
@@ -60,156 +62,8 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         setupWorld()
     }
     
-    func setupWorld() {
-        physicsWorld.gravity = CGVectorMake(0, 0)
-        physicsWorld.contactDelegate = self
-        
-        let background = SKSpriteNode(imageNamed: "Background.jpg")
-        background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = Config.GameLayer.Background
-        background.xScale = 1.45
-        background.yScale = 1.45
-        addChild(background)
-        
-        player.position = CGPointMake(size.width/2, size.height/2)
-        player.zPosition = Config.GameLayer.Sprite
-        addChild(player)
-        
-        instruction.text = "Tab to teleport to the location"
-        
-        targetCircle.position = targetPoints[currentPoint]
-        targetCircle.zPosition = Config.GameLayer.Sprite
-        targetCircle.fillColor = SKColor.clearColor()
-        targetCircle.strokeColor = SKColor.cyanColor()
-        targetCircle.lineWidth = 7
-        addChild(targetCircle)
-        
-        targetCircle.runAction(SKAction.repeatActionForever(SKAction.sequence([
-            SKAction.group([
-                SKAction.scaleBy(2, duration: 1.0),
-                SKAction.fadeOutWithDuration(1.0),
-            ]),
-            SKAction.waitForDuration(0.25),
-            SKAction.group([
-                SKAction.scaleTo(1, duration: 0),
-                SKAction.fadeAlphaTo(0.75, duration: 0)
-            ])
-        ])))
-        
-        teleportTarget(targetPoints[currentPoint])
-    }
     
-    func teleportTarget(targetPoint: CGPoint) {
-        targetCircle.position = targetPoints[currentPoint]
-    }
-    
-    func shootingTutorial() {
-        shootPos?.position = CGPointMake(size.width/2, size.height/2)
-        shootPos?.zPosition = Config.GameLayer.Sprite
-        shootPos?.fillColor = SKColor.clearColor()
-        shootPos?.strokeColor = SKColor.cyanColor()
-        shootPos?.lineWidth = 7
-        addChild(shootPos!)
-        
-        shootPos?.runAction(SKAction.repeatActionForever(SKAction.sequence([
-            SKAction.group([
-                SKAction.scaleTo(0.5, duration: 1.0),
-                SKAction.fadeOutWithDuration(1.0)
-            ]),
-            SKAction.waitForDuration(0.25),
-            SKAction.group([
-                SKAction.scaleTo(1, duration: 0),
-                SKAction.fadeAlphaBy(0.75, duration: 0)
-            ])
-        ])))
-        
-        instruction.text = "Hold and drag from the target location"
-        
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panDetected(_:)))
-        self.view!.addGestureRecognizer(panRecognizer)
-    }
-    
-    func panDetected(recognizer: UIPanGestureRecognizer) {
-        if  recognizer.state == .Began {
-            if arrow != nil {
-                arrow?.removeAllActions()
-                arrow?.removeFromParent()
-            }
-        }
-        if recognizer.state == .Changed {
-            var touchLocation = recognizer.locationInView(recognizer.view)
-            touchLocation = self.convertPointFromView(touchLocation)
-            
-            let dy = player.position.y - touchLocation.y
-            let dx = player.position.x - touchLocation.x
-            player.direction(dx, dy: dy)
-            
-            // Shoot bullets
-            if !player.invincible && !player.teleporting && !player.autoFiring {
-                player.autoFiring = true
-                runAction(SKAction.repeatActionForever(
-                    SKAction.sequence([
-                        SKAction.runBlock(autoFire),
-                        SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
-                        ])
-                ), withKey: "autoFire")
-            }
-        }
-        if recognizer.state == .Ended {
-            player.autoFiring = false
-            removeActionForKey("autoFire")
-            
-            runAction(SKAction.sequence([
-                SKAction.waitForDuration(1.0),
-                SKAction.runBlock() {
-                    self.completeTutorial()
-                }
-            ]))
-        }
-    }
-    
-    func autoFire() {
-        runAction(SKAction.group([
-            SKAction.runBlock() {
-                let bullet = Bullet(circleOfRadius: 10)
-                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
-                bullet.zPosition = Config.GameLayer.Sprite
-                self.addChild(bullet)
-                
-                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
-                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
-                bullet.move(dx, dy: dy)
-            },
-            bulletFireSound
-        ]))
-    }
-    
-    func completeTutorial() {
-        userDefaults.setBool(true, forKey: "skipTutorial")
-        
-        let overlay = SKShapeNode(rectOfSize: size)
-        overlay.position = CGPointMake(size.width/2, size.height/2)
-        overlay.zPosition = Config.GameLayer.Overlay
-        overlay.fillColor = UIColor.blackColor()
-        overlay.alpha = 0.75
-        addChild(overlay)
-        
-        let completeLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
-        completeLabel.position = CGPoint(x: size.width/2, y: size.height/2)
-        completeLabel.zPosition = Config.GameLayer.Overlay
-        completeLabel.fontColor = SKColor.greenColor()
-        completeLabel.fontSize = 120
-        completeLabel.text = "You Are Ready To Shift!"
-        addChild(completeLabel)
-        
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                self.gameManager?.loadGameScene()
-            }
-        ]))
-    }
-    
+    // MARK: - Event Handlers -
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
@@ -290,5 +144,157 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 ])))
             }
         }
+    }
+    
+    func panDetected(recognizer: UIPanGestureRecognizer) {
+        if  recognizer.state == .Began {
+            if arrow != nil {
+                arrow?.removeAllActions()
+                arrow?.removeFromParent()
+            }
+        }
+        if recognizer.state == .Changed {
+            var touchLocation = recognizer.locationInView(recognizer.view)
+            touchLocation = self.convertPointFromView(touchLocation)
+            
+            let dy = player.position.y - touchLocation.y
+            let dx = player.position.x - touchLocation.x
+            player.direction(dx, dy: dy)
+            
+            // Shoot bullets
+            if !player.invincible && !player.teleporting && !player.autoFiring {
+                player.autoFiring = true
+                runAction(SKAction.repeatActionForever(
+                    SKAction.sequence([
+                        SKAction.runBlock(autoFire),
+                        SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
+                    ])
+                ), withKey: "autoFire")
+            }
+        }
+        if recognizer.state == .Ended {
+            player.autoFiring = false
+            removeActionForKey("autoFire")
+            
+            runAction(SKAction.sequence([
+                SKAction.waitForDuration(1.0),
+                SKAction.runBlock() {
+                    self.completeTutorial()
+                }
+            ]))
+        }
+    }
+    
+    
+    // MARK: - Helper Functions -
+    func setupWorld() {
+        physicsWorld.gravity = CGVectorMake(0, 0)
+        physicsWorld.contactDelegate = self
+        
+        let background = SKSpriteNode(imageNamed: "Background.jpg")
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = Config.GameLayer.Background
+        background.xScale = 1.45
+        background.yScale = 1.45
+        addChild(background)
+        
+        player.position = CGPointMake(size.width/2, size.height/2)
+        player.zPosition = Config.GameLayer.Sprite
+        addChild(player)
+        
+        instruction.text = "Tab to teleport to the location"
+        
+        targetCircle.position = targetPoints[currentPoint]
+        targetCircle.zPosition = Config.GameLayer.Sprite
+        targetCircle.fillColor = SKColor.clearColor()
+        targetCircle.strokeColor = SKColor.cyanColor()
+        targetCircle.lineWidth = 7
+        addChild(targetCircle)
+        
+        targetCircle.runAction(SKAction.repeatActionForever(SKAction.sequence([
+            SKAction.group([
+                SKAction.scaleBy(2, duration: 1.0),
+                SKAction.fadeOutWithDuration(1.0),
+            ]),
+            SKAction.waitForDuration(0.25),
+            SKAction.group([
+                SKAction.scaleTo(1, duration: 0),
+                SKAction.fadeAlphaTo(0.75, duration: 0)
+            ])
+        ])))
+        
+        teleportTarget(targetPoints[currentPoint])
+    }
+    
+    func teleportTarget(targetPoint: CGPoint) {
+        targetCircle.position = targetPoints[currentPoint]
+    }
+    
+    func shootingTutorial() {
+        shootPos?.position = CGPointMake(size.width/2, size.height/2)
+        shootPos?.zPosition = Config.GameLayer.Sprite
+        shootPos?.fillColor = SKColor.clearColor()
+        shootPos?.strokeColor = SKColor.cyanColor()
+        shootPos?.lineWidth = 7
+        addChild(shootPos!)
+        
+        shootPos?.runAction(SKAction.repeatActionForever(SKAction.sequence([
+            SKAction.group([
+                SKAction.scaleTo(0.5, duration: 1.0),
+                SKAction.fadeOutWithDuration(1.0)
+                ]),
+            SKAction.waitForDuration(0.25),
+            SKAction.group([
+                SKAction.scaleTo(1, duration: 0),
+                SKAction.fadeAlphaBy(0.75, duration: 0)
+                ])
+            ])))
+        
+        instruction.text = "Hold and drag from the target location"
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panDetected(_:)))
+        self.view!.addGestureRecognizer(panRecognizer)
+    }
+    
+    func autoFire() {
+        runAction(SKAction.group([
+            SKAction.runBlock() {
+                let bullet = Bullet(circleOfRadius: 10)
+                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
+                bullet.zPosition = Config.GameLayer.Sprite
+                self.addChild(bullet)
+                
+                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
+                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
+                bullet.move(dx, dy: dy)
+            },
+            bulletFireSound
+        ]))
+    }
+    
+    func completeTutorial() {
+        userDefaults.setBool(true, forKey: "skipTutorial")
+        
+        let overlay = SKShapeNode(rectOfSize: size)
+        overlay.position = CGPointMake(size.width/2, size.height/2)
+        overlay.zPosition = Config.GameLayer.Overlay
+        overlay.fillColor = UIColor.blackColor()
+        overlay.alpha = 0.75
+        addChild(overlay)
+        
+        let completeLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+        completeLabel.position = CGPoint(x: size.width/2, y: size.height/2)
+        completeLabel.zPosition = Config.GameLayer.Overlay
+        completeLabel.fontColor = SKColor.greenColor()
+        completeLabel.fontSize = 120
+        completeLabel.text = "You Are Ready To Shift!"
+        addChild(completeLabel)
+        
+        runAction(SKAction.sequence([
+            SKAction.waitForDuration(1.0),
+            SKAction.runBlock() {
+                self.gameManager?.loadGameScene()
+            }
+        ]))
     }
 }
