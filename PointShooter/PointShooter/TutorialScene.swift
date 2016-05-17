@@ -22,6 +22,8 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     var targetPoint4: CGPoint
     var targetPoints: [CGPoint]
     var currentPoint: Int = 0
+    var shootPos: SKShapeNode?
+    var arrow: SKSpriteNode?
     
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.targetPoint1 = CGPoint(x: size.width-500, y: size.height-300)
@@ -31,6 +33,8 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         self.targetPoints = [targetPoint1, targetPoint2, targetPoint3, targetPoint4]
         self.targetCircle = SKShapeNode(circleOfRadius: 70)
         self.instruction = SKLabelNode(fontNamed: Config.Font.MainFont)
+        self.shootPos = SKShapeNode(circleOfRadius: 100)
+        self.arrow = SKSpriteNode(imageNamed: "Arrow")
         self.player = Player()
         super.init(size: size)
     }
@@ -99,6 +103,80 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         targetCircle.position = targetPoints[currentPoint]
     }
     
+    func shootingTutorial() {
+        shootPos?.position = CGPointMake(size.width/2, size.height/2)
+        shootPos?.zPosition = Config.GameLayer.Sprite
+        shootPos?.fillColor = SKColor.clearColor()
+        shootPos?.strokeColor = SKColor.cyanColor()
+        shootPos?.lineWidth = 7
+        addChild(shootPos!)
+        
+        shootPos?.runAction(SKAction.repeatActionForever(SKAction.sequence([
+            SKAction.group([
+                SKAction.scaleTo(0.5, duration: 1.0),
+                SKAction.fadeOutWithDuration(1.0)
+            ]),
+            SKAction.waitForDuration(0.25),
+            SKAction.group([
+                SKAction.scaleTo(1, duration: 0),
+                SKAction.fadeAlphaBy(0.75, duration: 0)
+            ])
+        ])))
+        
+        instruction.text = "Hold and drag from the target location"
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panDetected(_:)))
+        self.view!.addGestureRecognizer(panRecognizer)
+    }
+    
+    func panDetected(recognizer: UIPanGestureRecognizer) {
+        if  recognizer.state == .Began {
+            if arrow != nil {
+                arrow?.removeAllActions()
+                arrow?.removeFromParent()
+            }
+        }
+        if recognizer.state == .Changed {
+            var touchLocation = recognizer.locationInView(recognizer.view)
+            touchLocation = self.convertPointFromView(touchLocation)
+            
+            let dy = player.position.y - touchLocation.y
+            let dx = player.position.x - touchLocation.x
+            player.direction(dx, dy: dy)
+            
+            // Shoot bullets
+            if !player.invincible && !player.teleporting && !player.autoFiring {
+                player.autoFiring = true
+                runAction(SKAction.repeatActionForever(
+                    SKAction.sequence([
+                        SKAction.runBlock(autoFire),
+                        SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
+                        ])
+                ), withKey: "autoFire")
+            }
+        }
+        if recognizer.state == .Ended {
+            player.autoFiring = false
+            removeActionForKey("autoFire")
+        }
+    }
+    
+    func autoFire() {
+        runAction(SKAction.group([
+            SKAction.runBlock() {
+                let bullet = Bullet(circleOfRadius: 10)
+                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
+                bullet.zPosition = Config.GameLayer.Sprite
+                self.addChild(bullet)
+                
+                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
+                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
+                bullet.move(dx, dy: dy)
+            },
+            bulletFireSound
+        ]))
+    }
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
@@ -120,7 +198,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                         teleportOut.runAction(SKAction.sequence([
                             teleportOutAnimation,
                             SKAction.removeFromParent()
-                            ]))
+                        ]))
                     }
                 ]),
                 SKAction.waitForDuration(0.25),
@@ -137,7 +215,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                     teleportIn.runAction(SKAction.sequence([
                         teleportInAnimation,
                         SKAction.removeFromParent()
-                        ]))
+                    ]))
                     
                     self.player.teleporting = false
                 }
@@ -152,7 +230,31 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 } else {
                     targetCircle.removeAllActions()
                     targetCircle.removeFromParent()
+                    shootingTutorial()
                 }
+            }
+            
+            if nodeAtPoint(touch.locationInNode(self)) == shootPos {
+                shootPos?.removeAllActions()
+                shootPos?.removeFromParent()
+                
+                arrow?.position = CGPoint(x: size.width/2, y: size.height/2)
+                arrow?.zPosition = Config.GameLayer.Sprite
+                arrow?.xScale = 0.25
+                arrow?.yScale = 0.25
+                addChild(arrow!)
+                
+                arrow?.runAction(SKAction.repeatActionForever(SKAction.sequence([
+                    SKAction.group([
+                        SKAction.moveToY(size.height-300, duration: 1.0),
+                        SKAction.fadeOutWithDuration(1.0)
+                    ]),
+                    SKAction.waitForDuration(0.25),
+                    SKAction.group([
+                        SKAction.moveToY(size.height/2, duration: 0),
+                        SKAction.fadeAlphaTo(0.75, duration: 0)
+                    ])
+                ])))
             }
         }
     }
