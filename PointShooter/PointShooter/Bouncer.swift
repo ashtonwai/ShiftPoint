@@ -19,7 +19,7 @@ class Bouncer : Enemy {
     
     // MARK: - Initialization -
     init() {
-        self.delta = CGFloat(Int.random(10...30))
+        self.delta = CGFloat(Int.random(20...30))
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
         

@@ -533,15 +533,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnWave() {
+        waveLabel.text = "\(wave)"
+        
         // http://www.meta-calculator.com/online/9j13df5xtv8b
         var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
         
         runAction(SKAction.sequence([
             SKAction.waitForDuration(1.0),
             SKAction.runBlock() {
+                // Spawn seeker wave once every 3 waves after Wave 5
                 if self.wave > 5 && self.wave % 3 == 0 {
-                    self.spawnSeekerCircle()
+                    // Spawn half of enemies as Seekers
                     waveEnemyCount /= 2
+                    let seekers = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
+                    self.spawnSeekerCircle(seekers)
                 }
                 self.spawnEnemy(.Bouncer, count: waveEnemyCount)
             }
@@ -582,9 +587,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnSeekerCircle () {
-        for i in 0..<16 {
-            let angle = CGFloat(i) * 360.0 / 16.0
+    func spawnSeekerCircle (count: CGFloat) {
+        for i in 0..<Int(count) {
+            let angle = CGFloat(i) * 360.0 / count
             let seeker = Seeker()
             seeker.position = CGPoint(
                 x: playableRect.width/2 + playableRect.height/2 * cos(angle),
