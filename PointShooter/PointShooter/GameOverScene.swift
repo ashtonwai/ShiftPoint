@@ -18,7 +18,7 @@ class GameOverScene : SKScene {
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, score: Int) {
         self.gameManager = gameManager
         self.score = score
-        self.highscore = (userDefaults.valueForKey("highScore") as? Int)!
+        self.highscore = userDefaults.objectForKey("highScore") != nil ? (userDefaults.valueForKey("highScore") as? Int)! : 0
         self.playButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         super.init(size: size)
     }
