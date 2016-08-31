@@ -1,4 +1,4 @@
-Point Shooter
+ShiftPoint
 ==================
 IGME-590 iOS & tvOS Game Development - Project 1
 
