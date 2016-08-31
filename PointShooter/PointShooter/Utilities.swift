@@ -78,6 +78,9 @@ func randomCGPointInRect(rect:CGRect,margin:CGFloat)->CGPoint{
 }
 
 let π = CGFloat(M_PI)
+let degreesToRadians = π / 180
+let radiansToDegree = 180 / π
+
 func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
     let twoπ = π * 2.0
     var angle = (angle2 - angle1) % twoπ

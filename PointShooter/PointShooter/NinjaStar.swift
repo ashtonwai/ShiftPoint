@@ -14,7 +14,7 @@ class NinjaStar : Enemy {
     let color: SKColor = Config.Enemy.NinjaStar.NINJA_COLOR
     let ninjaSize: CGSize = Config.Enemy.NinjaStar.NINJA_SIZE
     
-    init() {
+    init(pos: CGPoint) {
         super.init(size: ninjaSize, scorePoints: points, hitPoints: hp, typeColor: color)
         
         let width = ninjaSize.width
@@ -22,6 +22,8 @@ class NinjaStar : Enemy {
         let center = CGPointMake(0, 0)
         
         self.name = "ninjaStar"
+        self.position = pos
+        self.zPosition = Config.GameLayer.Sprite
         
         let pathToDraw = CGPathCreateMutable()
         CGPathMoveToPoint(pathToDraw, nil, 0, height/3)

@@ -20,7 +20,7 @@ class Seeker : Enemy {
     var rotateSpeed: CGFloat = 3.0 * π
     
     // MARK: - Initialization -
-    init() {
+    init(pos: CGPoint) {
         super.init(size: seekerSize, scorePoints: points, hitPoints: hp, typeColor: color)
         
         let pathToDraw = CGPathCreateMutable()
@@ -35,6 +35,8 @@ class Seeker : Enemy {
         fillColor = SKColor.clearColor()
         
         self.name = "seeker"
+        self.position = pos
+        self.zPosition = Config.GameLayer.Sprite
         
         self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
         self.physicsBody?.dynamic = true

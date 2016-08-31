@@ -59,10 +59,10 @@ struct Config {
             static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
         }
         struct NinjaStar {
-            static let NINJA_SCORE   : Int = 50
-            static let NINJA_HEALTH  : Int = 3
-            static let NINJA_COLOR   : SKColor = SKColor.yellowColor()
-            static let NINJA_SIZE    : CGSize = CGSize(width: 60, height: 60)
+            static let NINJA_SCORE    : Int = 50
+            static let NINJA_HEALTH   : Int = 3
+            static let NINJA_COLOR    : SKColor = SKColor.yellowColor()
+            static let NINJA_SIZE     : CGSize = CGSize(width: 50, height: 50)
         }
     }
 }

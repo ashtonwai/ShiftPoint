@@ -463,8 +463,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 if self.wave > 5 && self.wave % 3 == 0 {
                     // Spawn half of enemies as Seekers
                     waveEnemyCount /= 2
-                    let seekers = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
-                    self.spawnSeekerCircle(seekers)
+                    let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
+                    let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
+                    self.spawnEnemyCircle(EnemyTypes.Seeker, count: circleEnemyCount, center: location, radius: 500)
                 }
                 self.spawnEnemy(.Bouncer, count: waveEnemyCount)
             }
@@ -505,25 +506,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemy(type: EnemyTypes, count: Int) {
         for _ in 0..<count {
-            let enemy = createEnemy(type)
-            enemy.position = getRandomOutsideSpawnLocation()
-            enemy.zPosition = Config.GameLayer.Sprite
+            let enemy = createEnemy(type, location: getRandomOutsideSpawnLocation())
             addChild(enemy)
             numOfEnemies += 1
             enemy.move()
         }
     }
     
-    func spawnSeekerCircle(count: CGFloat) {
+    func spawnEnemyCircle(type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) {
+        let r = (radius != nil) ? radius : (100 + 50 * (count - 1))
         for i in 0..<Int(count) {
             let angle = CGFloat(i) * 360.0 / count
-            let seeker = Seeker()
-            seeker.position = CGPoint(
-                x: playableRect.width/2 + playableRect.height/2 * cos(angle),
-                y: playableRect.height/2 + playableRect.height/2 * sin(angle)
-            )
-            seeker.zPosition = Config.GameLayer.Sprite
-            addChild(seeker)
+            let pos = CGPointMake(
+                center.x + cos(angle * degreesToRadians) * r!,
+                center.y + sin(angle * degreesToRadians) * r!)
+            let enemy = createEnemy(type, location: pos)
+            addChild(enemy)
             numOfEnemies += 1
         }
     }

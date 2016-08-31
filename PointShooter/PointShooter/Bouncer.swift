@@ -18,7 +18,7 @@ class Bouncer : Enemy {
     var delta: CGFloat
     
     // MARK: - Initialization -
-    init() {
+    init(pos: CGPoint) {
         self.delta = CGFloat(Int.random(20...30))
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
@@ -30,6 +30,8 @@ class Bouncer : Enemy {
         let center = CGPoint(x: -width/2, y: -height/2)
         
         self.name = "bouncer"
+        self.position = pos
+        self.zPosition = Config.GameLayer.Sprite
         
         self.path = CGPathCreateWithRect(CGRect(origin: center, size: bouncerSize), nil)
         self.fillColor = SKColor.clearColor()
