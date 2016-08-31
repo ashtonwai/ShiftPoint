@@ -79,47 +79,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         for touch in touches {
             let location = touch.locationInNode(self)
             
-            let teleport = SKAction.sequence([
-                SKAction.group([
-                    teleportSound,
-                    SKAction.runBlock() {
-                        self.player.teleporting = true
-                        self.player.prevPosition = self.player.position
-                        self.player.runAction(SKAction.fadeOutWithDuration(0.5))
-                        
-                        let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
-                        teleportOut.position = self.player.prevPosition
-                        teleportOut.zPosition = Config.GameLayer.Animation
-                        teleportOut.zRotation = self.player.rotateAngle
-                        self.addChild(teleportOut)
-                        
-                        teleportOut.runAction(SKAction.sequence([
-                            teleportOutAnimation,
-                            SKAction.removeFromParent()
-                        ]))
-                    }
-                ]),
-                SKAction.waitForDuration(0.25),
-                SKAction.runBlock() {
-                    self.player.position = location
-                    self.player.runAction(SKAction.fadeInWithDuration(0.5))
-                    
-                    let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
-                    teleportIn.position = self.player.position
-                    teleportIn.zPosition = Config.GameLayer.Animation
-                    teleportIn.zRotation = self.player.rotateAngle
-                    self.addChild(teleportIn)
-                    
-                    teleportIn.runAction(SKAction.sequence([
-                        teleportInAnimation,
-                        SKAction.removeFromParent()
-                    ]))
-                    
-                    self.player.teleporting = false
-                }
-            ])
-            
-            self.runAction(teleport)
+            player.onTeleport(location)
             
             if nodeAtPoint(touch.locationInNode(self)) == skipButton {
                 skipButton.fontColor = SKColor.cyanColor()
@@ -178,19 +138,10 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
             player.direction(dx, dy: dy)
             
             // Shoot bullets
-            if !player.invincible && !player.teleporting && !player.autoFiring {
-                player.autoFiring = true
-                runAction(SKAction.repeatActionForever(
-                    SKAction.sequence([
-                        SKAction.runBlock(autoFire),
-                        SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
-                    ])
-                ), withKey: "autoFire")
-            }
+            player.onAutoFire()
         }
         if recognizer.state == .Ended {
-            player.autoFiring = false
-            removeActionForKey("autoFire")
+            player.stopAutoFire()
             
             runAction(SKAction.sequence([
                 SKAction.waitForDuration(1.0),
@@ -258,34 +209,18 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
             SKAction.group([
                 SKAction.scaleTo(0.5, duration: 1.0),
                 SKAction.fadeOutWithDuration(1.0)
-                ]),
+            ]),
             SKAction.waitForDuration(0.25),
             SKAction.group([
                 SKAction.scaleTo(1, duration: 0),
                 SKAction.fadeAlphaBy(0.75, duration: 0)
-                ])
-            ])))
+            ])
+        ])))
         
         instruction.text = "Hold and drag from the target location"
         
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panDetected(_:)))
         self.view!.addGestureRecognizer(panRecognizer)
-    }
-    
-    func autoFire() {
-        runAction(SKAction.group([
-            SKAction.runBlock() {
-                let bullet = Bullet(circleOfRadius: 10)
-                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
-                bullet.zPosition = Config.GameLayer.Sprite
-                self.addChild(bullet)
-                
-                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
-                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
-                bullet.move(dx, dy: dy)
-            },
-            bulletFireSound
-        ]))
     }
     
     func completeTutorial() {

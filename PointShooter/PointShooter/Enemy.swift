@@ -15,6 +15,8 @@ class Enemy : SKShapeNode {
     var typeColor: SKColor
     var forward: CGPoint = CGPointMake(0.0, 1.0)
     
+    let scoreSound: SKAction = SKAction.playSoundFileNamed("Score.mp3", waitForCompletion: false)
+    
     // MARK: - Initialization -
     init(size: CGSize, scorePoints: Int, hitPoints: Int, typeColor: SKColor) {
         self.size = size
@@ -35,20 +37,33 @@ class Enemy : SKShapeNode {
         emitter.particleColorSequence = nil
         emitter.particleColorBlendFactor = 1.0
         emitter.particleColor = typeColor
+        emitter.position = self.position
+        emitter.zPosition = Config.GameLayer.Animation
         return emitter
     }
     
-    func move() {
-        fatalError("Must Override")
+    func scoreMarker() -> SKLabelNode {
+        let scoreMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
+        scoreMarker.fontColor = UIColor.cyanColor()
+        scoreMarker.fontSize = 30
+        scoreMarker.text = "\(scorePoints)"
+        scoreMarker.position = self.position
+        scoreMarker.zPosition = Config.GameLayer.Sprite
+        return scoreMarker
     }
     
     
     // MARK: - Event Handlers -
-    func onHit() {
-        hitPoints -= 1
+    func move() {
+        fatalError("Must Override")
+    }
+    
+    func onHit(damage: Int) -> Int {
+        hitPoints -= damage
         if hitPoints <= 0 {
-            self.onDestroy()
+            onDestroy()
         }
+        return hitPoints
     }
     
     func onDestroy() {

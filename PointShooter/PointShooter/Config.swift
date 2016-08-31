@@ -23,29 +23,7 @@ struct Config {
         static let DebugPhysics  : Bool = false
         static let GodMode       : Bool = false
         static let Endless       : Bool = false
-        static let SkipTutorial  : Bool = false
-    }
-    
-    struct Enemy {
-        static let ENEMY_MAX_SIZE     : CGSize = CGSize(width: 100, height: 100)
-        struct Bouncer {
-            static let BOUNCER_SCORE  : Int = 10
-            static let BOUNCER_HEALTH : Int = 1
-            static let BOUNCER_COLOR  : SKColor = SKColor.greenColor()
-            static let BOUNCER_SIZE   : CGSize = CGSize(width: 50, height: 50)
-        }
-        struct Seeker {
-            static let SEEKER_SCORE   : Int = 25
-            static let SEEKER_HEALTH  : Int = 1
-            static let SEEKER_COLOR   : SKColor = SKColor.redColor()
-            static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
-        }
-        struct NinjaStar {
-            static let NINJA_SCORE   : Int = 50
-            static let NINJA_HEALTH  : Int = 1
-            static let NINJA_COLOR   : SKColor = SKColor.yellowColor()
-            static let NINJA_SIZE    : CGSize = CGSize(width: 60, height: 60)
-        }
+        static let SkipTutorial  : Bool = true
     }
     
     struct GameLayer {
@@ -60,7 +38,31 @@ struct Config {
     struct Player {
         static let FIRE_RATE        : Float = 0.2
         static let BULLET_SPEED     : Float = 50.0
+        static let BULLET_POWER     : Int = 1
+        static let BULLET_POWER_MAX : Int = 3
         static let PLAYER_LIFE      : Int = 5
         static let PLAYER_MAX_LIFE  : Int = 5
+    }
+    
+    struct Enemy {
+        static let ENEMY_MAX_SIZE     : CGSize = CGSize(width: 100, height: 100)
+        struct Bouncer {
+            static let BOUNCER_SCORE  : Int = 10
+            static let BOUNCER_HEALTH : Int = 1
+            static let BOUNCER_COLOR  : SKColor = SKColor.greenColor()
+            static let BOUNCER_SIZE   : CGSize = CGSize(width: 50, height: 50)
+        }
+        struct Seeker {
+            static let SEEKER_SCORE   : Int = 25
+            static let SEEKER_HEALTH  : Int = 2
+            static let SEEKER_COLOR   : SKColor = SKColor.redColor()
+            static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
+        }
+        struct NinjaStar {
+            static let NINJA_SCORE   : Int = 50
+            static let NINJA_HEALTH  : Int = 3
+            static let NINJA_COLOR   : SKColor = SKColor.yellowColor()
+            static let NINJA_SIZE    : CGSize = CGSize(width: 60, height: 60)
+        }
     }
 }

@@ -10,6 +10,8 @@ import SpriteKit
 
 class Bullet : SKShapeNode {
     let bulletSpeed: CGFloat = CGFloat(Config.Player.BULLET_SPEED)
+    let bulletMaxPower: Int = Config.Player.BULLET_POWER_MAX
+    var bulletPower: Int = Config.Player.BULLET_POWER
     
     // MARK: - Initialization -
     init(circleOfRadius: CGFloat) {
@@ -45,7 +47,14 @@ class Bullet : SKShapeNode {
     
     
     // MARK: - Event Handlers -
-    func onHit() {
+    func onHit(damage: Int) {
+        bulletPower -= damage
+        if bulletPower <= 0 {
+            onDestroy()
+        }
+    }
+    
+    func onDestroy() {
         self.removeFromParent()
     }
 }

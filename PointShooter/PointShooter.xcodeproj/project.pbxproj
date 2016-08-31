@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */; };
 		2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* Utilities.swift */; };
-		2D2A59481C950D3800086DCB /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A59471C950D3800086DCB /* Actions.swift */; };
 		2D3F96881C97A5DA00272995 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F96871C97A5DA00272995 /* Config.swift */; };
 		2D3F96951C97CC9500272995 /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96941C97CC9500272995 /* Teleport.mp3 */; };
 		2D3F96971C97CCAE00272995 /* BGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96961C97CCAE00272995 /* BGM.mp3 */; };
@@ -42,7 +41,6 @@
 /* Begin PBXFileReference section */
 		2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 		2D05EEDE1C85625D0093A3A3 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		2D2A59471C950D3800086DCB /* Actions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		2D3F96871C97A5DA00272995 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		2D3F96941C97CC9500272995 /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Sounds/Teleport.mp3; sourceTree = "<group>"; };
 		2D3F96961C97CCAE00272995 /* BGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BGM.mp3; path = Sounds/BGM.mp3; sourceTree = "<group>"; };
@@ -109,10 +107,7 @@
 			children = (
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
-				2DFEA0531CDECD1E00C4FEC9 /* Enemy.swift */,
-				2DE088511C8A56DD00BE051C /* Bouncer.swift */,
-				2DE880BF1C90CF92006F5CE2 /* Seeker.swift */,
-				2DCB13CE1CEA7459001C109B /* NinjaStar.swift */,
+				2D5488D11D766D3500E81EC0 /* Enemies */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -120,7 +115,6 @@
 		2D05EED71C850F150093A3A3 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				2D2A59471C950D3800086DCB /* Actions.swift */,
 				2D3F96871C97A5DA00272995 /* Config.swift */,
 				2D05EEDE1C85625D0093A3A3 /* Utilities.swift */,
 			);
@@ -184,6 +178,17 @@
 				2D430A301C7F50BD0075F316 /* Info.plist */,
 			);
 			path = PointShooter;
+			sourceTree = "<group>";
+		};
+		2D5488D11D766D3500E81EC0 /* Enemies */ = {
+			isa = PBXGroup;
+			children = (
+				2DFEA0531CDECD1E00C4FEC9 /* Enemy.swift */,
+				2DE088511C8A56DD00BE051C /* Bouncer.swift */,
+				2DE880BF1C90CF92006F5CE2 /* Seeker.swift */,
+				2DCB13CE1CEA7459001C109B /* NinjaStar.swift */,
+			);
+			name = Enemies;
 			sourceTree = "<group>";
 		};
 		2DAAEC101CD860AF0080A957 /* Protocols */ = {
@@ -305,7 +310,6 @@
 				2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */,
 				2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */,
 				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
-				2D2A59481C950D3800086DCB /* Actions.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
 				2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */,

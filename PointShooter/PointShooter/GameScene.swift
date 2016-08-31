@@ -7,13 +7,13 @@
 //
 
 struct PhysicsCategory {
-    static let None      : UInt32 = 0
-    static let All       : UInt32 = UInt32.max
+    static let None         : UInt32 = 0
+    static let All          : UInt32 = UInt32.max
     static let OuterBounds  : UInt32 = 0b1 // 1
     static let PlayBounds   : UInt32 = 0b10 // 2
-    static let Enemy    : UInt32 = 0b101 // 4
-    static let Player   : UInt32 = 0b1001 // 8
-    static let Bullet   : UInt32 = 0b10001 // 16
+    static let Enemy        : UInt32 = 0b101 // 4
+    static let Player       : UInt32 = 0b1001 // 8
+    static let Bullet       : UInt32 = 0b10001 // 16
 }
 
 import SpriteKit
@@ -79,7 +79,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         super.init(size: size)
         
         // Physics for Spawn Rects
-        
         // OuterBounds
         let outerBoundingBox = SKShapeNode()
         outerBoundingBox.path = CGPathCreateWithRect(spawnRectBounds, nil)
@@ -148,48 +147,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 resumeButton.fontColor = UIColor.cyanColor()
             }
             
-            let teleport = SKAction.sequence([
-                SKAction.group([
-                    teleportSound,
-                    SKAction.runBlock() {
-                        self.player.teleporting = true
-                        self.player.prevPosition = self.player.position
-                        self.player.runAction(SKAction.fadeOutWithDuration(0.5))
-                        
-                        let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
-                        teleportOut.position = self.player.prevPosition
-                        teleportOut.zPosition = Config.GameLayer.Animation
-                        teleportOut.zRotation = self.player.rotateAngle
-                        self.addChild(teleportOut)
-                        
-                        teleportOut.runAction(SKAction.sequence([
-                            teleportOutAnimation,
-                            SKAction.removeFromParent()
-                        ]))
-                    }
-                ]),
-                SKAction.waitForDuration(0.25),
-                SKAction.runBlock() {
-                    self.player.position = location
-                    self.player.runAction(SKAction.fadeInWithDuration(0.5))
-                    
-                    let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
-                    teleportIn.position = self.player.position
-                    teleportIn.zPosition = Config.GameLayer.Animation
-                    teleportIn.zRotation = self.player.rotateAngle
-                    self.addChild(teleportIn)
-                    
-                    teleportIn.runAction(SKAction.sequence([
-                        teleportInAnimation,
-                        SKAction.removeFromParent()
-                    ]))
-                    
-                    self.player.teleporting = false
-                }
-            ])
-            
             if !gamePaused {
-                self.runAction(teleport)
+                player.onTeleport(location)
             }
         }
     }
@@ -214,20 +173,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 player.direction(dx, dy: dy)
                 
                 // Shoot bullets
-                if !player.invincible && !player.teleporting && !player.autoFiring {
-                    player.autoFiring = true
-                    runAction(SKAction.repeatActionForever(
-                        SKAction.sequence([
-                            SKAction.runBlock(autoFire),
-                            SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
-                            ])
-                        ), withKey: "autoFire")
-                }
-
+                player.onAutoFire()
             }
             if recognizer.state == .Ended {
-                player.autoFiring = false
-                removeActionForKey("autoFire")
+                player.stopAutoFire()
             }
         }
     }
@@ -235,7 +184,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // MARK - Collision Detections -
     func didBeginContact(contact: SKPhysicsContact) {
-        
         var firstNode: SKNode?
         var secondNode: SKNode?
         
@@ -256,98 +204,84 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         // bounds & bullet collision
         if firstNode?.physicsBody?.categoryBitMask == PhysicsCategory.OuterBounds, let bullet = secondNode as? Bullet {
-            bullet.onHit()
+            bullet.onDestroy()
         }
-        
         // enemy & bullet collision
         if let enemy = firstNode as? Enemy, let bullet = secondNode as? Bullet {
             bulletDidCollideWithEnemy(enemy, thisBullet: bullet)
         }
-        
         // enemy & player collision
         else if let enemy = firstNode as? Enemy, let player = secondNode as? Player {
             playerDidCollideWithEnemy(enemy, thisPlayer: player)
         }
-        
     }
     
     func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
-        // emitter
-        let emitter = thisEnemy.explosion()
-        emitter.position = thisEnemy.position
-        emitter.zPosition = Config.GameLayer.Sprite
+        let enemyHp = thisEnemy.hitPoints
+        let bulletPower = thisBullet.bulletPower
         
-        // points
-        let scoreMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
-        scoreMarker.position = thisEnemy.position
-        scoreMarker.zPosition = Config.GameLayer.Sprite
-        scoreMarker.fontColor = UIColor.cyanColor()
-        scoreMarker.fontSize = 30
-        scoreMarker.text = "\(thisEnemy.scorePoints)"
-        
-        runAction(SKAction.sequence([
-            SKAction.group([
-                scoreSound,
-                SKAction.runBlock() {
-                    self.addChild(emitter)
-                    self.addChild(scoreMarker)
-                    
-                    thisBullet.onHit()
-                    thisEnemy.onHit()
-                    
-                    self.score += thisEnemy.scorePoints
-                    self.scoreLabel.text = "\(self.score)"
-                    
-                    self.numOfEnemies -= 1
-                    if self.numOfEnemies <= 0 {
-                        self.wave += 1
-                        self.spawnWave()
+        thisBullet.onHit(enemyHp)
+        if thisEnemy.onHit(bulletPower) <= 0 {
+            let emitter = thisEnemy.explosion()
+            let scoreMarker = thisEnemy.scoreMarker()
+            
+            runAction(SKAction.sequence([
+                SKAction.group([
+                    thisEnemy.scoreSound,
+                    SKAction.runBlock() {
+                        self.addChild(emitter)
+                        self.addChild(scoreMarker)
+                        
+                        self.score += thisEnemy.scorePoints
+                        self.scoreLabel.text = "\(self.score)"
+                        
+                        self.numOfEnemies -= 1
+                        if self.numOfEnemies <= 0 {
+                            self.wave += 1
+                            self.spawnWave()
+                        }
                     }
+                ]),
+                SKAction.waitForDuration(0.3),
+                SKAction.runBlock() {
+                    emitter.removeFromParent()
+                    scoreMarker.runAction(SKAction.sequence([
+                        SKAction.fadeOutWithDuration(0.5),
+                        SKAction.removeFromParent()
+                    ]))
                 }
-            ]),
-            SKAction.waitForDuration(0.3),
-            SKAction.runBlock() {
-                emitter.removeFromParent()
-                scoreMarker.runAction(SKAction.sequence([
-                    SKAction.fadeOutWithDuration(0.5),
-                    SKAction.removeFromParent()
-                ]))
-            }
-        ]))
-        
+            ]))
+        }
     }
     
     func playerDidCollideWithEnemy(thisEnemy: Enemy, thisPlayer: Player) {
-        if !player.invincible && !player.teleporting {
-            thisEnemy.onDestroy()
-            player.onDamaged()
-            let heart = lives.removeLast()
-            heart.runAction(SKAction.sequence([
-                SKAction.fadeOutWithDuration(0.2),
-                SKAction.removeFromParent()
-            ]))
-            
-            if player.life <= 0 && !Config.Developer.Endless {
-                player.onDestroy()
-                gameOver()
-                return
-            }
-            
-            numOfEnemies -= 1
-            if numOfEnemies <= 0 {
-                wave += 1
-                spawnWave()
-            }
+        thisEnemy.onDestroy()
+        thisPlayer.onDamaged()
+        
+        let heart = lives.removeLast()
+        heart.runAction(SKAction.sequence([
+            SKAction.fadeOutWithDuration(0.2),
+            SKAction.removeFromParent()
+        ]))
+        
+        if thisPlayer.life <= 0 && !Config.Developer.Endless {
+            thisPlayer.onDestroy()
+            gameOver()
+            return
+        }
+        
+        numOfEnemies -= 1
+        if numOfEnemies <= 0 {
+            wave += 1
+            spawnWave()
         }
     }
     
     func checkBounds(enemy: Enemy) {
-        
         if enemy.position < playableRect {
             // if visible on screen
             enemy.physicsBody?.collisionBitMask = PhysicsCategory.PlayBounds
         }
-        
     }
     
     
@@ -516,22 +450,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(resumeButton)
     }
     
-    func autoFire() {
-        runAction(SKAction.group([
-            SKAction.runBlock() {
-                let bullet = Bullet(circleOfRadius: 10)
-                bullet.position = CGPointMake(self.player.position.x, self.player.position.y)
-                bullet.zPosition = Config.GameLayer.Sprite
-                self.addChild(bullet)
-                
-                let dx = cos(self.player.zRotation + CGFloat(M_PI/2))
-                let dy = sin(self.player.zRotation + CGFloat(M_PI/2))
-                bullet.move(dx, dy: dy)
-            },
-            bulletFireSound
-        ]))
-    }
-    
     func spawnWave() {
         waveLabel.text = "\(wave)"
         
@@ -554,13 +472,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     // Spawn outside playableRect
-    func getRandomSpawnLocation() -> CGPoint {
+    func getRandomOutsideSpawnLocation() -> CGPoint {
         var location = CGPoint(
             x: CGFloat.random(spawnZoneBounds.minX, max: spawnZoneBounds.maxX),
             y: CGFloat.random(spawnZoneBounds.minY, max: spawnZoneBounds.maxY)
         )
-        let zone = Int.random(1...4)
         
+        let zone = Int.random(1...4)
         switch zone {
         case 1: location.y = spawnZoneBounds.maxY   // Top
             break
@@ -576,10 +494,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         return location
     }
     
+    // Spawn inside playableRect
+    func getRandomInsideSpawnLocation() -> CGPoint {
+        let location = CGPoint(
+            x: CGFloat.random(playableRect.minX, max: playableRect.maxX),
+            y: CGFloat.random(playableRect.minY, max: playableRect.maxY)
+        )
+        return location
+    }
+    
     func spawnEnemy(type: EnemyTypes, count: Int) {
         for _ in 0..<count {
             let enemy = createEnemy(type)
-            enemy.position = getRandomSpawnLocation()
+            enemy.position = getRandomOutsideSpawnLocation()
             enemy.zPosition = Config.GameLayer.Sprite
             addChild(enemy)
             numOfEnemies += 1
@@ -587,7 +514,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnSeekerCircle (count: CGFloat) {
+    func spawnSeekerCircle(count: CGFloat) {
         for i in 0..<Int(count) {
             let angle = CGFloat(i) * 360.0 / count
             let seeker = Seeker()
