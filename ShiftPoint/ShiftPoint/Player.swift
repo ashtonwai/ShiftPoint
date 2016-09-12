@@ -27,7 +27,6 @@ class Player : SKSpriteNode {
         super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
         
         self.name = "player"
-        self.size = size
         self.anchorPoint.y = 0.35
         
         self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(

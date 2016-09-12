@@ -94,7 +94,7 @@ func shortestAngleBetween(angle1: CGFloat, angle2: CGFloat) -> CGFloat {
 }
 
 #if !(arch(x86_64) || arch(arm64))
-    func atan2(y: CGPoint, x: CGFloat) -> CGFloat {
+    func atan2(y: CGFloat, x: CGFloat) -> CGFloat {
         return CGFloat(atan2f(Float(y), Float(x)))
     }
     

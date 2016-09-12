@@ -36,6 +36,7 @@
 		2DFEA0541CDECD1E00C4FEC9 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFEA0531CDECD1E00C4FEC9 /* Enemy.swift */; };
 		679ED6B31C950DD000BC8924 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 679ED6B11C950DD000BC8924 /* Explosion.sks */; };
 		679ED6B41C950DD000BC8924 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 679ED6B21C950DD000BC8924 /* spark.png */; };
+		E15327F41D874E8C00E400F6 /* Life.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15327F31D874E8C00E400F6 /* Life.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		2DFEA0531CDECD1E00C4FEC9 /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		679ED6B11C950DD000BC8924 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		679ED6B21C950DD000BC8924 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		E15327F31D874E8C00E400F6 /* Life.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Life.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
 				2D5488D11D766D3500E81EC0 /* Enemies */,
+				E15327F21D874E4B00E400F6 /* Power-ups */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -216,6 +219,14 @@
 			name = Enums;
 			sourceTree = "<group>";
 		};
+		E15327F21D874E4B00E400F6 /* Power-ups */ = {
+			isa = PBXGroup;
+			children = (
+				E15327F31D874E8C00E400F6 /* Life.swift */,
+			);
+			name = "Power-ups";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -248,7 +259,7 @@
 				TargetAttributes = {
 					2D430A1C1C7F50BD0075F316 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = KT6L3A8T5R;
+						DevelopmentTeam = 24424VD8RL;
 					};
 				};
 			};
@@ -311,6 +322,7 @@
 				2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */,
 				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
+				E15327F41D874E8C00E400F6 /* Life.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
 				2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */,
 				2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */,
@@ -427,11 +439,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -440,11 +454,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
