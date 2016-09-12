@@ -33,6 +33,11 @@ class Bullet : SKShapeNode {
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
         self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds
         self.physicsBody?.usesPreciseCollisionDetection = true
+        self.physicsBody?.angularDamping = 0
+        self.physicsBody?.linearDamping = 0
+        self.physicsBody?.restitution = 0
+        self.physicsBody?.friction = 0
+        self.physicsBody?.allowsRotation = false
     }
 
     required init?(coder aDecoder: NSCoder) {
