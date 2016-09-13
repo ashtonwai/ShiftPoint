@@ -256,18 +256,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func playerDidCollideWithEnemy(thisEnemy: Enemy, thisPlayer: Player) {
         thisEnemy.onDestroy()
-        thisPlayer.onDamaged()
-        
-        if thisPlayer.life <= 0 && !Config.Developer.Endless {
-            thisPlayer.onDestroy()
-            gameOver()
-            return
-        } else {
+        if thisPlayer.onDamaged() {
             let heart = lives.removeLast()
             heart.runAction(SKAction.sequence([
                 SKAction.fadeOutWithDuration(0.2),
                 SKAction.removeFromParent()
             ]))
+        }
+        
+        if thisPlayer.life <= 0 && !Config.Developer.Endless {
+            thisPlayer.onDestroy()
+            gameOver()
+            return
         }
         
         numOfEnemies -= 1

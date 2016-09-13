@@ -125,9 +125,9 @@ class Player : SKSpriteNode {
         removeActionForKey("autoFire")
     }
     
-    func onDamaged() {
+    func onDamaged() -> Bool {
         if Config.Developer.GodMode || invincible || teleporting {
-            return
+            return false
         }
         
         life -= 1
@@ -146,6 +146,8 @@ class Player : SKSpriteNode {
             self.invincible = false
         }
         self.runAction(SKAction.sequence([blinkAction, setHidden]))
+        
+        return true
     }
     
     func onDestroy() {
