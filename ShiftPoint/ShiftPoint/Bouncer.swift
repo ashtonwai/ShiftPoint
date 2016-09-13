@@ -23,7 +23,13 @@ class Bouncer : Enemy {
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
         
-        self.forward = CGPoint.randomUnitVector()
+        let threshold: CGFloat = 10
+        let vector = CGPointMake(
+            CGFloat.random(cos(threshold * degreesToRadians),max:cos((180 - threshold) * degreesToRadians)),
+            CGFloat.random(sin(threshold * degreesToRadians),max:sin((180 - threshold) * degreesToRadians))
+        )
+        self.forward = vector.normalized() // bottom facing up
+        //self.forward = CGPoint.randomUnitVector()
         
         let width = bouncerSize.width
         let height = bouncerSize.height
@@ -49,7 +55,7 @@ class Bouncer : Enemy {
         self.physicsBody?.friction = 0
         self.physicsBody?.allowsRotation = false
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
