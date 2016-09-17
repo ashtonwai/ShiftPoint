@@ -14,6 +14,7 @@ struct PhysicsCategory {
     static let Enemy        : UInt32 = 0b101 // 4
     static let Player       : UInt32 = 0b1001 // 8
     static let Bullet       : UInt32 = 0b10001 // 16
+    static let PowerUp      : UInt32 = 0b100001 // 32
 }
 
 import SpriteKit
@@ -36,8 +37,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     var pauseOverlay        : SKShapeNode
     var pauseLabel          : SKLabelNode
     var resumeButton        : SKLabelNode
-    var scoreLabel          : SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
-    var waveLabel           : SKLabelNode = SKLabelNode(fontNamed: Config.Font.MainFont)
+    var scoreLabel          : SKLabelNode?
+    var waveLabel           : SKLabelNode?
     let maxEnemySize        : CGSize = Config.Enemy.ENEMY_MAX_SIZE
     var numOfEnemies        : Int = 0
     var score               : Int = 0
@@ -131,7 +132,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
                 let seeker = node as! Seeker
                 if let targetLocation = self.player?.position {
-                    seeker.seek(self.deltaTime, location: targetLocation)
+                    seeker.seek(self.deltaTime, target: targetLocation)
                 }
             })
         }
@@ -214,6 +215,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         else if let enemy = firstNode as? Enemy, let player = secondNode as? Player {
             playerDidCollideWithEnemy(enemy, thisPlayer: player)
         }
+        // power & player collision
+        else if let player = firstNode as? Player, let power = secondNode as? PowerUp {
+            playerDidCollideWithPowerUp(player, thisPower: power)
+        }
     }
     
     func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
@@ -233,7 +238,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         self.addChild(scoreMarker)
                         
                         self.score += thisEnemy.scorePoints
-                        self.scoreLabel.text = "\(self.score)"
+                        self.scoreLabel!.text = "\(self.score)"
                         
                         self.numOfEnemies -= 1
                         if self.numOfEnemies <= 0 {
@@ -258,11 +263,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         thisEnemy.onDestroy()
         thisPlayer.onDamaged()
         
-        let heart = lives.removeLast()
-        heart.runAction(SKAction.sequence([
-            SKAction.fadeOutWithDuration(0.2),
-            SKAction.removeFromParent()
-        ]))
+        if lives.count >= 1 {
+            let heart = lives.removeLast()
+            heart.runAction(SKAction.sequence([
+                SKAction.fadeOutWithDuration(0.2),
+                SKAction.removeFromParent()
+            ]))
+        }
         
         if thisPlayer.life <= 0 && !Config.Developer.Endless {
             thisPlayer.onDestroy()
@@ -274,6 +281,23 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         if numOfEnemies <= 0 {
             wave += 1
             spawnWave()
+        }
+    }
+    
+    func playerDidCollideWithPowerUp(thisPlayer: Player, thisPower: PowerUp) {
+        switch thisPower.powerType {
+        case .Life:
+            if let power = thisPower as? LifeUp {
+                power.onPickUp(thisPlayer)
+                let heart = elHeart()
+                let xPos = (lives.last?.position.x)! - (25 + heart.size.width)
+                let yPos = (lives.last?.position.y)!
+                heart.position = CGPointMake(xPos, yPos)
+                heart.alpha = 0
+                addChild(heart)
+                heart.runAction(SKAction.fadeAlphaBy(0.75, duration: 0.2))
+            }
+            break
         }
     }
     
@@ -351,72 +375,35 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         player.position = CGPointMake(size.width/2, size.height/2)
         player.zPosition = Config.GameLayer.Sprite
         addChild(player)
+        
+        spawnPowerUp(PowerTypes.Life)
     }
     
     func setupHUD() {
-        let scoreTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-        scoreTextLabel.position = CGPointMake(50, size.height-50)
-        scoreTextLabel.zPosition = Config.GameLayer.HUD
-        scoreTextLabel.horizontalAlignmentMode = .Left
-        scoreTextLabel.verticalAlignmentMode = .Top
-        scoreTextLabel.fontColor = Config.Font.GameUIColor
-        scoreTextLabel.fontSize = Config.Font.GameTextSize
-        scoreTextLabel.text = "Score"
+        let scoreTextLabel = elScoreTextLabel(CGPointMake(50, size.height-50))
         addChild(scoreTextLabel)
         
-        scoreLabel.position = CGPoint(x: 50, y: size.height-100)
-        scoreLabel.zPosition = Config.GameLayer.HUD
-        scoreLabel.horizontalAlignmentMode = .Left
-        scoreLabel.verticalAlignmentMode = .Top
-        scoreLabel.fontColor = Config.Font.GameUIColor
-        scoreLabel.fontSize = Config.Font.GameLabelSize
-        scoreLabel.text = "\(score)"
-        addChild(scoreLabel)
+        scoreLabel = elScoreLabel(CGPointMake(50, size.height-100), score: score)
+        addChild(scoreLabel!)
         
-        let waveTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-        waveTextLabel.position = CGPointMake(size.width/2, size.height-50)
-        waveTextLabel.zPosition = Config.GameLayer.HUD
-        waveTextLabel.horizontalAlignmentMode = .Center
-        waveTextLabel.verticalAlignmentMode = .Top
-        waveTextLabel.fontColor = Config.Font.GameUIColor
-        waveTextLabel.fontSize = Config.Font.GameTextSize
-        waveTextLabel.text = "Wave"
+        let waveTextLabel = elWaveTextLabel(CGPointMake(size.width/2, size.height-50))
         addChild(waveTextLabel)
         
-        waveLabel.position = CGPointMake(size.width/2, size.height-100)
-        waveLabel.zPosition = Config.GameLayer.HUD
-        waveLabel.horizontalAlignmentMode = .Center
-        waveLabel.verticalAlignmentMode = .Top
-        waveLabel.fontColor = Config.Font.GameUIColor
-        waveLabel.fontSize = Config.Font.GameLabelSize
-        waveLabel.text = "\(wave)"
-        addChild(waveLabel)
+        waveLabel = elWaveLabel(CGPointMake(size.width/2, size.height-100), wave: wave)
+        addChild(waveLabel!)
         
-        let lifeTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
-        lifeTextLabel.position = CGPointMake(size.width-50, size.height-50)
-        lifeTextLabel.zPosition = Config.GameLayer.HUD
-        lifeTextLabel.horizontalAlignmentMode = .Right
-        lifeTextLabel.verticalAlignmentMode = .Top
-        lifeTextLabel.fontColor = Config.Font.GameUIColor
-        lifeTextLabel.fontSize = Config.Font.GameTextSize
-        lifeTextLabel.text = "Life"
+        let lifeTextLabel = elLifeTextLabel(CGPointMake(size.width-50, size.height-50))
         addChild(lifeTextLabel)
         
         for i in 1...player.life {
-            let heart = SKSpriteNode(imageNamed: "Heart")
-            heart.size = CGSize(width: 55, height: 50)
+            let heart = elHeart()
+            
             let xPos = size.width - (25 + heart.size.width) * CGFloat(i)
             let yPos = size.height - (75 + heart.size.height)
-            heart.position = CGPointMake(xPos, yPos)
-            heart.zPosition = Config.GameLayer.HUD
-            heart.alpha = 0.75
             
-            let dot = SKShapeNode(circleOfRadius: 5)
-            dot.position = CGPointMake(xPos, yPos)
-            dot.zPosition = Config.GameLayer.HUD
-            dot.fillColor = Config.Font.GameUIColor
-            dot.lineWidth = 0
-            dot.alpha = 0.25
+            heart.position = CGPointMake(xPos, yPos)
+            
+            let dot = elHeartDot(CGPointMake(xPos, yPos))
             
             addChild(dot)
             addChild(heart)
@@ -451,7 +438,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnWave() {
-        waveLabel.text = "\(wave)"
+        waveLabel!.text = "\(wave)"
         
         // http://www.meta-calculator.com/online/9j13df5xtv8b
         var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
@@ -513,8 +500,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnEnemyCircle(type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) {
+    func spawnEnemyCircle(type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) -> [Enemy] {
         let r = (radius != nil) ? radius : (100 + 50 * (count - 1))
+        var circleEnemies: [Enemy] = []
+        
         for i in 0..<Int(count) {
             let angle = CGFloat(i) * 360.0 / count
             let pos = CGPointMake(
@@ -523,6 +512,29 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let enemy = createEnemy(type, location: pos)
             addChild(enemy)
             numOfEnemies += 1
+            circleEnemies.append(enemy)
+        }
+        
+        return circleEnemies
+    }
+    
+    func spawnPowerUp(type: PowerTypes) {
+        let location = getRandomInsideSpawnLocation()
+        
+        let powerUp = createPowerUp(type, location: location)
+        addChild(powerUp)
+        
+        let count = CGFloat(powerUp.enemyCount)
+        for i in 0..<Int(powerUp.enemyCount) {
+            let radius = 100 + 50 * (count - 1)
+            let angle = CGFloat(i) * 360.0 / count
+            let targetPos = CGPointMake(
+                location.x + cos(angle * degreesToRadians) * radius,
+                location.y + sin(angle * degreesToRadians) * radius)
+            let ninja = NinjaStar(pos: location, toPos: targetPos)
+            addChild(ninja)
+            numOfEnemies += 1
+            powerUp.ninjas.append(ninja)
         }
     }
     

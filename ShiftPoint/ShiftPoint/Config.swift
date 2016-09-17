@@ -65,4 +65,13 @@ struct Config {
             static let NINJA_SIZE     : CGSize = CGSize(width: 50, height: 50)
         }
     }
+    
+    struct PowerUp {
+        struct LifeUp {
+            static let LIFEUP_ICON        : SKTexture = SKTexture.init(imageNamed: "LifeUp")
+            static let LIFEUP_NAME        : String = "LIFE UP"
+            static let LIFEUP_TIME        : Int = 7
+            static let LIFEUP_ENEMY_COUNT : Int = 4
+        }
+    }
 }

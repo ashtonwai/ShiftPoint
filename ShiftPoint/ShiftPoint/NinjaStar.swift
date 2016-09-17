@@ -54,7 +54,45 @@ class NinjaStar : Enemy {
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
     
+    convenience init(pos: CGPoint, toPos: CGPoint) {
+        self.init(pos: pos)
+        self.alpha = 0
+        rotate(2.0)
+        spread(toPos)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    // MARK: - Movement Controls -
+    func rotate(speed: NSTimeInterval) {
+        let rotate = SKAction.rotateByAngle(π * 2, duration: speed)
+        runAction(SKAction.repeatActionForever(rotate))
+    }
+    
+    func spread(location: CGPoint) {
+        let spread = SKAction.group([
+            SKAction.fadeInWithDuration(0.5),
+            SKAction.moveTo(location, duration: 0.25)
+        ])
+        runAction(spread)
+    }
+    
+    func slash(center: CGPoint) {
+        let x = center.x - (position.x - center.x)
+        let y = center.y - (position.y - center.y)
+        runAction(SKAction.sequence([
+            SKAction.runBlock() {
+                self.rotate(1.0)
+            },
+            SKAction.waitForDuration(0.5),
+            SKAction.group([
+                SKAction.moveTo(CGPointMake(x, y), duration: 0.5),
+                SKAction.fadeOutWithDuration(1.0)
+            ]),
+            SKAction.removeFromParent()
+        ]))
     }
 }

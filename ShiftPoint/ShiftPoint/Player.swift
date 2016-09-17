@@ -131,9 +131,9 @@ class Player : SKSpriteNode {
             return
         }
         
-        life -= 1
         invincible = true
         autoFiring = false
+        life -= 1
         
         let blinkTimes = 6.0
         let duration = 1.5

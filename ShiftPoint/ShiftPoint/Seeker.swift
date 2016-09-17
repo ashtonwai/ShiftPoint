@@ -51,8 +51,8 @@ class Seeker : Enemy {
     
     
     // MARK: - Movement Controls -
-    func seek(deltaTime: NSTimeInterval, location: CGPoint) {
-        let offset = location - self.position
+    func seek(deltaTime: NSTimeInterval, target: CGPoint) {
+        let offset = target - self.position
         direction = offset.normalized()
         velocity = direction * delta
         position += velocity * CGFloat(deltaTime)

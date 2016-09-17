@@ -21,6 +21,10 @@
 		2D430A2A1C7F50BD0075F316 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A281C7F50BD0075F316 /* Main.storyboard */; };
 		2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2B1C7F50BD0075F316 /* Assets.xcassets */; };
 		2D430A2F1C7F50BD0075F316 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */; };
+		2D4F494B1D7792F5009E337F /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F494A1D7792F5009E337F /* PowerUp.swift */; };
+		2D4F494E1D779EAA009E337F /* LifeUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F494D1D779EAA009E337F /* LifeUp.swift */; };
+		2D4F49501D779EF3009E337F /* PowerTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F494F1D779EF3009E337F /* PowerTypes.swift */; };
+		2D4F49521D77FC63009E337F /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F49511D77FC63009E337F /* Elements.swift */; };
 		2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAAEC0E1CD860A70080A957 /* GameManager.swift */; };
 		2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */; };
 		2DABBFFC1C91C6FC00F5ABAD /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */; };
@@ -55,6 +59,10 @@
 		2D430A2B1C7F50BD0075F316 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D430A2E1C7F50BD0075F316 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D430A301C7F50BD0075F316 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2D4F494A1D7792F5009E337F /* PowerUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
+		2D4F494D1D779EAA009E337F /* LifeUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeUp.swift; sourceTree = "<group>"; };
+		2D4F494F1D779EF3009E337F /* PowerTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerTypes.swift; sourceTree = "<group>"; };
+		2D4F49511D77FC63009E337F /* Elements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Elements.swift; sourceTree = "<group>"; };
 		2DAAEC0E1CD860A70080A957 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inversionz.otf; path = Fonts/Inversionz.otf; sourceTree = "<group>"; };
 		2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "6 Cells.otf"; path = "Fonts/6 Cells.otf"; sourceTree = "<group>"; };
@@ -108,6 +116,7 @@
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
 				2D5488D11D766D3500E81EC0 /* Enemies */,
+				2D4F494C1D7792FB009E337F /* PowerUps */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -117,6 +126,7 @@
 			children = (
 				2D3F96871C97A5DA00272995 /* Config.swift */,
 				2D05EEDE1C85625D0093A3A3 /* Utilities.swift */,
+				2D4F49511D77FC63009E337F /* Elements.swift */,
 			);
 			name = Lib;
 			sourceTree = "<group>";
@@ -180,6 +190,15 @@
 			path = ShiftPoint;
 			sourceTree = "<group>";
 		};
+		2D4F494C1D7792FB009E337F /* PowerUps */ = {
+			isa = PBXGroup;
+			children = (
+				2D4F494A1D7792F5009E337F /* PowerUp.swift */,
+				2D4F494D1D779EAA009E337F /* LifeUp.swift */,
+			);
+			name = PowerUps;
+			sourceTree = "<group>";
+		};
 		2D5488D11D766D3500E81EC0 /* Enemies */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */,
+				2D4F494F1D779EF3009E337F /* PowerTypes.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -300,7 +320,9 @@
 			files = (
 				2DFEA0541CDECD1E00C4FEC9 /* Enemy.swift in Sources */,
 				2DE088521C8A56DD00BE051C /* Bouncer.swift in Sources */,
+				2D4F494B1D7792F5009E337F /* PowerUp.swift in Sources */,
 				2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */,
+				2D4F494E1D779EAA009E337F /* LifeUp.swift in Sources */,
 				2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */,
 				2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */,
 				2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */,
@@ -308,7 +330,9 @@
 				2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */,
 				2DE088541C8ABE0600BE051C /* MainMenuScene.swift in Sources */,
 				2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */,
+				2D4F49501D779EF3009E337F /* PowerTypes.swift in Sources */,
 				2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */,
+				2D4F49521D77FC63009E337F /* Elements.swift in Sources */,
 				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
