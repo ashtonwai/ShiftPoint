@@ -9,7 +9,7 @@
 import SpriteKit
 
 class Player : SKSpriteNode {
-    var prevPosition    : CGPoint = CGPointZero
+    var prevPosition    : CGPoint = CGPoint.zero
     var rotateAngle     : CGFloat = 0
     var teleporting     : Bool = false
     var invincible      : Bool = false
@@ -24,16 +24,16 @@ class Player : SKSpriteNode {
     // MARK: - Initialization -
     init() {
         let texture = SKTexture(imageNamed: "Player")
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
+        super.init(texture: texture, color: UIColor.clear, size: texture.size())
         
         self.name = "player"
         self.size = size
         self.anchorPoint.y = 0.35
         
-        self.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(
+        self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(
             width: texture.size().width * xScale,
             height: texture.size().height * yScale))
-        self.physicsBody?.dynamic = true
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Player
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
@@ -45,23 +45,23 @@ class Player : SKSpriteNode {
     
     
     // MARK: - Movement Controls -
-    func direction(dx: CGFloat, dy: CGFloat) {
+    func direction(_ dx: CGFloat, dy: CGFloat) {
         let angle = atan2(dy, dx)
         rotateAngle = angle + CGFloat(M_PI/2)
-        let rotate = SKAction.rotateToAngle(rotateAngle, duration: 0.0)
-        self.runAction(rotate)
+        let rotate = SKAction.rotate(toAngle: rotateAngle, duration: 0.0)
+        self.run(rotate)
     }
     
     
     // MARK: - Event Handler -
-    func onTeleport(location: CGPoint) {
+    func onTeleport(_ location: CGPoint) {
         let teleport = SKAction.sequence([
             SKAction.group([
                 teleportSound,
-                SKAction.runBlock() {
+                SKAction.run() {
                     self.teleporting = true
                     self.prevPosition = self.position
-                    self.runAction(SKAction.fadeOutWithDuration(0.5))
+                    self.run(SKAction.fadeOut(withDuration: 0.5))
                     
                     let teleportOut = SKSpriteNode(imageNamed: "teleport_1")
                     teleportOut.position = self.prevPosition
@@ -69,16 +69,16 @@ class Player : SKSpriteNode {
                     teleportOut.zRotation = self.rotateAngle
                     self.parent!.addChild(teleportOut)
                     
-                    teleportOut.runAction(SKAction.sequence([
+                    teleportOut.run(SKAction.sequence([
                         self.teleportOutAnimation(),
                         SKAction.removeFromParent()
                     ]))
                 }
             ]),
-            SKAction.waitForDuration(0.25),
-            SKAction.runBlock() {
+            SKAction.wait(forDuration: 0.25),
+            SKAction.run() {
                 self.position = location
-                self.runAction(SKAction.fadeInWithDuration(0.5))
+                self.run(SKAction.fadeIn(withDuration: 0.5))
                 
                 let teleportIn = SKSpriteNode(imageNamed: "teleport_6")
                 teleportIn.position = self.position
@@ -86,7 +86,7 @@ class Player : SKSpriteNode {
                 teleportIn.zRotation = self.rotateAngle
                 self.parent!.addChild(teleportIn)
                 
-                teleportIn.runAction(SKAction.sequence([
+                teleportIn.run(SKAction.sequence([
                     self.teleportInAnimation(),
                     SKAction.removeFromParent()
                 ]))
@@ -94,18 +94,18 @@ class Player : SKSpriteNode {
                 self.teleporting = false
             }
         ])
-        self.runAction(teleport)
+        self.run(teleport)
     }
     
     func onAutoFire() {
         if !invincible && !teleporting && !autoFiring {
             autoFiring = true
-            runAction(SKAction.repeatActionForever(
+            run(SKAction.repeatForever(
                 SKAction.sequence([
                     SKAction.group([
-                        SKAction.runBlock() {
+                        SKAction.run() {
                             let bullet = Bullet(circleOfRadius: 10)
-                            bullet.position = CGPointMake(self.position.x, self.position.y)
+                            bullet.position = CGPoint(x: self.position.x, y: self.position.y)
                             bullet.zPosition = Config.GameLayer.Sprite
                             self.parent!.addChild(bullet)
                             
@@ -115,7 +115,7 @@ class Player : SKSpriteNode {
                         },
                         bulletFireSound
                     ]),
-                    SKAction.waitForDuration(NSTimeInterval(Config.Player.FIRE_RATE))
+                    SKAction.wait(forDuration: TimeInterval(Config.Player.FIRE_RATE))
                 ])
             ), withKey: "autoFire")
         }
@@ -123,7 +123,7 @@ class Player : SKSpriteNode {
     
     func stopAutoFire() {
         autoFiring = false
-        removeActionForKey("autoFire")
+        removeAction(forKey: "autoFire")
     }
     
     func onDamaged() {
@@ -137,16 +137,16 @@ class Player : SKSpriteNode {
         
         let blinkTimes = 6.0
         let duration = 1.5
-        let blinkAction = SKAction.customActionWithDuration(duration) { node, elapsedTime in
+        let blinkAction = SKAction.customAction(withDuration: duration) { node, elapsedTime in
             let slice = duration / blinkTimes
-            let remainder = Double(elapsedTime) % slice
-            node.hidden = remainder > slice / 2
+            let remainder = Double(elapsedTime).truncatingRemainder(dividingBy: slice)
+            node.isHidden = remainder > slice / 2
         }
-        let setHidden = SKAction.runBlock() {
-            self.hidden = false
+        let setHidden = SKAction.run() {
+            self.isHidden = false
             self.invincible = false
         }
-        self.runAction(SKAction.sequence([blinkAction, setHidden]))
+        self.run(SKAction.sequence([blinkAction, setHidden]))
     }
     
     func onDestroy() {
@@ -160,14 +160,14 @@ class Player : SKSpriteNode {
         for i in 2...6 {
             teleportOutTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
         }
-        return SKAction.animateWithTextures(teleportOutTextures, timePerFrame: 0.1)
+        return SKAction.animate(with: teleportOutTextures, timePerFrame: 0.1)
     }
     
     func teleportInAnimation() -> SKAction {
         var teleportInTextures: [SKTexture] = []
-        for i in 4.stride(to: 1, by: -1) {
+        for i in stride(from: 4, to: 1, by: -1) {
             teleportInTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
         }
-        return SKAction.animateWithTextures(teleportInTextures, timePerFrame: 0.1)
+        return SKAction.animate(with: teleportInTextures, timePerFrame: 0.1)
     }
 }

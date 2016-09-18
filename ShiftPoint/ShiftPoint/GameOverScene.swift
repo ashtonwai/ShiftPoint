@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameOverScene : SKScene {
     var gameManager: GameManager
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     let highscore: Int
     let score: Int
     let playButton: SKLabelNode
@@ -18,7 +18,7 @@ class GameOverScene : SKScene {
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, score: Int) {
         self.gameManager = gameManager
         self.score = score
-        self.highscore = userDefaults.objectForKey("highScore") != nil ? (userDefaults.valueForKey("highScore") as? Int)! : 0
+        self.highscore = userDefaults.object(forKey: "highScore") != nil ? (userDefaults.value(forKey: "highScore") as? Int)! : 0
         self.playButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         super.init(size: size)
     }
@@ -27,7 +27,7 @@ class GameOverScene : SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "GameOver.png")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         background.zPosition = 0
@@ -38,9 +38,9 @@ class GameOverScene : SKScene {
         let gameover = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         gameover.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameover.zPosition = 1
-        gameover.horizontalAlignmentMode = .Center
-        gameover.verticalAlignmentMode = .Center
-        gameover.fontColor = UIColor.redColor()
+        gameover.horizontalAlignmentMode = .center
+        gameover.verticalAlignmentMode = .center
+        gameover.fontColor = UIColor.red
         gameover.fontSize = 250
         gameover.text = "Game Over"
         addChild(gameover)
@@ -48,7 +48,7 @@ class GameOverScene : SKScene {
         let tagLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         tagLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2+50)
         tagLabel.zPosition = 1
-        tagLabel.fontColor = UIColor.greenColor()
+        tagLabel.fontColor = UIColor.green
         tagLabel.fontSize = 50
         if score > highscore {
             tagLabel.text = "NEW HIGH SCORE"
@@ -63,7 +63,7 @@ class GameOverScene : SKScene {
         let scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         scoreLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2-50)
         scoreLabel.zPosition = 1
-        scoreLabel.fontColor = UIColor.greenColor()
+        scoreLabel.fontColor = UIColor.green
         scoreLabel.fontSize = 100
         scoreLabel.text = "\(score)"
         scoreLabel.alpha = 0
@@ -76,35 +76,35 @@ class GameOverScene : SKScene {
         playButton.alpha = 0
         addChild(playButton)
         
-        runAction(SKAction.sequence([
-            SKAction.runBlock() {
-                gameover.runAction(SKAction.moveToY(self.size.height/2+400, duration: 1.0))
+        run(SKAction.sequence([
+            SKAction.run() {
+                gameover.run(SKAction.moveTo(y: self.size.height/2+400, duration: 1.0))
             },
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                tagLabel.runAction(SKAction.fadeInWithDuration(1.0))
-                scoreLabel.runAction(SKAction.fadeInWithDuration(1.0))
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
+                tagLabel.run(SKAction.fadeIn(withDuration: 1.0))
+                scoreLabel.run(SKAction.fadeIn(withDuration: 1.0))
             },
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                self.playButton.runAction(SKAction.fadeInWithDuration(1.0))
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
+                self.playButton.run(SKAction.fadeIn(withDuration: 1.0))
             }
         ]))
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch: AnyObject in touches {
-            if nodeAtPoint(touch.locationInNode(self)) == playButton {
-                playButton.fontColor = UIColor.cyanColor()
+            if atPoint(touch.location(in: self)) == playButton {
+                playButton.fontColor = UIColor.cyan
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        playButton.fontColor = UIColor.whiteColor()
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        playButton.fontColor = UIColor.white
         for touch: AnyObject in touches {
-            if nodeAtPoint(touch.locationInNode(self)) == playButton {
-                playButton.fontColor = UIColor.whiteColor()
+            if atPoint(touch.location(in: self)) == playButton {
+                playButton.fontColor = UIColor.white
                 gameManager.loadGameScene()
             }
         }

@@ -14,7 +14,7 @@ class PowerUp : SKSpriteNode {
     var enemyCount: Int
     var powerTime: Int
     
-    var timer: NSTimer?
+    var timer: Timer?
     var remainTime: Int = 0
     var active: Bool = true
     var ninjas: [NinjaStar] = []
@@ -25,7 +25,7 @@ class PowerUp : SKSpriteNode {
         self.powerName = powerName
         self.enemyCount = enemyCount
         self.powerTime = powerTime
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
+        super.init(texture: texture, color: UIColor.clear, size: texture.size())
         
         self.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
         self.physicsBody?.categoryBitMask = PhysicsCategory.PowerUp
@@ -33,7 +33,7 @@ class PowerUp : SKSpriteNode {
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
         
         remainTime = powerTime
-        timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +44,7 @@ class PowerUp : SKSpriteNode {
     // MARK: - Particles -
     func powerMarker() -> SKLabelNode {
         let powerMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
-        powerMarker.fontColor = UIColor.yellowColor()
+        powerMarker.fontColor = UIColor.yellow
         powerMarker.fontSize = 30
         powerMarker.text = "\(powerName)"
         powerMarker.position = self.position
@@ -58,19 +58,19 @@ class PowerUp : SKSpriteNode {
         if remainTime > 1 {
             remainTime -= 1
             if remainTime < powerTime / 2 {
-                runAction(SKAction.group([
-                    SKAction.fadeAlphaTo(0.5, duration: 0.5),
+                run(SKAction.group([
+                    SKAction.fadeAlpha(to: 0.5, duration: 0.5),
                     glowAnimation(),
-                    SKAction.runBlock() {
+                    SKAction.run() {
                         for ninja in self.ninjas {
                             ninja.rotate(1.5)
                         }
                     }
                 ]))
             } else if remainTime < powerTime / 3 {
-                runAction(SKAction.group([
-                    SKAction.fadeAlphaTo(0.25, duration: 0.5),
-                    SKAction.runBlock() {
+                run(SKAction.group([
+                    SKAction.fadeAlpha(to: 0.25, duration: 0.5),
+                    SKAction.run() {
                         for ninja in self.ninjas {
                             ninja.rotate(1.0)
                         }
@@ -79,9 +79,9 @@ class PowerUp : SKSpriteNode {
             }
         } else {
             timer!.invalidate()
-            runAction(SKAction.sequence([
-                SKAction.fadeOutWithDuration(1.0),
-                SKAction.runBlock() {
+            run(SKAction.sequence([
+                SKAction.fadeOut(withDuration: 1.0),
+                SKAction.run() {
                     self.remainTime -= 1
                     self.active = false
                     for ninja in self.ninjas {
@@ -95,27 +95,27 @@ class PowerUp : SKSpriteNode {
     
     
     // MARK: - Event Handlers -
-    func onPickUp(player: Player) {
+    func onPickUp(_ player: Player) {
         timer!.invalidate()
         active = false
-        runAction(SKAction.group([
+        run(SKAction.group([
             pickUpAnimation(),
-            SKAction.runBlock() {
+            SKAction.run() {
                 self.boost(player)
             }
         ]))
     }
     
-    func boost(player: Player) {
+    func boost(_ player: Player) {
         fatalError("Must override!")
     }
     
     
     // MARK: - Animations -
     func glowAnimation() -> SKAction {
-        let glow = SKAction.repeatActionForever(SKAction.sequence([
-            SKAction.fadeAlphaBy(0.05, duration: 0.5),
-            SKAction.fadeAlphaTo(self.alpha + 0.05, duration: 0.25)
+        let glow = SKAction.repeatForever(SKAction.sequence([
+            SKAction.fadeAlpha(by: 0.05, duration: 0.5),
+            SKAction.fadeAlpha(to: self.alpha + 0.05, duration: 0.25)
         ]))
         return glow
     }
@@ -123,9 +123,9 @@ class PowerUp : SKSpriteNode {
     func pickUpAnimation() -> SKAction {
         let pickUp = SKAction.sequence([
             SKAction.group([
-                SKAction.scaleTo(3, duration: 0.5),
-                SKAction.fadeOutWithDuration(0.5),
-                SKAction.runBlock() {
+                SKAction.scale(to: 3, duration: 0.5),
+                SKAction.fadeOut(withDuration: 0.5),
+                SKAction.run() {
                     for ninja in self.ninjas {
                         ninja.slash(self.position)
                     }

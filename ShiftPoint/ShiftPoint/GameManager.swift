@@ -12,5 +12,5 @@ protocol GameManager {
     func loadMainMenuScene()
     func loadTutorialScene()
     func loadGameScene()
-    func loadGameOverScene(score: Int)
+    func loadGameOverScene(_ score: Int)
 }

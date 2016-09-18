@@ -23,12 +23,12 @@ class Bullet : SKShapeNode {
         
         self.name = "bullet"
         
-        self.path = CGPathCreateWithEllipseInRect(CGRect(origin: center, size: size), nil)
-        self.fillColor = SKColor.redColor()
+        self.path = CGPath(ellipseIn: CGRect(origin: center, size: size), transform: nil)
+        self.fillColor = SKColor.red
         self.lineWidth = 0
         
         self.physicsBody = SKPhysicsBody(circleOfRadius: 10)
-        self.physicsBody?.dynamic = true
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Bullet
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
         self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds
@@ -41,13 +41,13 @@ class Bullet : SKShapeNode {
     
     
     // MARK: - Movement Controls -
-    func move(dx: CGFloat, dy: CGFloat) {
+    func move(_ dx: CGFloat, dy: CGFloat) {
         self.physicsBody?.applyImpulse(CGVector(dx: dx * bulletSpeed, dy: dy * bulletSpeed))
     }
     
     
     // MARK: - Event Handlers -
-    func onHit(damage: Int) {
+    func onHit(_ damage: Int) {
         bulletPower -= damage
         if bulletPower <= 0 {
             onDestroy()

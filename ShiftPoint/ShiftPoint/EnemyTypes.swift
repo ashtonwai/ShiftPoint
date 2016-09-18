@@ -9,22 +9,22 @@
 import SpriteKit
 
 enum EnemyTypes {
-    case Bouncer
-    case Seeker
-    case NinjaStar
+    case bouncer
+    case seeker
+    case ninjaStar
 }
 
-func createEnemy(enemyType: EnemyTypes, location: CGPoint) -> Enemy {
+func createEnemy(_ enemyType: EnemyTypes, location: CGPoint) -> Enemy {
     var enemy: Enemy
     
     switch enemyType {
-    case .Bouncer:
+    case .bouncer:
         enemy = Bouncer(pos: location)
         break
-    case .Seeker:
+    case .seeker:
         enemy = Seeker(pos: location)
         break
-    case .NinjaStar:
+    case .ninjaStar:
         enemy = NinjaStar(pos: location)
         break;
     }

@@ -9,14 +9,14 @@
 import SpriteKit
 
 enum PowerTypes {
-    case Life
+    case life
 }
 
-func createPowerUp(powerType: PowerTypes, location: CGPoint) -> PowerUp {
+func createPowerUp(_ powerType: PowerTypes, location: CGPoint) -> PowerUp {
     var power: PowerUp
     
     switch powerType {
-    case .Life:
+    case .life:
         power = LifeUp(pos: location)
         break
     }

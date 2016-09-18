@@ -14,8 +14,8 @@ class Seeker : Enemy {
     let color: SKColor = Config.Enemy.Seeker.SEEKER_COLOR
     let seekerSize: CGSize = Config.Enemy.Seeker.SEEKER_SIZE
     
-    var velocity: CGPoint = CGPointZero
-    var direction: CGPoint = CGPointZero
+    var velocity: CGPoint = CGPoint.zero
+    var direction: CGPoint = CGPoint.zero
     var delta: CGFloat = 250.0
     var rotateSpeed: CGFloat = 3.0 * π
     
@@ -23,23 +23,27 @@ class Seeker : Enemy {
     init(pos: CGPoint) {
         super.init(size: seekerSize, scorePoints: points, hitPoints: hp, typeColor: color)
         
-        let pathToDraw = CGPathCreateMutable()
-        CGPathMoveToPoint(pathToDraw, nil, 0, seekerSize.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, seekerSize.width/2, -seekerSize.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, -seekerSize.width/2, -seekerSize.height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, 0, seekerSize.height/2)
-        CGPathCloseSubpath(pathToDraw)
+        let pathToDraw = CGMutablePath()
+        pathToDraw.move(to: CGPoint(x: 0, y: seekerSize.height/2))
+        pathToDraw.addLine(to: CGPoint(x: seekerSize.width/2, y: -seekerSize.height/2))
+        pathToDraw.addLine(to: CGPoint(x: -seekerSize.width/2, y: -seekerSize.height/2))
+        pathToDraw.addLine(to: CGPoint(x: 0, y: seekerSize.height/2))
+//        CGPathMoveToPoint(pathToDraw, nil, 0, seekerSize.height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, seekerSize.width/2, -seekerSize.height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, -seekerSize.width/2, -seekerSize.height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, 0, seekerSize.height/2)
+        pathToDraw.closeSubpath()
         path = pathToDraw
         lineWidth = 3
         strokeColor = color
-        fillColor = SKColor.clearColor()
+        fillColor = SKColor.clear
         
         self.name = "seeker"
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
-        self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
-        self.physicsBody?.dynamic = true
+        self.physicsBody = SKPhysicsBody(polygonFrom: path!)
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.PlayBounds
@@ -51,7 +55,7 @@ class Seeker : Enemy {
     
     
     // MARK: - Movement Controls -
-    func seek(deltaTime: NSTimeInterval, target: CGPoint) {
+    func seek(_ deltaTime: TimeInterval, target: CGPoint) {
         let offset = target - self.position
         direction = offset.normalized()
         velocity = direction * delta

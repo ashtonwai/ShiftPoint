@@ -50,7 +50,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
         self.gameManager = gameManager
         self.gamePaused = false
-        self.pauseOverlay = SKShapeNode(rectOfSize: size)
+        self.pauseOverlay = SKShapeNode(rectOf: size)
         self.pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         self.resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         
@@ -82,15 +82,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // Physics for Spawn Rects
         // OuterBounds
         let outerBoundingBox = SKShapeNode()
-        outerBoundingBox.path = CGPathCreateWithRect(spawnRectBounds, nil)
-        outerBoundingBox.physicsBody = SKPhysicsBody(edgeLoopFromRect: spawnRectBounds)
+        outerBoundingBox.path = CGPath(rect: spawnRectBounds, transform: nil)
+        outerBoundingBox.physicsBody = SKPhysicsBody(edgeLoopFrom: spawnRectBounds)
         outerBoundingBox.physicsBody?.categoryBitMask = PhysicsCategory.OuterBounds
         addChild(outerBoundingBox)
         
         // PlayBounds
         let boundingBox = SKShapeNode()
-        boundingBox.path = CGPathCreateWithRect(playableRect, nil)
-        boundingBox.physicsBody = SKPhysicsBody(edgeLoopFromRect: playableRect)
+        boundingBox.path = CGPath(rect: playableRect, transform: nil)
+        boundingBox.physicsBody = SKPhysicsBody(edgeLoopFrom: playableRect)
         boundingBox.physicsBody?.categoryBitMask = PhysicsCategory.PlayBounds
         addChild(boundingBox)
     }
@@ -99,7 +99,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         playBackgroundMusic("BGM.mp3")
         setupWorld()
         setupHUD()
@@ -115,7 +115,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     // MARK - Update -
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         if !gamePaused {
             if lastUpdateTime > 0 {
                 deltaTime = currentTime - lastUpdateTime
@@ -124,12 +124,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
             lastUpdateTime = currentTime
             
-            enumerateChildNodesWithName("bouncer", usingBlock: { node, stop in
+            enumerateChildNodes(withName: "bouncer", using: { node, stop in
                 let bouncer = node as! Bouncer
                 self.checkBounds(bouncer)
             })
             
-            enumerateChildNodesWithName("seeker", usingBlock: { node, stop in
+            enumerateChildNodes(withName: "seeker", using: { node, stop in
                 let seeker = node as! Seeker
                 if let targetLocation = self.player?.position {
                     seeker.seek(self.deltaTime, target: targetLocation)
@@ -140,12 +140,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: - Event Handlers -
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
-            if nodeAtPoint(location) == resumeButton {
-                resumeButton.fontColor = UIColor.cyanColor()
+            if atPoint(location) == resumeButton {
+                resumeButton.fontColor = UIColor.cyan
             }
             
             if !gamePaused {
@@ -154,20 +154,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) { 
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { 
         for touch: AnyObject in touches {
-            if nodeAtPoint(touch.locationInNode(self)) == resumeButton {
-                resumeButton.fontColor = UIColor.whiteColor()
+            if atPoint(touch.location(in: self)) == resumeButton {
+                resumeButton.fontColor = UIColor.white
                 runUnpauseAction()
             }
         }
     }
     
-    func panDetected(recognizer: UIPanGestureRecognizer) {
+    func panDetected(_ recognizer: UIPanGestureRecognizer) {
         if !gamePaused {
-            if recognizer.state == .Changed {
-                var touchLocation = recognizer.locationInView(recognizer.view)
-                touchLocation = self.convertPointFromView(touchLocation)
+            if recognizer.state == .changed {
+                var touchLocation = recognizer.location(in: recognizer.view)
+                touchLocation = self.convertPoint(fromView: touchLocation)
                 
                 let dy = player.position.y - touchLocation.y
                 let dx = player.position.x - touchLocation.x
@@ -176,7 +176,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 // Shoot bullets
                 player.onAutoFire()
             }
-            if recognizer.state == .Ended {
+            if recognizer.state == .ended {
                 player.stopAutoFire()
             }
         }
@@ -184,7 +184,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     
     // MARK - Collision Detections -
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         var firstNode: SKNode?
         var secondNode: SKNode?
         
@@ -221,7 +221,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func bulletDidCollideWithEnemy(thisEnemy: Enemy, thisBullet: Bullet) {
+    func bulletDidCollideWithEnemy(_ thisEnemy: Enemy, thisBullet: Bullet) {
         let enemyHp = thisEnemy.hitPoints
         let bulletPower = thisBullet.bulletPower
         
@@ -230,10 +230,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let emitter = thisEnemy.explosion()
             let scoreMarker = thisEnemy.scoreMarker()
             
-            runAction(SKAction.sequence([
+            run(SKAction.sequence([
                 SKAction.group([
                     thisEnemy.scoreSound,
-                    SKAction.runBlock() {
+                    SKAction.run() {
                         self.addChild(emitter)
                         self.addChild(scoreMarker)
                         
@@ -247,11 +247,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         }
                     }
                 ]),
-                SKAction.waitForDuration(0.3),
-                SKAction.runBlock() {
+                SKAction.wait(forDuration: 0.3),
+                SKAction.run() {
                     emitter.removeFromParent()
-                    scoreMarker.runAction(SKAction.sequence([
-                        SKAction.fadeOutWithDuration(0.5),
+                    scoreMarker.run(SKAction.sequence([
+                        SKAction.fadeOut(withDuration: 0.5),
                         SKAction.removeFromParent()
                     ]))
                 }
@@ -259,14 +259,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func playerDidCollideWithEnemy(thisEnemy: Enemy, thisPlayer: Player) {
+    func playerDidCollideWithEnemy(_ thisEnemy: Enemy, thisPlayer: Player) {
         thisEnemy.onDestroy()
         thisPlayer.onDamaged()
         
         if lives.count >= 1 {
             let heart = lives.removeLast()
-            heart.runAction(SKAction.sequence([
-                SKAction.fadeOutWithDuration(0.2),
+            heart.run(SKAction.sequence([
+                SKAction.fadeOut(withDuration: 0.2),
                 SKAction.removeFromParent()
             ]))
         }
@@ -284,24 +284,24 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func playerDidCollideWithPowerUp(thisPlayer: Player, thisPower: PowerUp) {
+    func playerDidCollideWithPowerUp(_ thisPlayer: Player, thisPower: PowerUp) {
         switch thisPower.powerType {
-        case .Life:
+        case .life:
             if let power = thisPower as? LifeUp {
                 power.onPickUp(thisPlayer)
                 let heart = elHeart()
                 let xPos = (lives.last?.position.x)! - (25 + heart.size.width)
                 let yPos = (lives.last?.position.y)!
-                heart.position = CGPointMake(xPos, yPos)
+                heart.position = CGPoint(x: xPos, y: yPos)
                 heart.alpha = 0
                 addChild(heart)
-                heart.runAction(SKAction.fadeAlphaBy(0.75, duration: 0.2))
+                heart.run(SKAction.fadeAlpha(by: 0.75, duration: 0.2))
             }
             break
         }
     }
     
-    func checkBounds(enemy: Enemy) {
+    func checkBounds(_ enemy: Enemy) {
         if enemy.position < playableRect {
             // if visible on screen
             enemy.physicsBody?.collisionBitMask = PhysicsCategory.PlayBounds
@@ -323,37 +323,37 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func runPauseAction() {
         // pause game
         pauseGame()
-        self.view?.paused = true
+        self.view?.isPaused = true
     }
     
     func runUnpauseAction() {
         // unpause game
-        runAction(SKAction.sequence([
+        run(SKAction.sequence([
             SKAction.group([
-                SKAction.runBlock() {
-                    self.pauseLabel.runAction(SKAction.sequence([
-                        SKAction.fadeOutWithDuration(0.5),
+                SKAction.run() {
+                    self.pauseLabel.run(SKAction.sequence([
+                        SKAction.fadeOut(withDuration: 0.5),
                         SKAction.removeFromParent()
                     ]))
                 },
-                SKAction.runBlock() {
-                    self.resumeButton.runAction(SKAction.sequence([
-                        SKAction.fadeOutWithDuration(0.5),
+                SKAction.run() {
+                    self.resumeButton.run(SKAction.sequence([
+                        SKAction.fadeOut(withDuration: 0.5),
                         SKAction.removeFromParent()
                     ]))
                 },
-                SKAction.runBlock() {
-                    self.pauseOverlay.runAction(SKAction.sequence([
-                        SKAction.fadeOutWithDuration(1.0),
+                SKAction.run() {
+                    self.pauseOverlay.run(SKAction.sequence([
+                        SKAction.fadeOut(withDuration: 1.0),
                         SKAction.removeFromParent()
                     ]))
                 }
             ]),
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
                 self.gamePaused = false
                 backgroundMusicPlayer.play()
-                self.view?.paused = false
+                self.view?.isPaused = false
             }
         ]))
     }
@@ -361,7 +361,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Helper Functions -
     func setupWorld() {
-        physicsWorld.gravity = CGVectorMake(0, 0)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
         let background = SKSpriteNode(imageNamed: "Background.jpg")
@@ -372,27 +372,27 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         addChild(background)
         
         player = Player()
-        player.position = CGPointMake(size.width/2, size.height/2)
+        player.position = CGPoint(x: size.width/2, y: size.height/2)
         player.zPosition = Config.GameLayer.Sprite
         addChild(player)
         
-        spawnPowerUp(PowerTypes.Life)
+        spawnPowerUp(PowerTypes.life)
     }
     
     func setupHUD() {
-        let scoreTextLabel = elScoreTextLabel(CGPointMake(50, size.height-50))
+        let scoreTextLabel = elScoreTextLabel(CGPoint(x: 50, y: size.height-50))
         addChild(scoreTextLabel)
         
-        scoreLabel = elScoreLabel(CGPointMake(50, size.height-100), score: score)
+        scoreLabel = elScoreLabel(CGPoint(x: 50, y: size.height-100), score: score)
         addChild(scoreLabel!)
         
-        let waveTextLabel = elWaveTextLabel(CGPointMake(size.width/2, size.height-50))
+        let waveTextLabel = elWaveTextLabel(CGPoint(x: size.width/2, y: size.height-50))
         addChild(waveTextLabel)
         
-        waveLabel = elWaveLabel(CGPointMake(size.width/2, size.height-100), wave: wave)
+        waveLabel = elWaveLabel(CGPoint(x: size.width/2, y: size.height-100), wave: wave)
         addChild(waveLabel!)
         
-        let lifeTextLabel = elLifeTextLabel(CGPointMake(size.width-50, size.height-50))
+        let lifeTextLabel = elLifeTextLabel(CGPoint(x: size.width-50, y: size.height-50))
         addChild(lifeTextLabel)
         
         for i in 1...player.life {
@@ -401,9 +401,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let xPos = size.width - (25 + heart.size.width) * CGFloat(i)
             let yPos = size.height - (75 + heart.size.height)
             
-            heart.position = CGPointMake(xPos, yPos)
+            heart.position = CGPoint(x: xPos, y: yPos)
             
-            let dot = elHeartDot(CGPointMake(xPos, yPos))
+            let dot = elHeartDot(CGPoint(x: xPos, y: yPos))
             
             addChild(dot)
             addChild(heart)
@@ -415,22 +415,22 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         gamePaused = true
         backgroundMusicPlayer.pause()
         
-        pauseOverlay.position = CGPointMake(size.width/2, size.height/2)
+        pauseOverlay.position = CGPoint(x: size.width/2, y: size.height/2)
         pauseOverlay.zPosition = Config.GameLayer.Overlay
-        pauseOverlay.fillColor = UIColor.blackColor()
+        pauseOverlay.fillColor = UIColor.black
         pauseOverlay.alpha = 0.75
         addChild(pauseOverlay)
         
         pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
-        pauseLabel.position = CGPointMake(size.width/2, size.height/2+250)
+        pauseLabel.position = CGPoint(x: size.width/2, y: size.height/2+250)
         pauseLabel.zPosition = Config.GameLayer.Overlay
-        pauseLabel.fontColor = UIColor.cyanColor()
+        pauseLabel.fontColor = UIColor.cyan
         pauseLabel.fontSize = 200
         pauseLabel.text = "Paused"
         addChild(pauseLabel)
         
         resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
-        resumeButton.position = CGPointMake(size.width/2, size.height/2-250)
+        resumeButton.position = CGPoint(x: size.width/2, y: size.height/2-250)
         resumeButton.zPosition = Config.GameLayer.Overlay
         resumeButton.fontSize = 60
         resumeButton.text = "Resume"
@@ -443,18 +443,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // http://www.meta-calculator.com/online/9j13df5xtv8b
         var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
         
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
                 // Spawn seeker wave once every 3 waves after Wave 5
                 if self.wave > 5 && self.wave % 3 == 0 {
                     // Spawn half of enemies as Seekers
                     waveEnemyCount /= 2
                     let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
                     let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
-                    self.spawnEnemyCircle(EnemyTypes.Seeker, count: circleEnemyCount, center: location, radius: 500)
+                    let _ = self.spawnEnemyCircle(EnemyTypes.seeker, count: circleEnemyCount, center: location, radius: 500)
                 }
-                self.spawnEnemy(.Bouncer, count: waveEnemyCount)
+                self.spawnEnemy(.bouncer, count: waveEnemyCount)
             }
         ]))
     }
@@ -491,7 +491,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         return location
     }
     
-    func spawnEnemy(type: EnemyTypes, count: Int) {
+    func spawnEnemy(_ type: EnemyTypes, count: Int) {
         for _ in 0..<count {
             let enemy = createEnemy(type, location: getRandomOutsideSpawnLocation())
             addChild(enemy)
@@ -500,15 +500,15 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnEnemyCircle(type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) -> [Enemy] {
+    func spawnEnemyCircle(_ type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) -> [Enemy] {
         let r = (radius != nil) ? radius : (100 + 50 * (count - 1))
         var circleEnemies: [Enemy] = []
         
         for i in 0..<Int(count) {
             let angle = CGFloat(i) * 360.0 / count
-            let pos = CGPointMake(
-                center.x + cos(angle * degreesToRadians) * r!,
-                center.y + sin(angle * degreesToRadians) * r!)
+            let pos = CGPoint(
+                x: center.x + cos(angle * degreesToRadians) * r!,
+                y: center.y + sin(angle * degreesToRadians) * r!)
             let enemy = createEnemy(type, location: pos)
             addChild(enemy)
             numOfEnemies += 1
@@ -518,7 +518,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         return circleEnemies
     }
     
-    func spawnPowerUp(type: PowerTypes) {
+    func spawnPowerUp(_ type: PowerTypes) {
         let location = getRandomInsideSpawnLocation()
         
         let powerUp = createPowerUp(type, location: location)
@@ -528,9 +528,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         for i in 0..<Int(powerUp.enemyCount) {
             let radius = 100 + 50 * (count - 1)
             let angle = CGFloat(i) * 360.0 / count
-            let targetPos = CGPointMake(
-                location.x + cos(angle * degreesToRadians) * radius,
-                location.y + sin(angle * degreesToRadians) * radius)
+            let targetPos = CGPoint(
+                x: location.x + cos(angle * degreesToRadians) * radius,
+                y: location.y + sin(angle * degreesToRadians) * radius)
             let ninja = NinjaStar(pos: location, toPos: targetPos)
             addChild(ninja)
             numOfEnemies += 1
@@ -547,10 +547,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     // MARK: - Debug -
     func debugDrawPlayableArea() {
         let shape = SKShapeNode()
-        let path = CGPathCreateMutable()
-        CGPathAddRect(path, nil, playableRect)
+        let path = CGMutablePath()
+        path.addRect(playableRect)
+//        CGPathAddRect(path, nil, playableRect)
         shape.path = path
-        shape.strokeColor = SKColor.redColor()
+        shape.strokeColor = SKColor.red
         shape.lineWidth = 10.0
         addChild(shape)
     }

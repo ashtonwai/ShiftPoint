@@ -11,7 +11,7 @@ import SpriteKit
 
 class GameViewController: UIViewController, GameManager {
     let screenSize = CGSize(width: 2048, height: 1536)
-    let scaleMode = SKSceneScaleMode.AspectFill
+    let scaleMode = SKSceneScaleMode.aspectFill
     var skView: SKView!
     var gameScene: GameScene?
 
@@ -28,7 +28,7 @@ class GameViewController: UIViewController, GameManager {
     // MARK: - Scene Navigation -
     func loadMainMenuScene() {
         let menuScene = MainMenuScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
-        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        let reveal = SKTransition.crossFade(withDuration: 1.0)
         skView.presentScene(menuScene, transition: reveal)
     }
     
@@ -37,13 +37,13 @@ class GameViewController: UIViewController, GameManager {
         tutorialScene.size = screenSize
         tutorialScene.scaleMode = scaleMode
         tutorialScene.gameManager = self
-        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        let reveal = SKTransition.crossFade(withDuration: 1.0)
         skView.presentScene(tutorialScene, transition: reveal)
     }
     
     func loadGameScene() {
         gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
-        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        let reveal = SKTransition.crossFade(withDuration: 1.0)
         if Config.Developer.DebugMode {
             skView.showsFPS = true
             skView.showsNodeCount = true
@@ -54,56 +54,56 @@ class GameViewController: UIViewController, GameManager {
         skView.presentScene(gameScene!, transition: reveal)
     }
     
-    func loadGameOverScene(score: Int) {
+    func loadGameOverScene(_ score: Int) {
         let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, score: score)
-        let reveal = SKTransition.crossFadeWithDuration(1.0)
+        let reveal = SKTransition.crossFade(withDuration: 1.0)
         skView.presentScene(gameOverScene, transition: reveal)
     }
     
     
     // MARK: - Notifications -
     func setupNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(GameViewController.willResignActive(_:)),
-            name: UIApplicationWillResignActiveNotification,
+            name: NSNotification.Name.UIApplicationWillResignActive,
             object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(GameViewController.didBecomeActive(_:)),
-            name: UIApplicationDidBecomeActiveNotification,
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
     }
     
-    func willResignActive(n:NSNotification){
+    func willResignActive(_ n:Notification){
         print("willResignActive notification")
         gameScene?.gameActive = false
     }
     
-    func didBecomeActive(n:NSNotification){
+    func didBecomeActive(_ n:Notification){
         print("didBecomeActive notification")
         gameScene?.gameActive = true
     }
     
     func teardownNotifications(){
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     
     // MARK: - View Lifecycle -
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return true
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return .Landscape
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return .landscape
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 
 class MainMenuScene : SKScene {
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     let gameManager: GameManager
     let startButton: SKLabelNode
     
@@ -26,7 +26,7 @@ class MainMenuScene : SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "MainMenu.png")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         background.zPosition = 0
@@ -37,49 +37,49 @@ class MainMenuScene : SKScene {
         let gameTitle = SKLabelNode(fontNamed: Config.Font.TitleFont)
         gameTitle.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
         gameTitle.zPosition = 1
-        gameTitle.horizontalAlignmentMode = .Center
-        gameTitle.verticalAlignmentMode = .Center
-        gameTitle.fontColor = UIColor.greenColor()
+        gameTitle.horizontalAlignmentMode = .center
+        gameTitle.verticalAlignmentMode = .center
+        gameTitle.fontColor = UIColor.green
         gameTitle.fontSize = 200
         gameTitle.text = "Shift Point"
         addChild(gameTitle)
         
         startButton.position = CGPoint(x: self.size.width/2, y: self.size.height/2-200)
         startButton.zPosition = 1
-        startButton.horizontalAlignmentMode = .Center
-        startButton.verticalAlignmentMode = .Center
+        startButton.horizontalAlignmentMode = .center
+        startButton.verticalAlignmentMode = .center
         startButton.fontSize = 80
         startButton.text = "Start"
         startButton.alpha = 0
         addChild(startButton)
         
-        runAction(SKAction.sequence([
-            SKAction.runBlock() {
-                gameTitle.runAction(SKAction.moveToY(self.size.height/2+300, duration: 1.0))
+        run(SKAction.sequence([
+            SKAction.run() {
+                gameTitle.run(SKAction.moveTo(y: self.size.height/2+300, duration: 1.0))
             },
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
-                self.startButton.runAction(SKAction.fadeInWithDuration(1.0))
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
+                self.startButton.run(SKAction.fadeIn(withDuration: 1.0))
             }
         ]))
     }
     
     // MARK: - Event Handlers -
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch: AnyObject in touches {
-            if nodeAtPoint(touch.locationInNode(self)) == startButton {
-                startButton.fontColor = UIColor.cyanColor()
+            if atPoint(touch.location(in: self)) == startButton {
+                startButton.fontColor = UIColor.cyan
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        startButton.fontColor = UIColor.whiteColor()
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        startButton.fontColor = UIColor.white
         for touch: AnyObject in touches {
-            if nodeAtPoint(touch.locationInNode(self)) == startButton {
-                startButton.fontColor = UIColor.whiteColor()
+            if atPoint(touch.location(in: self)) == startButton {
+                startButton.fontColor = UIColor.white
                 
-                if userDefaults.boolForKey("skipTutorial") && Config.Developer.SkipTutorial {
+                if userDefaults.bool(forKey: "skipTutorial") && Config.Developer.SkipTutorial {
                     gameManager.loadGameScene()
                 } else {
                     gameManager.loadTutorialScene()

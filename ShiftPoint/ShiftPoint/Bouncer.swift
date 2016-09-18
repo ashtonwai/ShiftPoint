@@ -14,7 +14,7 @@ class Bouncer : Enemy {
     let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
     let bouncerSize: CGSize = Config.Enemy.Bouncer.BOUNCER_SIZE
     
-    var velocity: CGPoint = CGPointZero
+    var velocity: CGPoint = CGPoint.zero
     var delta: CGFloat
     
     // MARK: - Initialization -
@@ -33,13 +33,13 @@ class Bouncer : Enemy {
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
-        self.path = CGPathCreateWithRect(CGRect(origin: center, size: bouncerSize), nil)
-        self.fillColor = SKColor.clearColor()
+        self.path = CGPath(rect: CGRect(origin: center, size: bouncerSize), transform: nil)
+        self.fillColor = SKColor.clear
         self.strokeColor = color
         self.lineWidth = 3
         
-        self.physicsBody = SKPhysicsBody(rectangleOfSize: bouncerSize)
-        self.physicsBody?.dynamic = true
+        self.physicsBody = SKPhysicsBody(rectangleOf: bouncerSize)
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds

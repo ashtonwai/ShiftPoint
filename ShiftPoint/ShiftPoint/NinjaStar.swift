@@ -19,36 +19,44 @@ class NinjaStar : Enemy {
         
         let width = ninjaSize.width
         let height = ninjaSize.height
-        let center = CGPointMake(0, 0)
+        let center = CGPoint(x: 0, y: 0)
         
         self.name = "ninjaStar"
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
-        let pathToDraw = CGPathCreateMutable()
-        CGPathMoveToPoint(pathToDraw, nil, 0, height/3)
-        CGPathAddLineToPoint(pathToDraw, nil, width/2, height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, width/3, 0)
-        CGPathAddLineToPoint(pathToDraw, nil, width/2, -height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, 0, -height/3)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/2, -height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/3, 0)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/2, height/2)
-        CGPathCloseSubpath(pathToDraw)
+        let pathToDraw = CGMutablePath()
+        pathToDraw.move(to: CGPoint(x: 0, y: height/3))
+        pathToDraw.addLine(to: CGPoint(x: width/2, y: height/2))
+        pathToDraw.addLine(to: CGPoint(x: width/3, y: 0))
+        pathToDraw.addLine(to: CGPoint(x: width/2, y: -height/2))
+        pathToDraw.addLine(to: CGPoint(x: 0, y: -height/3))
+        pathToDraw.addLine(to: CGPoint(x: -width/2, y: -height/2))
+        pathToDraw.addLine(to: CGPoint(x: -width/3, y: 0))
+        pathToDraw.addLine(to: CGPoint(x: -width/2, y: height/2))
+//        CGPathMoveToPoint(pathToDraw, nil, 0, height/3)
+//        CGPathAddLineToPoint(pathToDraw, nil, width/2, height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, width/3, 0)
+//        CGPathAddLineToPoint(pathToDraw, nil, width/2, -height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, 0, -height/3)
+//        CGPathAddLineToPoint(pathToDraw, nil, -width/2, -height/2)
+//        CGPathAddLineToPoint(pathToDraw, nil, -width/3, 0)
+//        CGPathAddLineToPoint(pathToDraw, nil, -width/2, height/2)
+        pathToDraw.closeSubpath()
         path = pathToDraw
         lineWidth = 3
         strokeColor = color
-        fillColor = SKColor.clearColor()
+        fillColor = SKColor.clear
         
         let circle = SKShapeNode(circleOfRadius: width/7)
         circle.position = center
         circle.strokeColor = color
-        circle.fillColor = SKColor.clearColor()
+        circle.fillColor = SKColor.clear
         circle.lineWidth = 3
         addChild(circle)
         
-        self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
-        self.physicsBody?.dynamic = true
+        self.physicsBody = SKPhysicsBody(polygonFrom: path!)
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
@@ -67,30 +75,30 @@ class NinjaStar : Enemy {
     
     
     // MARK: - Movement Controls -
-    func rotate(speed: NSTimeInterval) {
-        let rotate = SKAction.rotateByAngle(π * 2, duration: speed)
-        runAction(SKAction.repeatActionForever(rotate))
+    func rotate(_ speed: TimeInterval) {
+        let rotate = SKAction.rotate(byAngle: π * 2, duration: speed)
+        run(SKAction.repeatForever(rotate))
     }
     
-    func spread(location: CGPoint) {
+    func spread(_ location: CGPoint) {
         let spread = SKAction.group([
-            SKAction.fadeInWithDuration(0.5),
-            SKAction.moveTo(location, duration: 0.25)
+            SKAction.fadeIn(withDuration: 0.5),
+            SKAction.move(to: location, duration: 0.25)
         ])
-        runAction(spread)
+        run(spread)
     }
     
-    func slash(center: CGPoint) {
+    func slash(_ center: CGPoint) {
         let x = center.x - (position.x - center.x)
         let y = center.y - (position.y - center.y)
-        runAction(SKAction.sequence([
-            SKAction.runBlock() {
+        run(SKAction.sequence([
+            SKAction.run() {
                 self.rotate(1.0)
             },
-            SKAction.waitForDuration(0.5),
+            SKAction.wait(forDuration: 0.5),
             SKAction.group([
-                SKAction.moveTo(CGPointMake(x, y), duration: 0.5),
-                SKAction.fadeOutWithDuration(1.0)
+                SKAction.move(to: CGPoint(x: x, y: y), duration: 0.5),
+                SKAction.fadeOut(withDuration: 1.0)
             ]),
             SKAction.removeFromParent()
         ]))
