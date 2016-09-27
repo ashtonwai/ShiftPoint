@@ -173,8 +173,7 @@
 				2D05EED61C850EE00093A3A3 /* Sprites */,
 				2D05EED71C850F150093A3A3 /* Lib */,
 				2DAAEC171CD96CB60080A957 /* Emitter */,
-				2D084E061C8E907C0054E718 /* Fonts */,
-				2D3F96891C97CBDB00272995 /* Sounds */,
+				2DB1063B1D9B2BA5003C415D /* Resources */,
 				2D430A2B1C7F50BD0075F316 /* Assets.xcassets */,
 				2D430A281C7F50BD0075F316 /* Main.storyboard */,
 				2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */,
@@ -209,6 +208,15 @@
 				679ED6B21C950DD000BC8924 /* spark.png */,
 			);
 			name = Emitter;
+			sourceTree = "<group>";
+		};
+		2DB1063B1D9B2BA5003C415D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2D084E061C8E907C0054E718 /* Fonts */,
+				2D3F96891C97CBDB00272995 /* Sounds */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		2DB1E2401CDF158700655701 /* Enums */ = {
