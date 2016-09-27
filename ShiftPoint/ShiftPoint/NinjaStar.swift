@@ -19,36 +19,36 @@ class NinjaStar : Enemy {
         
         let width = ninjaSize.width
         let height = ninjaSize.height
-        let center = CGPointMake(0, 0)
+        let center = CGPoint(x: 0, y: 0)
         
         self.name = "ninjaStar"
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
-        let pathToDraw = CGPathCreateMutable()
-        CGPathMoveToPoint(pathToDraw, nil, 0, height/3)
-        CGPathAddLineToPoint(pathToDraw, nil, width/2, height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, width/3, 0)
-        CGPathAddLineToPoint(pathToDraw, nil, width/2, -height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, 0, -height/3)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/2, -height/2)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/3, 0)
-        CGPathAddLineToPoint(pathToDraw, nil, -width/2, height/2)
-        CGPathCloseSubpath(pathToDraw)
+        let pathToDraw = CGMutablePath()
+        pathToDraw.move(to: CGPoint(x: 0, y: height/3))
+        pathToDraw.addLine(to: CGPoint(x: width/2, y: height/2))
+        pathToDraw.addLine(to: CGPoint(x: width/3, y: 0))
+        pathToDraw.addLine(to: CGPoint(x: width/2, y: -height/2))
+        pathToDraw.addLine(to: CGPoint(x: 0, y: -height/3))
+        pathToDraw.addLine(to: CGPoint(x: -width/2, y: -height/2))
+        pathToDraw.addLine(to: CGPoint(x: -width/3, y: 0))
+        pathToDraw.addLine(to: CGPoint(x: -width/2, y: height/2))
+        pathToDraw.closeSubpath()
         path = pathToDraw
         lineWidth = 3
         strokeColor = color
-        fillColor = SKColor.clearColor()
+        fillColor = SKColor.clear
         
         let circle = SKShapeNode(circleOfRadius: width/7)
         circle.position = center
         circle.strokeColor = color
-        circle.fillColor = SKColor.clearColor()
+        circle.fillColor = SKColor.clear
         circle.lineWidth = 3
         addChild(circle)
         
-        self.physicsBody = SKPhysicsBody(polygonFromPath: path!)
-        self.physicsBody?.dynamic = true
+        self.physicsBody = SKPhysicsBody(polygonFrom: path!)
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.None

@@ -13,7 +13,7 @@ class Enemy : SKShapeNode {
     var scorePoints: Int
     var hitPoints: Int
     var typeColor: SKColor
-    var forward: CGPoint = CGPointMake(0.0, 1.0)
+    var forward: CGPoint = CGPoint(x: 0.0, y: 1.0)
     
     let scoreSound: SKAction = SKAction.playSoundFileNamed("Score.mp3", waitForCompletion: false)
     
@@ -44,7 +44,7 @@ class Enemy : SKShapeNode {
     
     func scoreMarker() -> SKLabelNode {
         let scoreMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
-        scoreMarker.fontColor = UIColor.cyanColor()
+        scoreMarker.fontColor = UIColor.cyan
         scoreMarker.fontSize = 30
         scoreMarker.text = "\(scorePoints)"
         scoreMarker.position = self.position
@@ -58,7 +58,7 @@ class Enemy : SKShapeNode {
         fatalError("Must Override")
     }
     
-    func onHit(damage: Int) -> Int {
+    func onHit(_ damage: Int) -> Int {
         hitPoints -= damage
         if hitPoints <= 0 {
             onDestroy()

@@ -14,7 +14,7 @@ class Bouncer : Enemy {
     let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
     let bouncerSize: CGSize = Config.Enemy.Bouncer.BOUNCER_SIZE
     
-    var velocity: CGPoint = CGPointZero
+    var velocity: CGPoint = CGPoint.zero
     var delta: CGFloat
     
     // MARK: - Initialization -
@@ -24,9 +24,9 @@ class Bouncer : Enemy {
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
         
         let threshold: CGFloat = 10
-        let vector = CGPointMake(
-            CGFloat.random(cos(threshold * degreesToRadians),max:cos((180 - threshold) * degreesToRadians)),
-            CGFloat.random(sin(threshold * degreesToRadians),max:sin((180 - threshold) * degreesToRadians))
+        let vector = CGPoint(
+            x: CGFloat.random(cos(threshold * degreesToRadians),max:cos((180 - threshold) * degreesToRadians)),
+            y: CGFloat.random(sin(threshold * degreesToRadians),max:sin((180 - threshold) * degreesToRadians))
         )
         self.forward = vector.normalized() // bottom facing up
         //self.forward = CGPoint.randomUnitVector()
@@ -39,13 +39,13 @@ class Bouncer : Enemy {
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
-        self.path = CGPathCreateWithRect(CGRect(origin: center, size: bouncerSize), nil)
-        self.fillColor = SKColor.clearColor()
+        self.path = CGPath(rect: CGRect(origin: center, size: bouncerSize), transform: nil)
+        self.fillColor = SKColor.clear
         self.strokeColor = color
         self.lineWidth = 3
         
-        self.physicsBody = SKPhysicsBody(rectangleOfSize: bouncerSize)
-        self.physicsBody?.dynamic = true
+        self.physicsBody = SKPhysicsBody(rectangleOf: bouncerSize)
+        self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
         self.physicsBody?.collisionBitMask = PhysicsCategory.OuterBounds

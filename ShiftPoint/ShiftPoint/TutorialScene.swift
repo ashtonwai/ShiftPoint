@@ -9,9 +9,9 @@
 import SpriteKit
 
 class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDelegate {
-    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let userDefaults = UserDefaults.standard
     var gameManager: GameManager?
-    var playableRect: CGRect = CGRectZero
+    var playableRect: CGRect = CGRect.zero
     var player: Player
     var targetCircle: SKShapeNode
     var instruction: SKLabelNode
@@ -47,24 +47,24 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         let maxAspectRatio: CGFloat = 4.0 / 3.0
         let maxAspectRatioHeight = size.width / maxAspectRatio
         let playableMargin: CGFloat = (size.height - maxAspectRatioHeight) / 2
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2)
         
-        instruction.position = CGPointMake(size.width/2, size.height-100)
+        instruction.position = CGPoint(x: size.width/2, y: size.height-100)
         instruction.zPosition = Config.GameLayer.HUD
-        instruction.horizontalAlignmentMode = .Center
-        instruction.verticalAlignmentMode = .Center
+        instruction.horizontalAlignmentMode = .center
+        instruction.verticalAlignmentMode = .center
         instruction.fontColor = Config.Font.GameUIColor
         instruction.fontSize = Config.Font.GameTextSize
         addChild(instruction)
         
-        skipButton.position = CGPointMake(size.width-50, 50)
+        skipButton.position = CGPoint(x: size.width-50, y: 50)
         skipButton.zPosition = Config.GameLayer.HUD
-        skipButton.horizontalAlignmentMode = .Right
-        skipButton.verticalAlignmentMode = .Bottom
+        skipButton.horizontalAlignmentMode = .right
+        skipButton.verticalAlignmentMode = .bottom
         skipButton.fontColor = Config.Font.GameUIColor
         skipButton.fontSize = 80
         skipButton.text = "Skip"
@@ -75,18 +75,18 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     
     
     // MARK: - Event Handlers -
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             
             player.onTeleport(location)
             
-            if nodeAtPoint(touch.locationInNode(self)) == skipButton {
-                skipButton.fontColor = SKColor.cyanColor()
+            if atPoint(touch.location(in: self)) == skipButton {
+                skipButton.fontColor = SKColor.cyan
                 gameManager?.loadGameScene()
             }
             
-            if nodeAtPoint(touch.locationInNode(self)) == targetCircle {
+            if atPoint(touch.location(in: self)) == targetCircle {
                 if currentPoint < 3 {
                     currentPoint += 1
                     teleportTarget(targetPoints[currentPoint])
@@ -97,7 +97,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 }
             }
             
-            if nodeAtPoint(touch.locationInNode(self)) == shootPos {
+            if atPoint(touch.location(in: self)) == shootPos {
                 shootPos?.removeAllActions()
                 shootPos?.removeFromParent()
                 
@@ -107,31 +107,31 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 arrow?.yScale = 0.25
                 addChild(arrow!)
                 
-                arrow?.runAction(SKAction.repeatActionForever(SKAction.sequence([
+                arrow?.run(SKAction.repeatForever(SKAction.sequence([
                     SKAction.group([
-                        SKAction.moveToY(size.height-300, duration: 1.0),
-                        SKAction.fadeOutWithDuration(1.0)
+                        SKAction.moveTo(y: size.height-300, duration: 1.0),
+                        SKAction.fadeOut(withDuration: 1.0)
                     ]),
-                    SKAction.waitForDuration(0.25),
+                    SKAction.wait(forDuration: 0.25),
                     SKAction.group([
-                        SKAction.moveToY(size.height/2, duration: 0),
-                        SKAction.fadeAlphaTo(0.75, duration: 0)
+                        SKAction.moveTo(y: size.height/2, duration: 0),
+                        SKAction.fadeAlpha(to: 0.75, duration: 0)
                     ])
                 ])))
             }
         }
     }
     
-    func panDetected(recognizer: UIPanGestureRecognizer) {
-        if  recognizer.state == .Began {
+    func panDetected(_ recognizer: UIPanGestureRecognizer) {
+        if  recognizer.state == .began {
             if arrow != nil {
                 arrow?.removeAllActions()
                 arrow?.removeFromParent()
             }
         }
-        if recognizer.state == .Changed {
-            var touchLocation = recognizer.locationInView(recognizer.view)
-            touchLocation = self.convertPointFromView(touchLocation)
+        if recognizer.state == .changed {
+            var touchLocation = recognizer.location(in: recognizer.view)
+            touchLocation = self.convertPoint(fromView: touchLocation)
             
             let dy = player.position.y - touchLocation.y
             let dx = player.position.x - touchLocation.x
@@ -140,12 +140,12 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
             // Shoot bullets
             player.onAutoFire()
         }
-        if recognizer.state == .Ended {
+        if recognizer.state == .ended {
             player.stopAutoFire()
             
-            runAction(SKAction.sequence([
-                SKAction.waitForDuration(1.0),
-                SKAction.runBlock() {
+            run(SKAction.sequence([
+                SKAction.wait(forDuration: 1.0),
+                SKAction.run() {
                     self.completeTutorial()
                 }
             ]))
@@ -155,7 +155,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     
     // MARK: - Helper Functions -
     func setupWorld() {
-        physicsWorld.gravity = CGVectorMake(0, 0)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
         let background = SKSpriteNode(imageNamed: "Background.jpg")
@@ -165,7 +165,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         background.yScale = 1.45
         addChild(background)
         
-        player.position = CGPointMake(size.width/2, size.height/2)
+        player.position = CGPoint(x: size.width/2, y: size.height/2)
         player.zPosition = Config.GameLayer.Sprite
         addChild(player)
         
@@ -173,47 +173,47 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         
         targetCircle.position = targetPoints[currentPoint]
         targetCircle.zPosition = Config.GameLayer.Sprite
-        targetCircle.fillColor = SKColor.clearColor()
-        targetCircle.strokeColor = SKColor.cyanColor()
+        targetCircle.fillColor = SKColor.clear
+        targetCircle.strokeColor = SKColor.cyan
         targetCircle.lineWidth = 7
         addChild(targetCircle)
         
-        targetCircle.runAction(SKAction.repeatActionForever(SKAction.sequence([
+        targetCircle.run(SKAction.repeatForever(SKAction.sequence([
             SKAction.group([
-                SKAction.scaleBy(2, duration: 1.0),
-                SKAction.fadeOutWithDuration(1.0),
+                SKAction.scale(by: 2, duration: 1.0),
+                SKAction.fadeOut(withDuration: 1.0),
             ]),
-            SKAction.waitForDuration(0.25),
+            SKAction.wait(forDuration: 0.25),
             SKAction.group([
-                SKAction.scaleTo(1, duration: 0),
-                SKAction.fadeAlphaTo(0.75, duration: 0)
+                SKAction.scale(to: 1, duration: 0),
+                SKAction.fadeAlpha(to: 0.75, duration: 0)
             ])
         ])))
         
         teleportTarget(targetPoints[currentPoint])
     }
     
-    func teleportTarget(targetPoint: CGPoint) {
+    func teleportTarget(_ targetPoint: CGPoint) {
         targetCircle.position = targetPoints[currentPoint]
     }
     
     func shootingTutorial() {
-        shootPos?.position = CGPointMake(size.width/2, size.height/2)
+        shootPos?.position = CGPoint(x: size.width/2, y: size.height/2)
         shootPos?.zPosition = Config.GameLayer.Sprite
-        shootPos?.fillColor = SKColor.clearColor()
-        shootPos?.strokeColor = SKColor.cyanColor()
+        shootPos?.fillColor = SKColor.clear
+        shootPos?.strokeColor = SKColor.cyan
         shootPos?.lineWidth = 7
         addChild(shootPos!)
         
-        shootPos?.runAction(SKAction.repeatActionForever(SKAction.sequence([
+        shootPos?.run(SKAction.repeatForever(SKAction.sequence([
             SKAction.group([
-                SKAction.scaleTo(0.5, duration: 1.0),
-                SKAction.fadeOutWithDuration(1.0)
+                SKAction.scale(to: 0.5, duration: 1.0),
+                SKAction.fadeOut(withDuration: 1.0)
             ]),
-            SKAction.waitForDuration(0.25),
+            SKAction.wait(forDuration: 0.25),
             SKAction.group([
-                SKAction.scaleTo(1, duration: 0),
-                SKAction.fadeAlphaBy(0.75, duration: 0)
+                SKAction.scale(to: 1, duration: 0),
+                SKAction.fadeAlpha(by: 0.75, duration: 0)
             ])
         ])))
         
@@ -224,26 +224,26 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     }
     
     func completeTutorial() {
-        userDefaults.setBool(true, forKey: "skipTutorial")
+        userDefaults.set(true, forKey: "skipTutorial")
         
-        let overlay = SKShapeNode(rectOfSize: size)
-        overlay.position = CGPointMake(size.width/2, size.height/2)
+        let overlay = SKShapeNode(rectOf: size)
+        overlay.position = CGPoint(x: size.width/2, y: size.height/2)
         overlay.zPosition = Config.GameLayer.Overlay
-        overlay.fillColor = UIColor.blackColor()
+        overlay.fillColor = UIColor.black
         overlay.alpha = 0.75
         addChild(overlay)
         
         let completeLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         completeLabel.position = CGPoint(x: size.width/2, y: size.height/2)
         completeLabel.zPosition = Config.GameLayer.Overlay
-        completeLabel.fontColor = SKColor.greenColor()
+        completeLabel.fontColor = SKColor.green
         completeLabel.fontSize = 120
         completeLabel.text = "You Are Ready To Shift!"
         addChild(completeLabel)
         
-        runAction(SKAction.sequence([
-            SKAction.waitForDuration(1.0),
-            SKAction.runBlock() {
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
                 self.gameManager?.loadGameScene()
             }
         ]))
