@@ -10,11 +10,6 @@
 		2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */; };
 		2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D05EEDE1C85625D0093A3A3 /* Utilities.swift */; };
 		2D3F96881C97A5DA00272995 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F96871C97A5DA00272995 /* Config.swift */; };
-		2D3F96951C97CC9500272995 /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96941C97CC9500272995 /* Teleport.mp3 */; };
-		2D3F96971C97CCAE00272995 /* BGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96961C97CCAE00272995 /* BGM.mp3 */; };
-		2D3F96991C97CCBC00272995 /* Laser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F96981C97CCBC00272995 /* Laser.mp3 */; };
-		2D3F969B1C97CCC600272995 /* Score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F969A1C97CCC600272995 /* Score.mp3 */; };
-		2D3F969D1C97CCCF00272995 /* Transition.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F969C1C97CCCF00272995 /* Transition.mp3 */; };
 		2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A201C7F50BD0075F316 /* AppDelegate.swift */; };
 		2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A241C7F50BD0075F316 /* GameScene.swift */; };
 		2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D430A261C7F50BD0075F316 /* GameViewController.swift */; };
@@ -22,9 +17,14 @@
 		2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2B1C7F50BD0075F316 /* Assets.xcassets */; };
 		2D430A2F1C7F50BD0075F316 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D430A2D1C7F50BD0075F316 /* LaunchScreen.storyboard */; };
 		2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DAAEC0E1CD860A70080A957 /* GameManager.swift */; };
-		2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */; };
-		2DABBFFC1C91C6FC00F5ABAD /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */; };
-		2DABBFFE1C91C71B00F5ABAD /* Microgramma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */; };
+		2DB1062C1D9B1BB7003C415D /* Microgramma.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB1062B1D9B1BB7003C415D /* Microgramma.ttf */; };
+		2DB1062E1D9B1BCC003C415D /* 6 Cells.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB1062D1D9B1BCC003C415D /* 6 Cells.otf */; };
+		2DB106301D9B1BDD003C415D /* Inversionz.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB1062F1D9B1BDD003C415D /* Inversionz.otf */; };
+		2DB106321D9B1BF2003C415D /* Transition.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106311D9B1BF2003C415D /* Transition.mp3 */; };
+		2DB106371D9B1C02003C415D /* BGM.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106331D9B1C02003C415D /* BGM.mp3 */; };
+		2DB106381D9B1C02003C415D /* Laser.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106341D9B1C02003C415D /* Laser.mp3 */; };
+		2DB106391D9B1C02003C415D /* Score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106351D9B1C02003C415D /* Score.mp3 */; };
+		2DB1063A1D9B1C02003C415D /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106361D9B1C02003C415D /* Teleport.mp3 */; };
 		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB13CE1CEA7459001C109B /* NinjaStar.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
@@ -43,11 +43,6 @@
 		2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
 		2D05EEDE1C85625D0093A3A3 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		2D3F96871C97A5DA00272995 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		2D3F96941C97CC9500272995 /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Sounds/Teleport.mp3; sourceTree = "<group>"; };
-		2D3F96961C97CCAE00272995 /* BGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BGM.mp3; path = Sounds/BGM.mp3; sourceTree = "<group>"; };
-		2D3F96981C97CCBC00272995 /* Laser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Laser.mp3; path = Sounds/Laser.mp3; sourceTree = "<group>"; };
-		2D3F969A1C97CCC600272995 /* Score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Score.mp3; path = Sounds/Score.mp3; sourceTree = "<group>"; };
-		2D3F969C1C97CCCF00272995 /* Transition.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Transition.mp3; path = Sounds/Transition.mp3; sourceTree = "<group>"; };
 		2D430A1D1C7F50BD0075F316 /* Shift Point.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shift Point.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D430A201C7F50BD0075F316 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D430A241C7F50BD0075F316 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -57,9 +52,14 @@
 		2D430A2E1C7F50BD0075F316 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D430A301C7F50BD0075F316 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DAAEC0E1CD860A70080A957 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
-		2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inversionz.otf; path = Fonts/Inversionz.otf; sourceTree = "<group>"; };
-		2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "6 Cells.otf"; path = "Fonts/6 Cells.otf"; sourceTree = "<group>"; };
-		2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Microgramma.ttf; path = Fonts/Microgramma.ttf; sourceTree = "<group>"; };
+		2DB1062B1D9B1BB7003C415D /* Microgramma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Microgramma.ttf; path = Resources/Fonts/Microgramma.ttf; sourceTree = "<group>"; };
+		2DB1062D1D9B1BCC003C415D /* 6 Cells.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "6 Cells.otf"; path = "Resources/Fonts/6 Cells.otf"; sourceTree = "<group>"; };
+		2DB1062F1D9B1BDD003C415D /* Inversionz.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Inversionz.otf; path = Resources/Fonts/Inversionz.otf; sourceTree = "<group>"; };
+		2DB106311D9B1BF2003C415D /* Transition.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Transition.mp3; path = Resources/Sounds/Transition.mp3; sourceTree = "<group>"; };
+		2DB106331D9B1C02003C415D /* BGM.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BGM.mp3; path = Resources/Sounds/BGM.mp3; sourceTree = "<group>"; };
+		2DB106341D9B1C02003C415D /* Laser.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Laser.mp3; path = Resources/Sounds/Laser.mp3; sourceTree = "<group>"; };
+		2DB106351D9B1C02003C415D /* Score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Score.mp3; path = Resources/Sounds/Score.mp3; sourceTree = "<group>"; };
+		2DB106361D9B1C02003C415D /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Resources/Sounds/Teleport.mp3; sourceTree = "<group>"; };
 		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DCB13CE1CEA7459001C109B /* NinjaStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NinjaStar.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -127,9 +127,9 @@
 		2D084E061C8E907C0054E718 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				2DABBFFD1C91C71B00F5ABAD /* Microgramma.ttf */,
-				2DABBFFB1C91C6FC00F5ABAD /* 6 Cells.otf */,
-				2DABBFF91C91C5CE00F5ABAD /* Inversionz.otf */,
+				2DB1062B1D9B1BB7003C415D /* Microgramma.ttf */,
+				2DB1062D1D9B1BCC003C415D /* 6 Cells.otf */,
+				2DB1062F1D9B1BDD003C415D /* Inversionz.otf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -137,11 +137,11 @@
 		2D3F96891C97CBDB00272995 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				2D3F969C1C97CCCF00272995 /* Transition.mp3 */,
-				2D3F969A1C97CCC600272995 /* Score.mp3 */,
-				2D3F96981C97CCBC00272995 /* Laser.mp3 */,
-				2D3F96961C97CCAE00272995 /* BGM.mp3 */,
-				2D3F96941C97CC9500272995 /* Teleport.mp3 */,
+				2DB106311D9B1BF2003C415D /* Transition.mp3 */,
+				2DB106331D9B1C02003C415D /* BGM.mp3 */,
+				2DB106341D9B1C02003C415D /* Laser.mp3 */,
+				2DB106351D9B1C02003C415D /* Score.mp3 */,
+				2DB106361D9B1C02003C415D /* Teleport.mp3 */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -259,8 +259,9 @@
 				TargetAttributes = {
 					2D430A1C1C7F50BD0075F316 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = KT6L3A8T5R;
+						DevelopmentTeam = 965J8XKWWH;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -288,18 +289,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D430A2F1C7F50BD0075F316 /* LaunchScreen.storyboard in Resources */,
-				2D3F969D1C97CCCF00272995 /* Transition.mp3 in Resources */,
-				2DABBFFC1C91C6FC00F5ABAD /* 6 Cells.otf in Resources */,
 				2D430A2C1C7F50BD0075F316 /* Assets.xcassets in Resources */,
-				2DABBFFE1C91C71B00F5ABAD /* Microgramma.ttf in Resources */,
-				2D3F96971C97CCAE00272995 /* BGM.mp3 in Resources */,
-				2DABBFFA1C91C5CE00F5ABAD /* Inversionz.otf in Resources */,
-				2D3F96951C97CC9500272995 /* Teleport.mp3 in Resources */,
+				2DB1062C1D9B1BB7003C415D /* Microgramma.ttf in Resources */,
+				2DB1063A1D9B1C02003C415D /* Teleport.mp3 in Resources */,
+				2DB106391D9B1C02003C415D /* Score.mp3 in Resources */,
+				2DB1062E1D9B1BCC003C415D /* 6 Cells.otf in Resources */,
+				2DB106381D9B1C02003C415D /* Laser.mp3 in Resources */,
 				679ED6B41C950DD000BC8924 /* spark.png in Resources */,
 				679ED6B31C950DD000BC8924 /* Explosion.sks in Resources */,
 				2D430A2A1C7F50BD0075F316 /* Main.storyboard in Resources */,
-				2D3F96991C97CCBC00272995 /* Laser.mp3 in Resources */,
-				2D3F969B1C97CCC600272995 /* Score.mp3 in Resources */,
+				2DB106301D9B1BDD003C415D /* Inversionz.otf in Resources */,
+				2DB106371D9B1C02003C415D /* BGM.mp3 in Resources */,
+				2DB106321D9B1BF2003C415D /* Transition.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,11 +447,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = KT6L3A8T5R;
+				DEVELOPMENT_TEAM = 965J8XKWWH;
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.ShiftPoint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FirstGameStudio.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
@@ -463,11 +464,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = KT6L3A8T5R;
+				DEVELOPMENT_TEAM = 965J8XKWWH;
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.igm590project1.ShiftPoint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FirstGameStudio.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
