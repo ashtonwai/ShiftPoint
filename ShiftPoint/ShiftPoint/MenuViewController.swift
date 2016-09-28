@@ -24,7 +24,7 @@ class MenuViewController: UIViewController {
             self.gameTitle.alpha = 1.0
         }, completion: { finished in
             UIView.animate(withDuration: 1.0, delay: 0, options: UIViewAnimationOptions.curveEaseInOut, animations: {
-                self.gameTitle.frame.origin.y -= 150
+                self.gameTitle.frame.origin.y -= 200
             }, completion: { finished in
                 self.fadeInStartButton()
                 self.fadeInHighScoreButton()
@@ -37,28 +37,28 @@ class MenuViewController: UIViewController {
     func fadeInStartButton() {
         UIView.animate(withDuration: 1.0, animations: {
             self.startButton.alpha = 1.0
-            self.startButton.frame.origin.y += 50
+            self.startButton.frame.origin.y += 100
         })
     }
     
     func fadeInHighScoreButton() {
         UIView.animate(withDuration: 1.0, delay: 0.4, animations: {
             self.highScoreButton.alpha = 1.0
-            self.highScoreButton.frame.origin.y += 50
+            self.highScoreButton.frame.origin.y += 100
         })
     }
     
     func fadeInSettingsButton() {
         UIView.animate(withDuration: 1.0, delay: 0.8, animations: {
             self.settingsButton.alpha = 1.0
-            self.settingsButton.frame.origin.y += 50
+            self.settingsButton.frame.origin.y += 100
         })
     }
     
     func fadeInAboutButton() {
         UIView.animate(withDuration: 1.0, delay: 1.2, animations: {
             self.aboutButton.alpha = 1.0
-            self.aboutButton.frame.origin.y += 50
+            self.aboutButton.frame.origin.y += 100
         })
     }
 }
