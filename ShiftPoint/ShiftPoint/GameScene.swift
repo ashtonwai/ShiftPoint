@@ -466,8 +466,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     // Spawn half of enemies as Seekers
                     waveEnemyCount /= 2
                     let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
-                    let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
+                    //let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
+                    let location = self.player.position
                     self.spawnEnemyCircle(EnemyTypes.seeker, count: circleEnemyCount, center: location, radius: 500)
+                }
+                else if self.wave > 10 && self.wave % 3 == 2 {
+                    // Spawn Ninja Stars
                 }
                 self.spawnEnemy(.bouncer, count: waveEnemyCount)
             }
