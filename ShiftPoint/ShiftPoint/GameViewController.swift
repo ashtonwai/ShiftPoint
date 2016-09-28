@@ -10,6 +10,7 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController, GameManager {
+    let userDefaults = UserDefaults.standard
     let screenSize = CGSize(width: 2048, height: 1536)
     let scaleMode = SKSceneScaleMode.aspectFill
     var skView: SKView!
@@ -20,18 +21,18 @@ class GameViewController: UIViewController, GameManager {
         self.becomeFirstResponder()
         skView = self.view as! SKView
         skView.ignoresSiblingOrder = true
-        loadMainMenuScene()
+        
+        let skipTutorial = userDefaults.object(forKey: "skipTutorial") != nil ? (userDefaults.object(forKey: "skipTutorial") as! Bool) : Config.Settings.SKIP_TUTORIAL
+        if !skipTutorial {
+            loadTutorialScene()
+        } else {
+            loadGameScene()
+        }
         setupNotifications()
     }
     
     
     // MARK: - Scene Navigation -
-    func loadMainMenuScene() {
-        let menuScene = MainMenuScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
-        let reveal = SKTransition.crossFade(withDuration: 1.0)
-        skView.presentScene(menuScene, transition: reveal)
-    }
-    
     func loadTutorialScene() {
         let tutorialScene = TutorialScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
         tutorialScene.size = screenSize

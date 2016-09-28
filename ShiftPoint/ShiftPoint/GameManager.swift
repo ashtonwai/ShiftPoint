@@ -9,7 +9,6 @@
 import Foundation
 
 protocol GameManager {
-    func loadMainMenuScene()
     func loadTutorialScene()
     func loadGameScene()
     func loadGameOverScene(_ score: Int)

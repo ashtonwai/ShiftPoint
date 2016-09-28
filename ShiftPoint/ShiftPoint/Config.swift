@@ -23,7 +23,6 @@ struct Config {
         static let DebugPhysics  : Bool = false
         static let GodMode       : Bool = false
         static let Endless       : Bool = false
-        static let SkipTutorial  : Bool = true
     }
     
     struct GameLayer {
@@ -64,5 +63,9 @@ struct Config {
             static let NINJA_COLOR    : SKColor = SKColor.yellow
             static let NINJA_SIZE     : CGSize = CGSize(width: 50, height: 50)
         }
+    }
+    
+    struct Settings {
+        static let SKIP_TUTORIAL    : Bool = false
     }
 }
