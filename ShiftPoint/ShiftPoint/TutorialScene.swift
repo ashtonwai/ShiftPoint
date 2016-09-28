@@ -55,17 +55,17 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     
     // MARK: - Event Handlers -
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
+        if touches.count > 0 {
+            let location = touches.first!.location(in: self)
             
             player.onTeleport(location)
             
-            if atPoint(touch.location(in: self)) == skipButton {
+            if atPoint(location) == skipButton {
                 skipButton.fontColor = SKColor.cyan
                 gameManager.loadGameScene()
             }
             
-            if atPoint(touch.location(in: self)) == targetCircle {
+            if atPoint(location) == targetCircle {
                 if currentPoint < 3 {
                     currentPoint += 1
                     teleportTarget(targetPoints[currentPoint])
@@ -76,7 +76,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
                 }
             }
             
-            if atPoint(touch.location(in: self)) == shootPos {
+            if atPoint(location) == shootPos {
                 shootPos?.removeAllActions()
                 shootPos?.removeFromParent()
                 
