@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="j8S-aH-NdH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="lrh-vd-0zw">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -8,6 +8,9 @@
     <customFonts key="customFonts">
         <array key="6 Cells.otf">
             <string>6Cells</string>
+        </array>
+        <array key="Inversionz.otf">
+            <string>Inversionz</string>
         </array>
         <array key="Microgramma.ttf">
             <string>MicrogrammaDOT-MediumExtended</string>
@@ -45,7 +48,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BV1-FR-VrT" kind="modal" modalTransitionStyle="crossDissolve" id="NCy-eY-uUL"/>
+                                    <segue destination="BV1-FR-VrT" kind="show" id="NCy-eY-uUL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZT-rQ-tYE" userLabel="HighScoreButton">
@@ -63,6 +66,9 @@
                                 <state key="normal" title="Settings">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="SDz-v3-WyL" kind="show" id="Ksy-Cw-YVM"/>
+                                </connections>
                             </button>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M6H-db-Qax" userLabel="AboutButton">
                                 <frame key="frameInset" minX="312" minY="548" width="400" height="40"/>
@@ -75,6 +81,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="HgT-K2-MPs"/>
                     <connections>
                         <outlet property="aboutButton" destination="M6H-db-Qax" id="ZfT-g0-d9H"/>
                         <outlet property="gameTitle" destination="oA1-AZ-8pd" id="Wnn-6N-9qZ"/>
@@ -85,7 +92,113 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cq9-Se-doQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-438.8671875" y="386.71875"/>
+            <point key="canvasLocation" x="-403" y="387"/>
+        </scene>
+        <!--Setting View Controller-->
+        <scene sceneID="d6A-ID-ABE">
+            <objects>
+                <viewController id="SDz-v3-WyL" customClass="SettingViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="iUs-Py-YBj"/>
+                        <viewControllerLayoutGuide type="bottom" id="h2J-8k-nqd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="77t-in-cY0">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="wh0-lZ-F7G" userLabel="Background">
+                                <frame key="frameInset" width="1024" height="768"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8o-dY-Xm6" userLabel="SectionTitle">
+                                <frame key="frameInset" minX="212" minY="50" width="600" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Inversionz" family="Inversionz" pointSize="100"/>
+                                <color key="textColor" red="0.0" green="0.98431372549999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Music" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JXK-bJ-nzg" userLabel="MusicLabel">
+                                <frame key="frameInset" minX="100" minY="175" width="400" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sound Effect" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juA-6I-mLP" userLabel="SoundEffectLabel">
+                                <frame key="frameInset" minX="100" minY="233" width="400" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Skip Tutorial" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RWi-YT-q9G" userLabel="SkipTutorialLabel">
+                                <frame key="frameInset" minX="100" minY="291" width="400" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZZ4-W0-ly2" userLabel="MusicSwitch">
+                                <frame key="frameInset" minX="850" minY="185" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="setMusicEnable:" destination="SDz-v3-WyL" eventType="valueChanged" id="CbQ-D5-qzt"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3B-RV-vHi" userLabel="SoundEffectSwitch">
+                                <frame key="frameInset" minX="850" minY="243" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="setSoundEffectEnable:" destination="SDz-v3-WyL" eventType="valueChanged" id="9Ao-N3-Ppu"/>
+                                </connections>
+                            </switch>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cod-t2-EUU" userLabel="TutorialSwitch">
+                                <frame key="frameInset" minX="850" minY="301" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="setSkipTutorial:" destination="SDz-v3-WyL" eventType="valueChanged" id="ZCj-DH-9a0"/>
+                                </connections>
+                            </switch>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="rQA-4V-6vM" userLabel="MusicSlider">
+                                <frame key="frameInset" minX="514" minY="185" width="300" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="setMusicVolumn:" destination="SDz-v3-WyL" eventType="valueChanged" id="84l-kx-2ZY"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="eLd-gZ-kls" userLabel="SoundEffectSlider">
+                                <frame key="frameInset" minX="514" minY="243" width="300" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="setSoundEffectVolumn:" destination="SDz-v3-WyL" eventType="valueChanged" id="Z2F-p0-gZT"/>
+                                </connections>
+                            </slider>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JpF-ao-66l" userLabel="ReturnButton">
+                                <frame key="frameInset" minX="412" minY="650" width="200" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
+                                <state key="normal" title="Return">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="returnToPreviousView:" destination="SDz-v3-WyL" eventType="touchUpInside" id="4Fo-cP-fRM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="BFH-w4-w2z"/>
+                    <connections>
+                        <outlet property="musicSlider" destination="rQA-4V-6vM" id="9R4-bi-Tmj"/>
+                        <outlet property="musicSwitch" destination="ZZ4-W0-ly2" id="NYK-e7-Ca6"/>
+                        <outlet property="soundEffectSlider" destination="eLd-gZ-kls" id="Ef0-ic-nFR"/>
+                        <outlet property="soundEffectSwitch" destination="y3B-RV-vHi" id="jdB-Te-ORl"/>
+                        <outlet property="tutorialSwitch" destination="cod-t2-EUU" id="TNR-a0-vOn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rEW-Uq-kVI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-403" y="1121"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -105,6 +218,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="313" y="387"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="yDC-M7-aN8">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="lrh-vd-0zw" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dmQ-rJ-Io1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="j8S-aH-NdH" kind="relationship" relationship="rootViewController" id="kED-pi-vwH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rhz-nd-KMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1115" y="387"/>
         </scene>
     </scenes>
     <resources>

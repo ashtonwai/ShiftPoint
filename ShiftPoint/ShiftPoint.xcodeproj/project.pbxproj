@@ -26,6 +26,7 @@
 		2DB106391D9B1C02003C415D /* Score.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106351D9B1C02003C415D /* Score.mp3 */; };
 		2DB1063A1D9B1C02003C415D /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106361D9B1C02003C415D /* Teleport.mp3 */; };
 		2DB1063D1D9B2F75003C415D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1063C1D9B2F75003C415D /* MenuViewController.swift */; };
+		2DB1063F1D9B5F40003C415D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1063E1D9B5F40003C415D /* SettingViewController.swift */; };
 		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB13CE1CEA7459001C109B /* NinjaStar.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
@@ -61,6 +62,7 @@
 		2DB106351D9B1C02003C415D /* Score.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Score.mp3; path = Resources/Sounds/Score.mp3; sourceTree = "<group>"; };
 		2DB106361D9B1C02003C415D /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Resources/Sounds/Teleport.mp3; sourceTree = "<group>"; };
 		2DB1063C1D9B2F75003C415D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		2DB1063E1D9B5F40003C415D /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DCB13CE1CEA7459001C109B /* NinjaStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NinjaStar.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				2D430A261C7F50BD0075F316 /* GameViewController.swift */,
 				2DB1063C1D9B2F75003C415D /* MenuViewController.swift */,
+				2DB1063E1D9B5F40003C415D /* SettingViewController.swift */,
 			);
 			name = VC;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */,
 				2D430A271C7F50BD0075F316 /* GameViewController.swift in Sources */,
 				2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */,
+				2DB1063F1D9B5F40003C415D /* SettingViewController.swift in Sources */,
 				2D430A211C7F50BD0075F316 /* AppDelegate.swift in Sources */,
 				2DE0884E1C88895800BE051C /* Player.swift in Sources */,
 				2D05EEDF1C85625D0093A3A3 /* Utilities.swift in Sources */,

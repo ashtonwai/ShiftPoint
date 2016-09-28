@@ -34,6 +34,14 @@ struct Config {
         static let Overlay      : CGFloat = 5
     }
     
+    struct Settings {
+        static let skipTutorial      : Bool = false
+        static let musicEnable       : Bool = true
+        static let musicVolumn       : Float = 1.0
+        static let soundEffectEnable : Bool = true
+        static let soundEffectVolumn : Float = 1.0
+    }
+    
     struct Player {
         static let FIRE_RATE        : Float = 0.2
         static let BULLET_SPEED     : Float = 50.0
@@ -63,9 +71,5 @@ struct Config {
             static let NINJA_COLOR    : SKColor = SKColor.yellow
             static let NINJA_SIZE     : CGSize = CGSize(width: 50, height: 50)
         }
-    }
-    
-    struct Settings {
-        static let SKIP_TUTORIAL    : Bool = false
     }
 }

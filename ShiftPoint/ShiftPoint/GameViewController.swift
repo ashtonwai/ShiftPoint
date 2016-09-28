@@ -22,7 +22,7 @@ class GameViewController: UIViewController, GameManager {
         skView = self.view as! SKView
         skView.ignoresSiblingOrder = true
         
-        let skipTutorial = userDefaults.object(forKey: "skipTutorial") != nil ? (userDefaults.object(forKey: "skipTutorial") as! Bool) : Config.Settings.SKIP_TUTORIAL
+        let skipTutorial = userDefaults.object(forKey: "skipTutorial") != nil ? (userDefaults.object(forKey: "skipTutorial") as! Bool) : Config.Settings.skipTutorial
         if !skipTutorial {
             loadTutorialScene()
         } else {

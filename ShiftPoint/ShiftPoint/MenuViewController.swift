@@ -16,6 +16,10 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var aboutButton: UIButton!
     
     override func viewDidLoad() {
+        fadeInGameTitle()
+    }
+    
+    func fadeInGameTitle() {
         UIView.animate(withDuration: 1.0, delay: 0.5, options: UIViewAnimationOptions.curveLinear, animations: {
             self.gameTitle.alpha = 1.0
         }, completion: { finished in
