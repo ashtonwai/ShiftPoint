@@ -267,7 +267,7 @@
 				TargetAttributes = {
 					2D430A1C1C7F50BD0075F316 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = 965J8XKWWH;
+						DevelopmentTeam = 24424VD8RL;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -455,11 +455,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 965J8XKWWH;
+				DEVELOPMENT_TEAM = 24424VD8RL;
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.FirstGameStudio.ShiftPoint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.PointBlankStudios.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
@@ -472,11 +472,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 965J8XKWWH;
+				DEVELOPMENT_TEAM = 24424VD8RL;
 				INFOPLIST_FILE = "$(SRCROOT)/ShiftPoint/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.FirstGameStudio.ShiftPoint;
+				PRODUCT_BUNDLE_IDENTIFIER = com.PointBlankStudios.ShiftPoint;
 				PRODUCT_NAME = "Shift Point";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;

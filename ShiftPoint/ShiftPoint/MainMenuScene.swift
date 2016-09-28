@@ -79,11 +79,11 @@ class MainMenuScene : SKScene {
             if atPoint(touch.location(in: self)) == startButton {
                 startButton.fontColor = UIColor.white
                 
-                if userDefaults.bool(forKey: "skipTutorial") && Config.Developer.SkipTutorial {
-                    gameManager.loadGameScene()
-                } else {
+//                if userDefaults.bool(forKey: "skipTutorial") && Config.Developer.SkipTutorial {
+//                    gameManager.loadGameScene()
+//                } else {
                     gameManager.loadTutorialScene()
-                }
+//                }
             }
         }
     }

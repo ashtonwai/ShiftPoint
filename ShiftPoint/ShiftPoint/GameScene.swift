@@ -140,8 +140,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Event Handlers -
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
+        if touches.count > 0 {
+            let location = touches.first!.location(in: self)
             
             if atPoint(location) == resumeButton {
                 resumeButton.fontColor = UIColor.cyan
@@ -296,9 +296,36 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func pauseGame() {
+        gamePaused = true
+        backgroundMusicPlayer.pause()
+        
+        pauseOverlay.position = CGPoint(x: size.width/2, y: size.height/2)
+        pauseOverlay.zPosition = Config.GameLayer.Overlay
+        pauseOverlay.fillColor = UIColor.black
+        pauseOverlay.alpha = 0.75
+        addChild(pauseOverlay)
+        
+        pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
+        pauseLabel.position = CGPoint(x: size.width/2, y: size.height/2+250)
+        pauseLabel.zPosition = Config.GameLayer.Overlay
+        pauseLabel.fontColor = UIColor.cyan
+        pauseLabel.fontSize = 200
+        pauseLabel.text = "Paused"
+        addChild(pauseLabel)
+        
+        resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        resumeButton.position = CGPoint(x: size.width/2, y: size.height/2-250)
+        resumeButton.zPosition = Config.GameLayer.Overlay
+        resumeButton.fontSize = 60
+        resumeButton.text = "Resume"
+        addChild(resumeButton)
+    }
+    
     func runPauseAction() {
         // pause game
         pauseGame()
+        physicsWorld.speed = 0
         self.view?.isPaused = true
     }
     
@@ -328,6 +355,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             SKAction.wait(forDuration: 1.0),
             SKAction.run() {
                 self.gamePaused = false
+                self.physicsWorld.speed = 1
                 backgroundMusicPlayer.play()
                 self.view?.isPaused = false
             }
@@ -422,32 +450,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             addChild(heart)
             lives.append(heart)
         }
-    }
-    
-    func pauseGame() {
-        gamePaused = true
-        backgroundMusicPlayer.pause()
-        
-        pauseOverlay.position = CGPoint(x: size.width/2, y: size.height/2)
-        pauseOverlay.zPosition = Config.GameLayer.Overlay
-        pauseOverlay.fillColor = UIColor.black
-        pauseOverlay.alpha = 0.75
-        addChild(pauseOverlay)
-        
-        pauseLabel = SKLabelNode(fontNamed: Config.Font.GameOverFont)
-        pauseLabel.position = CGPoint(x: size.width/2, y: size.height/2+250)
-        pauseLabel.zPosition = Config.GameLayer.Overlay
-        pauseLabel.fontColor = UIColor.cyan
-        pauseLabel.fontSize = 200
-        pauseLabel.text = "Paused"
-        addChild(pauseLabel)
-        
-        resumeButton = SKLabelNode(fontNamed: Config.Font.MainFont)
-        resumeButton.position = CGPoint(x: size.width/2, y: size.height/2-250)
-        resumeButton.zPosition = Config.GameLayer.Overlay
-        resumeButton.fontSize = 60
-        resumeButton.text = "Resume"
-        addChild(resumeButton)
     }
     
     func spawnWave() {
