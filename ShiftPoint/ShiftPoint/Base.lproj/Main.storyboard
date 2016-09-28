@@ -49,6 +49,9 @@
                                 <state key="normal" title="High Score">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="yRb-gp-8ja" kind="show" id="rkn-Lg-3t8"/>
+                                </connections>
                             </button>
                             <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBa-Iw-Kmn" userLabel="SettingsButton">
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
@@ -64,6 +67,9 @@
                                 <state key="normal" title="About">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="kSg-dR-tgl" kind="show" id="0Dh-3L-Dx2"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -97,6 +103,44 @@
             </objects>
             <point key="canvasLocation" x="-403" y="387"/>
         </scene>
+        <!--About View Controller-->
+        <scene sceneID="d4n-Qp-Dum">
+            <objects>
+                <viewController id="kSg-dR-tgl" customClass="AboutViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="goj-1F-2qY"/>
+                        <viewControllerLayoutGuide type="bottom" id="gQ6-tk-dRT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L22-bt-1Nm">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="Cum-JJ-eaR" userLabel="Background"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BRw-h2-hjx">
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
+                                <state key="normal" title="Return">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="returnToPreviousView:" destination="kSg-dR-tgl" eventType="touchUpInside" id="qoV-TQ-nna"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Cum-JJ-eaR" secondAttribute="trailing" id="50e-Dd-Cwd"/>
+                            <constraint firstItem="gQ6-tk-dRT" firstAttribute="top" secondItem="Cum-JJ-eaR" secondAttribute="bottom" id="BLS-ae-omO"/>
+                            <constraint firstItem="Cum-JJ-eaR" firstAttribute="top" secondItem="L22-bt-1Nm" secondAttribute="top" id="Gzt-wr-2A5"/>
+                            <constraint firstItem="Cum-JJ-eaR" firstAttribute="leading" secondItem="L22-bt-1Nm" secondAttribute="leading" id="aVG-9S-7zn"/>
+                            <constraint firstItem="gQ6-tk-dRT" firstAttribute="top" secondItem="BRw-h2-hjx" secondAttribute="bottom" constant="50" id="sA6-i8-o8E"/>
+                            <constraint firstItem="BRw-h2-hjx" firstAttribute="centerX" secondItem="L22-bt-1Nm" secondAttribute="centerX" id="ytJ-al-kya"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SB1-Hs-tle" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-403.125" y="1128.90625"/>
+        </scene>
         <!--Setting View Controller-->
         <scene sceneID="d6A-ID-ABE">
             <objects>
@@ -116,17 +160,17 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JXK-bJ-nzg" userLabel="MusicLabel">
-                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sound Effect" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juA-6I-mLP" userLabel="SoundEffectLabel">
-                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Skip Tutorial" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RWi-YT-q9G" userLabel="SkipTutorialLabel">
-                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <color key="textColor" red="0.75294117650000003" green="0.75294117650000003" blue="0.75294117650000003" alpha="0.7538523707" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -138,11 +182,6 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3B-RV-vHi" userLabel="SoundEffectSwitch">
                                 <connections>
                                     <action selector="setSoundEffectEnable:" destination="SDz-v3-WyL" eventType="valueChanged" id="9Ao-N3-Ppu"/>
-                                </connections>
-                            </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cod-t2-EUU" userLabel="TutorialSwitch">
-                                <connections>
-                                    <action selector="setSkipTutorial:" destination="SDz-v3-WyL" eventType="valueChanged" id="ZCj-DH-9a0"/>
                                 </connections>
                             </switch>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="rQA-4V-6vM" userLabel="MusicSlider">
@@ -167,25 +206,30 @@
                                     <action selector="returnToPreviousView:" destination="SDz-v3-WyL" eventType="touchUpInside" id="4Fo-cP-fRM"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cod-t2-EUU" userLabel="TutorialSwitch">
+                                <connections>
+                                    <action selector="setSkipTutorial:" destination="SDz-v3-WyL" eventType="valueChanged" id="ZCj-DH-9a0"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="eLd-gZ-kls" firstAttribute="top" secondItem="rQA-4V-6vM" secondAttribute="bottom" constant="28" id="02K-z4-CUY"/>
+                            <constraint firstItem="eLd-gZ-kls" firstAttribute="top" secondItem="rQA-4V-6vM" secondAttribute="bottom" constant="20" id="02K-z4-CUY"/>
                             <constraint firstItem="JXK-bJ-nzg" firstAttribute="leading" secondItem="77t-in-cY0" secondAttribute="leading" constant="100" id="0z5-Gx-lyr"/>
                             <constraint firstItem="JpF-ao-66l" firstAttribute="centerX" secondItem="77t-in-cY0" secondAttribute="centerX" id="20I-9E-nUc"/>
                             <constraint firstAttribute="trailing" secondItem="cod-t2-EUU" secondAttribute="trailing" constant="125" id="2HA-oo-C9P"/>
                             <constraint firstAttribute="trailing" secondItem="ZZ4-W0-ly2" secondAttribute="trailing" constant="125" id="2jZ-W1-i1X"/>
-                            <constraint firstItem="eLd-gZ-kls" firstAttribute="top" secondItem="rQA-4V-6vM" secondAttribute="bottom" constant="28" id="39T-Uc-Ld2"/>
+                            <constraint firstItem="eLd-gZ-kls" firstAttribute="top" secondItem="rQA-4V-6vM" secondAttribute="bottom" constant="20" id="39T-Uc-Ld2"/>
                             <constraint firstItem="JXK-bJ-nzg" firstAttribute="top" secondItem="v8o-dY-Xm6" secondAttribute="bottom" constant="56" id="6MR-Rl-XRq"/>
-                            <constraint firstItem="cod-t2-EUU" firstAttribute="top" secondItem="y3B-RV-vHi" secondAttribute="bottom" constant="27" id="9ei-er-8ez"/>
+                            <constraint firstItem="cod-t2-EUU" firstAttribute="top" secondItem="y3B-RV-vHi" secondAttribute="bottom" constant="19" id="9ei-er-8ez"/>
                             <constraint firstItem="h2J-8k-nqd" firstAttribute="top" secondItem="JpF-ao-66l" secondAttribute="bottom" constant="80" id="Bto-QB-omi"/>
                             <constraint firstItem="v8o-dY-Xm6" firstAttribute="top" secondItem="iUs-Py-YBj" secondAttribute="bottom" constant="30" id="Cvj-9K-kG3"/>
                             <constraint firstItem="RWi-YT-q9G" firstAttribute="leading" secondItem="77t-in-cY0" secondAttribute="leading" constant="100" id="HxK-m3-ffn"/>
                             <constraint firstItem="juA-6I-mLP" firstAttribute="leading" secondItem="77t-in-cY0" secondAttribute="leading" constant="100" id="KoT-tb-Cto"/>
-                            <constraint firstItem="ZZ4-W0-ly2" firstAttribute="top" secondItem="iUs-Py-YBj" secondAttribute="bottom" constant="161" id="L6U-RL-dYH"/>
+                            <constraint firstItem="ZZ4-W0-ly2" firstAttribute="top" secondItem="iUs-Py-YBj" secondAttribute="bottom" constant="157" id="L6U-RL-dYH"/>
                             <constraint firstItem="rQA-4V-6vM" firstAttribute="leading" secondItem="eLd-gZ-kls" secondAttribute="leading" id="Rvq-rM-DlA"/>
                             <constraint firstItem="wh0-lZ-F7G" firstAttribute="leading" secondItem="77t-in-cY0" secondAttribute="leading" id="Tn1-ZV-VI8"/>
-                            <constraint firstItem="y3B-RV-vHi" firstAttribute="top" secondItem="ZZ4-W0-ly2" secondAttribute="bottom" constant="27" id="bgP-qO-N21"/>
+                            <constraint firstItem="y3B-RV-vHi" firstAttribute="top" secondItem="ZZ4-W0-ly2" secondAttribute="bottom" constant="18" id="bgP-qO-N21"/>
                             <constraint firstItem="ZZ4-W0-ly2" firstAttribute="leading" secondItem="rQA-4V-6vM" secondAttribute="trailing" constant="38" id="c9J-oX-YYF"/>
                             <constraint firstItem="v8o-dY-Xm6" firstAttribute="centerX" secondItem="77t-in-cY0" secondAttribute="centerX" id="dMK-yM-RTo"/>
                             <constraint firstItem="y3B-RV-vHi" firstAttribute="leading" secondItem="eLd-gZ-kls" secondAttribute="trailing" constant="38" id="efX-4Z-0q3"/>
@@ -195,7 +239,7 @@
                             <constraint firstAttribute="trailing" secondItem="wh0-lZ-F7G" secondAttribute="trailing" id="m0n-lq-The"/>
                             <constraint firstItem="h2J-8k-nqd" firstAttribute="top" secondItem="wh0-lZ-F7G" secondAttribute="bottom" id="n1w-6s-Lh1"/>
                             <constraint firstItem="RWi-YT-q9G" firstAttribute="top" secondItem="juA-6I-mLP" secondAttribute="bottom" constant="16" id="qw3-MQ-OHY"/>
-                            <constraint firstItem="rQA-4V-6vM" firstAttribute="top" secondItem="v8o-dY-Xm6" secondAttribute="bottom" constant="62" id="s7O-1y-LJK"/>
+                            <constraint firstItem="rQA-4V-6vM" firstAttribute="top" secondItem="v8o-dY-Xm6" secondAttribute="bottom" constant="57" id="s7O-1y-LJK"/>
                             <constraint firstItem="rQA-4V-6vM" firstAttribute="trailing" secondItem="eLd-gZ-kls" secondAttribute="trailing" id="uDO-Fo-ZBE"/>
                         </constraints>
                     </view>
@@ -210,7 +254,52 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rEW-Uq-kVI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-45" y="1206"/>
+            <point key="canvasLocation" x="313" y="1129"/>
+        </scene>
+        <!--High Score View Controller-->
+        <scene sceneID="ea6-W2-Pzh">
+            <objects>
+                <viewController id="yRb-gp-8ja" customClass="HighScoreViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CfV-3v-zJq"/>
+                        <viewControllerLayoutGuide type="bottom" id="jTc-CT-4W4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2DZ-ZE-rmP">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="TUv-uq-TFJ" userLabel="Background"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="High Scores" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MbU-bo-x4k">
+                                <fontDescription key="fontDescription" name="Inversionz" family="Inversionz" pointSize="100"/>
+                                <color key="textColor" red="0.0" green="0.98431372549999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HSO-ph-spH">
+                                <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
+                                <state key="normal" title="Return">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="returnToPreviousView:" destination="yRb-gp-8ja" eventType="touchUpInside" id="mGa-qy-dLS"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TUv-uq-TFJ" firstAttribute="leading" secondItem="2DZ-ZE-rmP" secondAttribute="leading" id="0E9-Zc-Yhu"/>
+                            <constraint firstItem="jTc-CT-4W4" firstAttribute="top" secondItem="HSO-ph-spH" secondAttribute="bottom" constant="50" id="4HD-oN-Q3q"/>
+                            <constraint firstItem="MbU-bo-x4k" firstAttribute="top" secondItem="CfV-3v-zJq" secondAttribute="bottom" constant="30" id="DtM-W3-xDu"/>
+                            <constraint firstItem="MbU-bo-x4k" firstAttribute="centerX" secondItem="2DZ-ZE-rmP" secondAttribute="centerX" id="KOY-xL-7IS"/>
+                            <constraint firstAttribute="trailing" secondItem="TUv-uq-TFJ" secondAttribute="trailing" id="Q0l-Cb-gHp"/>
+                            <constraint firstItem="TUv-uq-TFJ" firstAttribute="top" secondItem="2DZ-ZE-rmP" secondAttribute="top" id="kFX-l6-vqK"/>
+                            <constraint firstItem="HSO-ph-spH" firstAttribute="centerX" secondItem="2DZ-ZE-rmP" secondAttribute="centerX" id="m6I-hH-QNM"/>
+                            <constraint firstItem="jTc-CT-4W4" firstAttribute="top" secondItem="TUv-uq-TFJ" secondAttribute="bottom" id="s9G-IP-lkS"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qEs-ys-VYr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="312.890625" y="-405.46875"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -234,7 +323,7 @@
         <!--Navigation Controller-->
         <scene sceneID="yDC-M7-aN8">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="lrh-vd-0zw" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" navigationBarHidden="YES" id="lrh-vd-0zw" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="dmQ-rJ-Io1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

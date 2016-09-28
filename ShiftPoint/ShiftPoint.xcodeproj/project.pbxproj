@@ -27,6 +27,8 @@
 		2DB1063A1D9B1C02003C415D /* Teleport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2DB106361D9B1C02003C415D /* Teleport.mp3 */; };
 		2DB1063D1D9B2F75003C415D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1063C1D9B2F75003C415D /* MenuViewController.swift */; };
 		2DB1063F1D9B5F40003C415D /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1063E1D9B5F40003C415D /* SettingViewController.swift */; };
+		2DB106411D9C7790003C415D /* HighScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106401D9C7790003C415D /* HighScoreViewController.swift */; };
+		2DB106431D9C7CB2003C415D /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106421D9C7CB2003C415D /* AboutViewController.swift */; };
 		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB13CE1CEA7459001C109B /* NinjaStar.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
@@ -63,6 +65,8 @@
 		2DB106361D9B1C02003C415D /* Teleport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Teleport.mp3; path = Resources/Sounds/Teleport.mp3; sourceTree = "<group>"; };
 		2DB1063C1D9B2F75003C415D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		2DB1063E1D9B5F40003C415D /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		2DB106401D9C7790003C415D /* HighScoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoreViewController.swift; sourceTree = "<group>"; };
+		2DB106421D9C7CB2003C415D /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DCB13CE1CEA7459001C109B /* NinjaStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NinjaStar.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 				2D430A261C7F50BD0075F316 /* GameViewController.swift */,
 				2DB1063C1D9B2F75003C415D /* MenuViewController.swift */,
 				2DB1063E1D9B5F40003C415D /* SettingViewController.swift */,
+				2DB106401D9C7790003C415D /* HighScoreViewController.swift */,
+				2DB106421D9C7CB2003C415D /* AboutViewController.swift */,
 			);
 			name = VC;
 			sourceTree = "<group>";
@@ -322,6 +328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DB106411D9C7790003C415D /* HighScoreViewController.swift in Sources */,
 				2DFEA0541CDECD1E00C4FEC9 /* Enemy.swift in Sources */,
 				2DE088521C8A56DD00BE051C /* Bouncer.swift in Sources */,
 				2D430A251C7F50BD0075F316 /* GameScene.swift in Sources */,
@@ -339,6 +346,7 @@
 				E15327F41D874E8C00E400F6 /* Life.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
 				2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */,
+				2DB106431D9C7CB2003C415D /* AboutViewController.swift in Sources */,
 				2DAAEC0F1CD860A70080A957 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
