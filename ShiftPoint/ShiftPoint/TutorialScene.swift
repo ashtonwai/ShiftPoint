@@ -10,36 +10,32 @@ import SpriteKit
 
 class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDelegate {
     let userDefaults = UserDefaults.standard
-    var gameManager: GameManager?
-    var playableRect: CGRect = CGRect.zero
-    var player: Player
-    var targetCircle: SKShapeNode
-    var instruction: SKLabelNode
-    var skipButton: SKLabelNode
-    
+    var gameManager: GameManager
+    var playableRect: CGRect!
+    var player: Player!
+    var targetCircle: SKShapeNode!
+    var instruction: SKLabelNode!
+    var skipButton: SKLabelNode!
+    var shootPos: SKShapeNode?
+    var arrow: SKSpriteNode?
     var targetPoint1: CGPoint
     var targetPoint2: CGPoint
     var targetPoint3: CGPoint
     var targetPoint4: CGPoint
     var targetPoints: [CGPoint]
     var currentPoint: Int = 0
-    var shootPos: SKShapeNode?
-    var arrow: SKSpriteNode?
     
     
     // MARK: - Initialization -
     init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
+        self.gameManager = gameManager
         self.targetPoint1 = CGPoint(x: size.width-500, y: size.height-300)
         self.targetPoint2 = CGPoint(x: 500, y: size.height-300)
         self.targetPoint3 = CGPoint(x: 500, y: 300)
         self.targetPoint4 = CGPoint(x: size.width-500, y: 300)
         self.targetPoints = [targetPoint1, targetPoint2, targetPoint3, targetPoint4]
-        self.targetCircle = SKShapeNode(circleOfRadius: 70)
-        self.instruction = SKLabelNode(fontNamed: Config.Font.MainFont)
-        self.skipButton = SKLabelNode(fontNamed: Config.Font.MainFont)
         self.shootPos = SKShapeNode(circleOfRadius: 100)
         self.arrow = SKSpriteNode(imageNamed: "Arrow")
-        self.player = Player()
         super.init(size: size)
     }
     
@@ -52,23 +48,6 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         let maxAspectRatioHeight = size.width / maxAspectRatio
         let playableMargin: CGFloat = (size.height - maxAspectRatioHeight) / 2
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2)
-        
-        instruction.position = CGPoint(x: size.width/2, y: size.height-100)
-        instruction.zPosition = Config.GameLayer.HUD
-        instruction.horizontalAlignmentMode = .center
-        instruction.verticalAlignmentMode = .center
-        instruction.fontColor = Config.Font.GameUIColor
-        instruction.fontSize = Config.Font.GameTextSize
-        addChild(instruction)
-        
-        skipButton.position = CGPoint(x: size.width-50, y: 50)
-        skipButton.zPosition = Config.GameLayer.HUD
-        skipButton.horizontalAlignmentMode = .right
-        skipButton.verticalAlignmentMode = .bottom
-        skipButton.fontColor = Config.Font.GameUIColor
-        skipButton.fontSize = 80
-        skipButton.text = "Skip"
-        addChild(skipButton)
         
         setupWorld()
     }
@@ -83,7 +62,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
             
             if atPoint(touch.location(in: self)) == skipButton {
                 skipButton.fontColor = SKColor.cyan
-                gameManager?.loadGameScene()
+                gameManager.loadGameScene()
             }
             
             if atPoint(touch.location(in: self)) == targetCircle {
@@ -123,7 +102,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
     }
     
     func panDetected(_ recognizer: UIPanGestureRecognizer) {
-        if  recognizer.state == .began {
+        if recognizer.state == .began {
             if arrow != nil {
                 arrow?.removeAllActions()
                 arrow?.removeFromParent()
@@ -165,12 +144,31 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         background.yScale = 1.45
         addChild(background)
         
-        player.position = CGPoint(x: size.width/2, y: size.height/2)
-        player.zPosition = Config.GameLayer.Sprite
+        let center = CGPoint(x: size.width/2, y: size.height/2)
+        player = Player(center)
         addChild(player)
         
+        instruction = SKLabelNode(fontNamed: Config.Font.MainFont)
+        instruction.position = CGPoint(x: size.width/2, y: size.height-100)
+        instruction.zPosition = Config.GameLayer.HUD
+        instruction.horizontalAlignmentMode = .center
+        instruction.verticalAlignmentMode = .center
+        instruction.fontColor = Config.Font.GameUIColor
+        instruction.fontSize = Config.Font.GameTextSize
         instruction.text = "Tab to teleport to the location"
+        addChild(instruction)
         
+        skipButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        skipButton.position = CGPoint(x: size.width-50, y: 50)
+        skipButton.zPosition = Config.GameLayer.HUD
+        skipButton.horizontalAlignmentMode = .right
+        skipButton.verticalAlignmentMode = .bottom
+        skipButton.fontColor = Config.Font.GameUIColor
+        skipButton.fontSize = 80
+        skipButton.text = "Skip"
+        addChild(skipButton)
+        
+        targetCircle = SKShapeNode(circleOfRadius: 70)
         targetCircle.position = targetPoints[currentPoint]
         targetCircle.zPosition = Config.GameLayer.Sprite
         targetCircle.fillColor = SKColor.clear
@@ -244,7 +242,7 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         run(SKAction.sequence([
             SKAction.wait(forDuration: 1.0),
             SKAction.run() {
-                self.gameManager?.loadGameScene()
+                self.gameManager.loadGameScene()
             }
         ]))
     }

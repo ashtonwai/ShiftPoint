@@ -90,8 +90,8 @@
 		2D05EED41C850E750093A3A3 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				2D430A241C7F50BD0075F316 /* GameScene.swift */,
 				2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */,
+				2D430A241C7F50BD0075F316 /* GameScene.swift */,
 				2DE088551C8ABE1A00BE051C /* GameOverScene.swift */,
 			);
 			name = Scenes;

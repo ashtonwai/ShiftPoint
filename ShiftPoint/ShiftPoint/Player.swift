@@ -22,12 +22,14 @@ class Player : SKSpriteNode {
     
     
     // MARK: - Initialization -
-    init() {
+    init(_ position: CGPoint) {
         let texture = SKTexture(imageNamed: "Player")
         super.init(texture: texture, color: UIColor.clear, size: texture.size())
         
         self.name = "player"
         self.anchorPoint.y = 0.35
+        self.position = position
+        self.zPosition = Config.GameLayer.Sprite
         
         self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(
             width: texture.size().width * xScale,

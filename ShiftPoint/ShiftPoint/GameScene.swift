@@ -99,13 +99,26 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        playBackgroundMusic("BGM.mp3")
-        setupWorld()
-        setupHUD()
-        spawnWave()
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        physicsWorld.contactDelegate = self
+        
+        let background = SKSpriteNode(imageNamed: "Background.jpg")
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = Config.GameLayer.Background
+        background.xScale = 1.45
+        background.yScale = 1.45
+        addChild(background)
+        
+        let center = CGPoint(x: size.width/2, y: size.height/2)
+        player = Player(center)
+        addChild(player)
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameScene.panDetected(_:)))
         self.view!.addGestureRecognizer(panGesture)
+        
+        playBackgroundMusic("BGM.mp3")
+        setupHUD()
+        spawnWave()
         
         // debug mode
         if Config.Developer.DebugMode {
@@ -336,23 +349,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: - Helper Functions -
-    func setupWorld() {
-        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        physicsWorld.contactDelegate = self
-        
-        let background = SKSpriteNode(imageNamed: "Background.jpg")
-        background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = Config.GameLayer.Background
-        background.xScale = 1.45
-        background.yScale = 1.45
-        addChild(background)
-        
-        player = Player()
-        player.position = CGPoint(x: size.width/2, y: size.height/2)
-        player.zPosition = Config.GameLayer.Sprite
-        addChild(player)
-    }
-    
     func setupHUD() {
         let scoreTextLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         scoreTextLabel.position = CGPoint(x: 50, y: size.height-50)

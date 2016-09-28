@@ -148,7 +148,7 @@ extension Int{
         }
         
         let min = UInt32(range.lowerBound + offset)
-        let max = UInt32(range.upperBound   + offset)
+        let max = UInt32(range.upperBound + offset)
         
         return Int(min + arc4random_uniform(max - min)) - offset
     }
@@ -165,10 +165,12 @@ func playBackgroundMusic(_ filename: String) {
         return
     }
     
+    let musicVolumn = UserDefaults.standard.object(forKey: "musicVolumn") != nil ? (UserDefaults.standard.object(forKey: "musicVolumn") as! Float) : Config.Settings.musicVolumn
     do {
         try backgroundMusicPlayer = AVAudioPlayer(contentsOf: url)
         backgroundMusicPlayer.numberOfLoops = -1
         backgroundMusicPlayer.prepareToPlay()
+        backgroundMusicPlayer.volume = musicVolumn
         backgroundMusicPlayer.play()
     } catch {
         print("Could not create audio player!")
