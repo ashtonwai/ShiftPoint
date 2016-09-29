@@ -42,7 +42,7 @@ class Seeker : Enemy {
         self.physicsBody?.isDynamic = true
         self.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
-        self.physicsBody?.collisionBitMask = PhysicsCategory.PlayBounds
+        self.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
 
     required init?(coder aDecoder: NSCoder) {
