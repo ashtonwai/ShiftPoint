@@ -536,7 +536,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 }
                 self.spawnEnemy(.bouncer, count: waveEnemyCount)
             }
-            ]))
+        ]))
     }
     
     func spawnEnemy(_ type: EnemyTypes, count: Int) {

@@ -23,10 +23,10 @@ class Bouncer : Enemy {
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
-        let threshold: CGFloat = 10
+        let threshold: CGFloat = 15
         let vector = CGPoint(
-            x: CGFloat.random(cos(threshold * degreesToRadians),max:cos((180 - threshold) * degreesToRadians)),
-            y: CGFloat.random(sin(threshold * degreesToRadians),max:sin((180 - threshold) * degreesToRadians))
+            x: CGFloat.random(cos(threshold * degreesToRadians), max:cos((180 - threshold) * degreesToRadians)),
+            y: CGFloat.random(sin(threshold * degreesToRadians), max:sin((180 - threshold) * degreesToRadians))
         )
         self.forward = vector.normalized() // bottom facing up
         //self.forward = CGPoint.randomUnitVector()
@@ -64,5 +64,4 @@ class Bouncer : Enemy {
     override func move() {
         self.physicsBody?.applyImpulse(CGVector(dx: forward.x * delta, dy: forward.y * delta))
     }
-    
 }
