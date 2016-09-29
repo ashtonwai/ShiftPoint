@@ -14,8 +14,8 @@ class NinjaStar : Enemy {
     let color: SKColor = Config.Enemy.NinjaStar.NINJA_COLOR
     let ninjaSize: CGSize = Config.Enemy.NinjaStar.NINJA_SIZE
     
-    init(pos: CGPoint) {
-        super.init(size: ninjaSize, scorePoints: points, hitPoints: hp, typeColor: color)
+    init(pos: CGPoint, gameScene: GameScene) {
+        super.init(size: ninjaSize, scorePoints: points, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
         let width = ninjaSize.width
         let height = ninjaSize.height
@@ -54,7 +54,47 @@ class NinjaStar : Enemy {
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
     
+    convenience init(pos: CGPoint, toPos: CGPoint, gameScene: GameScene) {
+        self.init(pos: pos, gameScene: gameScene)
+        self.alpha = 0
+        rotate(2.0)
+        spread(toPos)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    // MARK: - Movement Controls -
+    func rotate(_ speed: TimeInterval) {
+        let rotate = SKAction.rotate(byAngle: π * 2, duration: speed)
+        run(SKAction.repeatForever(rotate))
+    }
+    
+    func spread(_ location: CGPoint) {
+        let spread = SKAction.group([
+            SKAction.fadeIn(withDuration: 0.5),
+            SKAction.move(to: location, duration: 0.25)
+        ])
+        run(spread)
+    }
+    
+    func slash(_ center: CGPoint) {
+        let x = center.x - (position.x - center.x)
+        let y = center.y - (position.y - center.y)
+        run(SKAction.sequence([
+            SKAction.run() {
+                self.rotate(1.0)
+            },
+            SKAction.wait(forDuration: 0.5),
+            SKAction.group([
+                SKAction.move(to: CGPoint(x: x, y: y), duration: 0.5),
+                SKAction.fadeOut(withDuration: 1.0)
+            ]),
+            SKAction.run() {
+                self.onDestroy()
+            }
+        ]))
     }
 }

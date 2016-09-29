@@ -14,6 +14,7 @@ struct PhysicsCategory {
     static let Enemy        : UInt32 = 0b101 // 4
     static let Player       : UInt32 = 0b1001 // 8
     static let Bullet       : UInt32 = 0b10001 // 16
+    static let PowerUp      : UInt32 = 0b100001 // 32
 }
 
 import SpriteKit
@@ -227,6 +228,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         else if let enemy = firstNode as? Enemy, let player = secondNode as? Player {
             playerDidCollideWithEnemy(enemy, thisPlayer: player)
         }
+        // power & player collision
+        else if let player = firstNode as? Player, let power = secondNode as? PowerUp {
+            playerDidCollideWithPowerUp(player, thisPower: power)
+        }
     }
     
     func bulletDidCollideWithEnemy(_ thisEnemy: Enemy, thisBullet: Bullet) {
@@ -248,7 +253,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         self.score += thisEnemy.scorePoints
                         self.scoreLabel.text = "\(self.score)"
                         
-                        self.numOfEnemies -= 1
                         if self.numOfEnemies <= 0 {
                             self.wave += 1
                             self.spawnWave()
@@ -262,6 +266,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         SKAction.fadeOut(withDuration: 0.5),
                         SKAction.removeFromParent()
                     ]))
+                    self.spawnPowerUp(thisEnemy.position)
                 }
             ]))
         }
@@ -283,10 +288,28 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             return
         }
         
-        numOfEnemies -= 1
         if numOfEnemies <= 0 {
             wave += 1
             spawnWave()
+        }
+    }
+    
+    func playerDidCollideWithPowerUp(_ thisPlayer: Player, thisPower: PowerUp) {
+        switch thisPower.powerType {
+        case .life:
+            if let power = thisPower as? LifeUp {
+                power.onPickUp(thisPlayer)
+                let heart = SKSpriteNode(imageNamed: "Heart")
+                heart.size = CGSize(width: 55, height: 50)
+                let xPos = (lives.last?.position.x)! - (25 + heart.size.width)
+                let yPos = (lives.last?.position.y)!
+                heart.position = CGPoint(x: xPos, y: yPos)
+                heart.zPosition = Config.GameLayer.HUD
+                heart.alpha = 0
+                addChild(heart)
+                heart.run(SKAction.fadeAlpha(by: 0.75, duration: 0.2))
+            }
+            break
         }
     }
     
@@ -448,32 +471,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func spawnWave() {
-        waveLabel.text = "\(wave)"
-        
-        // http://www.meta-calculator.com/online/9j13df5xtv8b
-        var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
-        
-        run(SKAction.sequence([
-            SKAction.wait(forDuration: 1.0),
-            SKAction.run() {
-                // Spawn seeker wave once every 3 waves after Wave 5
-                if self.wave > 5 && self.wave % 3 == 0 {
-                    // Spawn half of enemies as Seekers
-                    waveEnemyCount /= 2
-                    let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
-                    //let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
-                    let location = self.player.position
-                    self.spawnEnemyCircle(EnemyTypes.seeker, count: circleEnemyCount, center: location, radius: 500)
-                }
-                else if self.wave > 10 && self.wave % 3 == 2 {
-                    // Spawn Ninja Stars
-                }
-                self.spawnEnemy(.bouncer, count: waveEnemyCount)
-            }
-        ]))
-    }
-    
     // Spawn outside playableRect
     func getRandomOutsideSpawnLocation() -> CGPoint {
         var location = CGPoint(
@@ -506,31 +503,94 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         return location
     }
     
+    func gameOver() {
+        backgroundMusicPlayer.stop()
+        gameManager.loadGameOverScene(score)
+    }
+    
+    
+    // MARK: - Spawn Methods -
+    func spawnWave() {
+        waveLabel.text = "\(wave)"
+        
+        // http://www.meta-calculator.com/online/9j13df5xtv8b
+        var waveEnemyCount = Int(5.5 * sqrt(0.5 * Double(wave)))
+        
+        run(SKAction.sequence([
+            SKAction.wait(forDuration: 1.0),
+            SKAction.run() {
+                // Spawn seeker wave once every 3 waves after Wave 5
+                if self.wave > 5 && self.wave % 3 == 0 {
+                    // Spawn half of enemies as Seekers
+                    waveEnemyCount /= 2
+                    let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
+                    //let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
+                    let location = self.player.position
+                    _ = self.spawnEnemyCircle(EnemyTypes.seeker, count: circleEnemyCount, center: location, radius: 500)
+                }
+                else if self.wave > 10 && self.wave % 3 == 2 {
+                    // Spawn Ninja Stars
+                }
+                self.spawnEnemy(.bouncer, count: waveEnemyCount)
+            }
+            ]))
+    }
+    
     func spawnEnemy(_ type: EnemyTypes, count: Int) {
         for _ in 0..<count {
-            let enemy = createEnemy(type, location: getRandomOutsideSpawnLocation())
+            let enemy = createEnemy(type, location: getRandomOutsideSpawnLocation(), gameScene: self)
             addChild(enemy)
-            numOfEnemies += 1
             enemy.move()
         }
     }
     
-    func spawnEnemyCircle(_ type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) {
+    func spawnEnemyCircle(_ type: EnemyTypes, count: CGFloat, center: CGPoint, radius: CGFloat?) -> [Enemy] {
         let r = (radius != nil) ? radius : (100 + 50 * (count - 1))
+        var circleEnemies: [Enemy] = []
+        
         for i in 0..<Int(count) {
             let angle = CGFloat(i) * 360.0 / count
             let pos = CGPoint(
                 x: center.x + cos(angle * degreesToRadians) * r!,
                 y: center.y + sin(angle * degreesToRadians) * r!)
-            let enemy = createEnemy(type, location: pos)
+            let enemy = createEnemy(type, location: pos, gameScene: self)
             addChild(enemy)
-            numOfEnemies += 1
+            circleEnemies.append(enemy)
         }
+        
+        return circleEnemies
     }
     
-    func gameOver() {
-        backgroundMusicPlayer.stop()
-        gameManager.loadGameOverScene(score)
+    func spawnPowerUp(_ location: CGPoint) {
+        let type: PowerTypes
+        
+        let dice = Int.random(1...1000)
+        switch dice {
+        case 1...50:
+            if player.life < player.maxLife {
+                type = PowerTypes.life
+            } else {
+                return
+            }
+            break
+        default:
+            return
+        }
+        
+        let powerUp = createPowerUp(type, location: location)
+        addChild(powerUp)
+        
+        let count = CGFloat(powerUp.enemyCount)
+        for i in 0..<Int(powerUp.enemyCount) {
+            let radius = 100 + 50 * (count - 1)
+            let angle = CGFloat(i) * 360.0 / count
+            let targetPos = CGPoint(
+                x: location.x + cos(angle * degreesToRadians) * radius,
+                y: location.y + sin(angle * degreesToRadians) * radius)
+            let ninja = NinjaStar(pos: location, toPos: targetPos, gameScene: self)
+            addChild(ninja)
+            powerUp.ninjas.append(ninja)
+        }
     }
     
     

@@ -14,18 +14,18 @@ enum EnemyTypes {
     case ninjaStar
 }
 
-func createEnemy(_ enemyType: EnemyTypes, location: CGPoint) -> Enemy {
+func createEnemy(_ enemyType: EnemyTypes, location: CGPoint, gameScene: GameScene) -> Enemy {
     var enemy: Enemy
     
     switch enemyType {
     case .bouncer:
-        enemy = Bouncer(pos: location)
+        enemy = Bouncer(pos: location, gameScene: gameScene)
         break
     case .seeker:
-        enemy = Seeker(pos: location)
+        enemy = Seeker(pos: location, gameScene: gameScene)
         break
     case .ninjaStar:
-        enemy = NinjaStar(pos: location)
+        enemy = NinjaStar(pos: location, gameScene: gameScene)
         break;
     }
     

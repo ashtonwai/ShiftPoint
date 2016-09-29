@@ -18,10 +18,10 @@ class Bouncer : Enemy {
     var delta: CGFloat
     
     // MARK: - Initialization -
-    init(pos: CGPoint) {
+    init(pos: CGPoint, gameScene: GameScene) {
         self.delta = CGFloat(Int.random(20...30))
         
-        super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color)
+        super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
         let threshold: CGFloat = 10
         let vector = CGPoint(

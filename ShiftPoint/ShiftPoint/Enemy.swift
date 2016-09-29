@@ -14,16 +14,20 @@ class Enemy : SKShapeNode {
     var hitPoints: Int
     var typeColor: SKColor
     var forward: CGPoint = CGPoint(x: 0.0, y: 1.0)
+    var gameScene: GameScene
     
     let scoreSound: SKAction = SKAction.playSoundFileNamed("Score.mp3", waitForCompletion: false)
     
     // MARK: - Initialization -
-    init(size: CGSize, scorePoints: Int, hitPoints: Int, typeColor: SKColor) {
+    init(size: CGSize, scorePoints: Int, hitPoints: Int, typeColor: SKColor, gameScene: GameScene) {
         self.size = size
         self.scorePoints = scorePoints
         self.hitPoints = hitPoints
         self.typeColor = typeColor
+        self.gameScene = gameScene
         super.init()
+        
+        gameScene.numOfEnemies += 1
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,6 +71,7 @@ class Enemy : SKShapeNode {
     }
     
     func onDestroy() {
+        gameScene.numOfEnemies -= 1
         self.removeFromParent()
     }
 }

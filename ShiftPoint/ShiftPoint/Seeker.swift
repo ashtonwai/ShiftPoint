@@ -20,8 +20,8 @@ class Seeker : Enemy {
     var rotateSpeed: CGFloat = 3.0 * π
     
     // MARK: - Initialization -
-    init(pos: CGPoint) {
-        super.init(size: seekerSize, scorePoints: points, hitPoints: hp, typeColor: color)
+    init(pos: CGPoint, gameScene: GameScene) {
+        super.init(size: seekerSize, scorePoints: points, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
         let pathToDraw = CGMutablePath()
         pathToDraw.move(to: CGPoint(x: 0, y: seekerSize.height/2))
