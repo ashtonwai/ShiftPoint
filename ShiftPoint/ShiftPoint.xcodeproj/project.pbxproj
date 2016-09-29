@@ -32,6 +32,7 @@
 		2DB106451D9CA7DE003C415D /* PowerTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106441D9CA7DE003C415D /* PowerTypes.swift */; };
 		2DB106471D9CB865003C415D /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106461D9CB865003C415D /* PowerUp.swift */; };
 		2DB106491D9CB8E9003C415D /* LifeUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106481D9CB8E9003C415D /* LifeUp.swift */; };
+		2DB1064B1D9D6D83003C415D /* DamageOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */; };
 		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB13CE1CEA7459001C109B /* NinjaStar.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
@@ -72,6 +73,7 @@
 		2DB106441D9CA7DE003C415D /* PowerTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerTypes.swift; sourceTree = "<group>"; };
 		2DB106461D9CB865003C415D /* PowerUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		2DB106481D9CB8E9003C415D /* LifeUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeUp.swift; sourceTree = "<group>"; };
+		2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DamageOverlay.swift; sourceTree = "<group>"; };
 		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DCB13CE1CEA7459001C109B /* NinjaStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NinjaStar.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 		2D05EED61C850EE00093A3A3 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
+				2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */,
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
 				2D5488D11D766D3500E81EC0 /* Enemies */,
@@ -350,6 +353,7 @@
 				2DE088561C8ABE1A00BE051C /* GameOverScene.swift in Sources */,
 				2DE880C01C90CF92006F5CE2 /* Seeker.swift in Sources */,
 				2DE088501C8A45C800BE051C /* Bullet.swift in Sources */,
+				2DB1064B1D9D6D83003C415D /* DamageOverlay.swift in Sources */,
 				2DB1063D1D9B2F75003C415D /* MenuViewController.swift in Sources */,
 				2D3F96881C97A5DA00272995 /* Config.swift in Sources */,
 				2D013BB21CEACC4A00FE68D2 /* TutorialScene.swift in Sources */,

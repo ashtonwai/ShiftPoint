@@ -275,6 +275,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     func playerDidCollideWithEnemy(_ thisEnemy: Enemy, thisPlayer: Player) {
         thisEnemy.onDestroy()
         if thisPlayer.onDamaged() {
+            let damageOverlay = DamageOverlay(size: self.size, duration: thisPlayer.damageDuration)
+            addChild(damageOverlay)
+            
             let heart = lives.removeLast()
             heart.run(SKAction.sequence([
                 SKAction.fadeOut(withDuration: 0.2),

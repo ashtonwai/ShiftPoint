@@ -50,6 +50,7 @@ struct Config {
         static let BULLET_POWER_MAX : Int = 3
         static let PLAYER_LIFE      : Int = 5
         static let PLAYER_MAX_LIFE  : Int = 5
+        static let PLAYER_DAMAGE_DURATION : TimeInterval = 1.5
     }
     
     struct Enemy {

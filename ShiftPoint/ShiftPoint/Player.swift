@@ -16,6 +16,7 @@ class Player : SKSpriteNode {
     var autoFiring      : Bool = false
     var life            : Int = Config.Player.PLAYER_LIFE
     let maxLife         : Int = Config.Player.PLAYER_MAX_LIFE
+    let damageDuration  : TimeInterval = Config.Player.PLAYER_DAMAGE_DURATION
     
     let teleportSound: SKAction = SKAction.playSoundFileNamed("Teleport.mp3", waitForCompletion: false)
     let bulletFireSound: SKAction = SKAction.playSoundFileNamed("Laser.mp3", waitForCompletion: false)
@@ -137,9 +138,8 @@ class Player : SKSpriteNode {
         autoFiring = false
         
         let blinkTimes = 6.0
-        let duration = 1.5
-        let blinkAction = SKAction.customAction(withDuration: duration) { node, elapsedTime in
-            let slice = duration / blinkTimes
+        let blinkAction = SKAction.customAction(withDuration: damageDuration) { node, elapsedTime in
+            let slice = self.damageDuration / blinkTimes
             let remainder = Double(elapsedTime).truncatingRemainder(dividingBy: slice)
             node.isHidden = remainder > slice / 2
         }
