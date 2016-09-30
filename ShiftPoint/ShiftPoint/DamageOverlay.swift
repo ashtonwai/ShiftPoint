@@ -14,7 +14,7 @@ class DamageOverlay: SKSpriteNode {
     init(size: CGSize, duration: TimeInterval) {
         self.duration = duration + duration / 2
         
-        let overlay = SKTexture(imageNamed: "DamageOverlay.png")
+        let overlay = SKTexture(imageNamed: "DamageOverlay")
         super.init(texture: overlay, color: UIColor.clear, size: size)
         
         self.name = "damageOverlay"

@@ -286,8 +286,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         }
         
         if thisPlayer.life <= 0 && !Config.Developer.Endless {
-            thisPlayer.onDestroy()
-            gameOver()
+            run(SKAction.sequence([
+                SKAction.run() {
+                    self.physicsWorld.speed = 0
+                    thisPlayer.onDestroy()
+                },
+                SKAction.wait(forDuration: 3.5),
+                SKAction.run {
+                    self.gameOver()
+                }
+            ]))
             return
         }
         

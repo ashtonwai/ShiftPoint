@@ -153,7 +153,41 @@ class Player : SKSpriteNode {
     }
     
     func onDestroy() {
-        self.removeFromParent()
+        invincible = true
+        autoFiring = false
+        
+        let destroy = SKSpriteNode(imageNamed: "player_destroy_1")
+        destroy.position = self.position
+        destroy.zPosition = Config.GameLayer.Animation
+        destroy.zRotation = self.rotateAngle
+        destroy.alpha = 0
+        self.parent!.addChild(destroy)
+        
+        run(SKAction.sequence([
+            SKAction.repeat(SKAction.sequence([
+                SKAction.move(by: CGVector(dx: -20, dy: 0), duration: 0.1),
+                SKAction.move(by: CGVector(dx: 20, dy: 0), duration: 0.1)
+            ]), count: 3),
+            SKAction.group([
+                SKAction.repeat(SKAction.sequence([
+                    SKAction.move(by: CGVector(dx: -20, dy: 0), duration: 0.1),
+                    SKAction.move(by: CGVector(dx: 20, dy: 0), duration: 0.1)
+                ]), count: 2),
+                SKAction.fadeOut(withDuration: 1.0),
+                SKAction.run() {
+                    destroy.run(SKAction.sequence([
+                        SKAction.fadeIn(withDuration: 1.0),
+                        SKAction.group([
+                            self.destroyAnimation(),
+                            SKAction.scale(by: 5.0, duration: 0.5)
+                        ]),
+                        SKAction.fadeOut(withDuration: 1.0),
+                        SKAction.removeFromParent()
+                    ]))
+                }
+            ]),
+            SKAction.removeFromParent()
+        ]))
     }
     
     
@@ -172,5 +206,13 @@ class Player : SKSpriteNode {
             teleportInTextures.append(SKTexture(imageNamed: "teleport_\(i)"))
         }
         return SKAction.animate(with: teleportInTextures, timePerFrame: 0.1)
+    }
+    
+    func destroyAnimation() -> SKAction {
+        var destroyTextures: [SKTexture] = []
+        for i in 2...6 {
+            destroyTextures.append(SKTexture(imageNamed: "player_destroy_\(i)"))
+        }
+        return SKAction.animate(with: destroyTextures, timePerFrame: 0.1)
     }
 }

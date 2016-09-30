@@ -23,7 +23,7 @@ class Bouncer : Enemy {
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
-        let threshold: CGFloat = 15
+        let threshold: CGFloat = 20
         let vector = CGPoint(
             x: CGFloat.random(cos(threshold * degreesToRadians), max:cos((180 - threshold) * degreesToRadians)),
             y: CGFloat.random(sin(threshold * degreesToRadians), max:sin((180 - threshold) * degreesToRadians))
