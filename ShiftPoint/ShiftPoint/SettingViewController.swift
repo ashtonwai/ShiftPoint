@@ -58,6 +58,6 @@ class SettingViewController: UIViewController {
     }
     
     @IBAction func returnToPreviousView(_ sender: UIButton) {
-        _ = self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
 }

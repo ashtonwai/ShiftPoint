@@ -25,17 +25,24 @@
                         <viewControllerLayoutGuide type="top" id="Os9-x1-iZf"/>
                         <viewControllerLayoutGuide type="bottom" id="aUZ-hh-ix9"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="wKj-8R-VRS">
+                    <view key="view" contentMode="scaleAspectFill" id="wKj-8R-VRS">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="fqS-TL-ilM" userLabel="Background"/>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shift Point" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oA1-AZ-8pd" userLabel="GameTitle">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="fqS-TL-ilM" userLabel="Background">
+                                <frame key="frameInset"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Shift Point" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oA1-AZ-8pd" userLabel="GameTitle">
+                                <frame key="frameInset" minX="163" minY="321.5" maxX="163" maxY="321"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" name="6Cells" family="6 Cells" pointSize="120"/>
                                 <color key="textColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6In-qU-JsI" userLabel="StartButton">
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6In-qU-JsI" userLabel="StartButton">
+                                <frame key="frameInset" minX="43.75%" width="12.26%" height="46" maxY="267"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <state key="normal" title="Start">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -44,51 +51,41 @@
                                     <segue destination="BV1-FR-VrT" kind="show" id="NCy-eY-uUL"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZT-rQ-tYE" userLabel="HighScoreButton">
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZT-rQ-tYE" userLabel="HighScoreButton">
+                                <frame key="frameInset" minX="38.28%" width="23.34%" height="46" maxY="213"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <state key="normal" title="High Score">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="yRb-gp-8ja" kind="show" id="rkn-Lg-3t8"/>
+                                    <segue destination="yRb-gp-8ja" kind="presentation" modalTransitionStyle="crossDissolve" id="rkn-Lg-3t8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBa-Iw-Kmn" userLabel="SettingsButton">
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBa-Iw-Kmn" userLabel="SettingsButton">
+                                <frame key="frameInset" minX="40.82%" width="18.26%" height="46" maxY="159"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <state key="normal" title="Settings">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="SDz-v3-WyL" kind="show" id="Ksy-Cw-YVM"/>
+                                    <segue destination="SDz-v3-WyL" kind="presentation" modalTransitionStyle="crossDissolve" id="Ksy-Cw-YVM"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M6H-db-Qax" userLabel="AboutButton">
+                            <button opaque="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M6H-db-Qax" userLabel="AboutButton">
+                                <frame key="frameInset" minX="43.21%" width="13.33%" height="46" maxY="105"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <state key="normal" title="About">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="kSg-dR-tgl" kind="show" id="0Dh-3L-Dx2"/>
+                                    <segue destination="kSg-dR-tgl" kind="presentation" modalTransitionStyle="crossDissolve" id="0Dh-3L-Dx2"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="KBa-Iw-Kmn" firstAttribute="centerX" secondItem="wKj-8R-VRS" secondAttribute="centerX" id="6Gh-bN-TBE"/>
-                            <constraint firstItem="7ZT-rQ-tYE" firstAttribute="centerX" secondItem="wKj-8R-VRS" secondAttribute="centerX" id="B8N-4W-47d"/>
-                            <constraint firstItem="oA1-AZ-8pd" firstAttribute="centerX" secondItem="wKj-8R-VRS" secondAttribute="centerX" id="CsW-nz-GND"/>
-                            <constraint firstItem="M6H-db-Qax" firstAttribute="centerX" secondItem="wKj-8R-VRS" secondAttribute="centerX" id="J1t-do-g0y"/>
-                            <constraint firstItem="aUZ-hh-ix9" firstAttribute="top" secondItem="fqS-TL-ilM" secondAttribute="bottom" id="OTw-DI-1Qm"/>
-                            <constraint firstItem="fqS-TL-ilM" firstAttribute="top" secondItem="wKj-8R-VRS" secondAttribute="top" id="Oh5-0w-0eW"/>
-                            <constraint firstItem="KBa-Iw-Kmn" firstAttribute="top" secondItem="7ZT-rQ-tYE" secondAttribute="bottom" constant="8" id="R5O-ZR-0N3"/>
-                            <constraint firstItem="6In-qU-JsI" firstAttribute="top" secondItem="Os9-x1-iZf" secondAttribute="bottom" constant="381" id="W5J-1N-p0I"/>
-                            <constraint firstItem="fqS-TL-ilM" firstAttribute="leading" secondItem="wKj-8R-VRS" secondAttribute="leading" id="WRi-AV-dzf"/>
-                            <constraint firstAttribute="trailing" secondItem="fqS-TL-ilM" secondAttribute="trailing" id="hdF-1A-WjX"/>
-                            <constraint firstItem="oA1-AZ-8pd" firstAttribute="centerY" secondItem="wKj-8R-VRS" secondAttribute="centerY" id="hel-pO-QIO"/>
-                            <constraint firstItem="6In-qU-JsI" firstAttribute="centerX" secondItem="wKj-8R-VRS" secondAttribute="centerX" id="iRH-1Z-nmv"/>
-                            <constraint firstItem="7ZT-rQ-tYE" firstAttribute="top" secondItem="6In-qU-JsI" secondAttribute="bottom" constant="8" id="ovD-i8-89S"/>
-                            <constraint firstItem="M6H-db-Qax" firstAttribute="top" secondItem="KBa-Iw-Kmn" secondAttribute="bottom" constant="8" id="pmX-5T-B7J"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="HgT-K2-MPs"/>
                     <connections>
@@ -115,7 +112,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="Cum-JJ-eaR" userLabel="Background"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="MainMenu" translatesAutoresizingMaskIntoConstraints="NO" id="Cum-JJ-eaR" userLabel="Background">
+                                <frame key="frameInset" maxX="0.5"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BRw-h2-hjx">
                                 <fontDescription key="fontDescription" name="MicrogrammaDOT-MediumExtended" family="Microgramma D OT" pointSize="40"/>
                                 <state key="normal" title="Return">
@@ -128,12 +128,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Cum-JJ-eaR" secondAttribute="trailing" id="50e-Dd-Cwd"/>
-                            <constraint firstItem="gQ6-tk-dRT" firstAttribute="top" secondItem="Cum-JJ-eaR" secondAttribute="bottom" id="BLS-ae-omO"/>
-                            <constraint firstItem="Cum-JJ-eaR" firstAttribute="top" secondItem="L22-bt-1Nm" secondAttribute="top" id="Gzt-wr-2A5"/>
-                            <constraint firstItem="Cum-JJ-eaR" firstAttribute="leading" secondItem="L22-bt-1Nm" secondAttribute="leading" id="aVG-9S-7zn"/>
-                            <constraint firstItem="gQ6-tk-dRT" firstAttribute="top" secondItem="BRw-h2-hjx" secondAttribute="bottom" constant="50" id="sA6-i8-o8E"/>
-                            <constraint firstItem="BRw-h2-hjx" firstAttribute="centerX" secondItem="L22-bt-1Nm" secondAttribute="centerX" id="ytJ-al-kya"/>
+                            <constraint firstItem="BRw-h2-hjx" firstAttribute="centerX" secondItem="L22-bt-1Nm" secondAttribute="centerX" id="4A6-4m-hOu"/>
+                            <constraint firstItem="gQ6-tk-dRT" firstAttribute="top" secondItem="BRw-h2-hjx" secondAttribute="bottom" constant="50" id="MK9-st-cvT"/>
                         </constraints>
                     </view>
                 </viewController>

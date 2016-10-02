@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class Bouncer : Enemy {
+class Bouncer: Enemy {
     let score: Int = Config.Enemy.Bouncer.BOUNCER_SCORE
     let hp: Int = Config.Enemy.Bouncer.BOUNCER_HEALTH
     let color: SKColor = Config.Enemy.Bouncer.BOUNCER_COLOR
@@ -23,7 +23,7 @@ class Bouncer : Enemy {
         
         super.init(size: bouncerSize, scorePoints: score, hitPoints: hp, typeColor: color, gameScene: gameScene)
         
-        let threshold: CGFloat = 20
+        let threshold: CGFloat = 10
         let vector = CGPoint(
             x: CGFloat.random(cos(threshold * degreesToRadians), max:cos((180 - threshold) * degreesToRadians)),
             y: CGFloat.random(sin(threshold * degreesToRadians), max:sin((180 - threshold) * degreesToRadians))
@@ -62,6 +62,16 @@ class Bouncer : Enemy {
     
     // MARK: - Movement Controls -
     override func move() {
-        self.physicsBody?.applyImpulse(CGVector(dx: forward.x * delta, dy: forward.y * delta))
+        var dx = forward.x * delta
+        var dy = forward.y * delta
+        
+        // make sure bouncer will enter playableRect
+        if fabs(dx) < 0.1 {
+            dx *= 10
+        } else if fabs(dy) < 0.1 {
+            dy *= 10
+        }
+        
+        self.physicsBody?.applyImpulse(CGVector(dx: dx, dy: dy))
     }
 }

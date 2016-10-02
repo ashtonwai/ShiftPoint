@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class PowerUp : SKSpriteNode {
+class PowerUp: SKSpriteNode {
     var powerType: PowerTypes
     var powerName: String
     var enemyCount: Int
@@ -95,17 +95,13 @@ class PowerUp : SKSpriteNode {
     
     
     // MARK: - Event Handlers -
-    func onPickUp(_ player: Player) {
-        run(SKAction.group([
-            SKAction.run() {
-                self.timer!.invalidate()
-                self.boost(player)
-            },
-            pickUpAnimation()
-        ]))
+    func onPickUp(_ player: Player) -> Bool {
+        timer!.invalidate()
+        run(pickUpAnimation())
+        return boost(player)
     }
     
-    func boost(_ player: Player) {
+    func boost(_ player: Player) -> Bool {
         fatalError("Must override!")
     }
     

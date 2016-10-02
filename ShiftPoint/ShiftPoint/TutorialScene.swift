@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDelegate {
+class TutorialScene: SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDelegate {
     let userDefaults = UserDefaults.standard
     var gameManager: GameManager
     var playableRect: CGRect!
@@ -50,6 +50,10 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: size.height-playableMargin*2)
         
         setupWorld()
+        
+        let center = CGPoint(x: size.width/2, y: size.height/2)
+        player = Player(center)
+        addChild(player)
     }
     
     
@@ -143,10 +147,6 @@ class TutorialScene : SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDele
         background.xScale = 1.45
         background.yScale = 1.45
         addChild(background)
-        
-        let center = CGPoint(x: size.width/2, y: size.height/2)
-        player = Player(center)
-        addChild(player)
         
         instruction = SKLabelNode(fontNamed: Config.Font.MainFont)
         instruction.position = CGPoint(x: size.width/2, y: size.height-100)

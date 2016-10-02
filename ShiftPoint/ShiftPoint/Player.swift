@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class Player : SKSpriteNode {
+class Player: SKSpriteNode {
     var prevPosition    : CGPoint = CGPoint.zero
     var rotateAngle     : CGFloat = 0
     var teleporting     : Bool = false
@@ -18,8 +18,8 @@ class Player : SKSpriteNode {
     let maxLife         : Int = Config.Player.PLAYER_MAX_LIFE
     let damageDuration  : TimeInterval = Config.Player.PLAYER_DAMAGE_DURATION
     
-    let teleportSound: SKAction = SKAction.playSoundFileNamed("Teleport.mp3", waitForCompletion: false)
-    let bulletFireSound: SKAction = SKAction.playSoundFileNamed("Laser.mp3", waitForCompletion: false)
+    let teleportSound   : SKAction = SKAction.playSoundFileNamed("Teleport.mp3", waitForCompletion: false)
+    let bulletFireSound : SKAction = SKAction.playSoundFileNamed("Laser.mp3", waitForCompletion: false)
     
     
     // MARK: - Initialization -
@@ -31,6 +31,7 @@ class Player : SKSpriteNode {
         self.anchorPoint.y = 0.35
         self.position = position
         self.zPosition = Config.GameLayer.Sprite
+        self.alpha = 0
         
         self.physicsBody = SKPhysicsBody(rectangleOf: CGSize(
             width: texture.size().width * xScale,
@@ -39,6 +40,8 @@ class Player : SKSpriteNode {
         self.physicsBody?.categoryBitMask = PhysicsCategory.Player
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
         self.physicsBody?.collisionBitMask = PhysicsCategory.None
+        
+        onTeleport(position)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -135,7 +138,7 @@ class Player : SKSpriteNode {
         
         life -= 1
         invincible = true
-        autoFiring = false
+        stopAutoFire()
         
         let blinkTimes = 6.0
         let blinkAction = SKAction.customAction(withDuration: damageDuration) { node, elapsedTime in
@@ -154,7 +157,7 @@ class Player : SKSpriteNode {
     
     func onDestroy() {
         invincible = true
-        autoFiring = false
+        stopAutoFire()
         
         let destroy = SKSpriteNode(imageNamed: "player_destroy_1")
         destroy.position = self.position
@@ -167,7 +170,7 @@ class Player : SKSpriteNode {
             SKAction.repeat(SKAction.sequence([
                 SKAction.move(by: CGVector(dx: -20, dy: 0), duration: 0.1),
                 SKAction.move(by: CGVector(dx: 20, dy: 0), duration: 0.1)
-            ]), count: 3),
+            ]), count: 2),
             SKAction.group([
                 SKAction.repeat(SKAction.sequence([
                     SKAction.move(by: CGVector(dx: -20, dy: 0), duration: 0.1),

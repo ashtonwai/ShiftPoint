@@ -8,10 +8,10 @@
 
 import SpriteKit
 
-class Bullet : SKShapeNode {
-    let bulletSpeed: CGFloat = CGFloat(Config.Player.BULLET_SPEED)
-    let bulletMaxPower: Int = Config.Player.BULLET_POWER_MAX
-    var bulletPower: Int = Config.Player.BULLET_POWER
+class Bullet: SKShapeNode {
+    let bulletSpeed: CGFloat = Config.Bullet.BULLET_SPEED
+    let bulletMaxPower: Int = Config.Bullet.BULLET_POWER_MAX
+    var bulletPower: Int = Config.Bullet.BULLET_POWER
     
     // MARK: - Initialization -
     init(circleOfRadius: CGFloat) {

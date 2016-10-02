@@ -9,10 +9,10 @@
 import SpriteKit
 
 class DamageOverlay: SKSpriteNode {
-    var duration: TimeInterval
+    var duration: TimeInterval = Config.Player.PLAYER_DAMAGE_DURATION
     
-    init(size: CGSize, duration: TimeInterval) {
-        self.duration = duration + duration / 2
+    init(size: CGSize) {
+        self.duration += duration / 2
         
         let overlay = SKTexture(imageNamed: "DamageOverlay")
         super.init(texture: overlay, color: UIColor.clear, size: size)

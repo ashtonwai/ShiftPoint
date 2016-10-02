@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class GameOverScene : SKScene {
+class GameOverScene: SKScene {
     var gameManager: GameManager
     let userDefaults = UserDefaults.standard
     let highscore: Int

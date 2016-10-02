@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class Seeker : Enemy {
+class Seeker: Enemy {
     let points: Int = Config.Enemy.Seeker.SEEKER_SCORE
     let hp: Int = Config.Enemy.Seeker.SEEKER_HEALTH
     let color: SKColor = Config.Enemy.Seeker.SEEKER_COLOR
@@ -55,7 +55,7 @@ class Seeker : Enemy {
         let offset = location - self.position
         direction = offset.normalized()
         velocity = direction * delta
-        position += velocity * CGFloat(deltaTime)
+        self.position += velocity * CGFloat(deltaTime)
         
         // rotation
         let shortest = shortestAngleBetween(self.zRotation + π/2, angle2: velocity.angle)

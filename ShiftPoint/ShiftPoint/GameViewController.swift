@@ -78,12 +78,11 @@ class GameViewController: UIViewController, GameManager {
     
     func willResignActive(_ n:Notification){
         print("willResignActive notification")
-        gameScene?.gameActive = false
+        gameScene?.onGamePaused()
     }
     
     func didBecomeActive(_ n:Notification){
         print("didBecomeActive notification")
-        gameScene?.gameActive = true
     }
     
     func teardownNotifications(){

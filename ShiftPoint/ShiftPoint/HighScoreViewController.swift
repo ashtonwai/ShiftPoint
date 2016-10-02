@@ -10,6 +10,6 @@ import UIKit
 
 class HighScoreViewController: UIViewController {
     @IBAction func returnToPreviousView(_ sender: UIButton) {
-        _ = self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
 }

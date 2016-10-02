@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class LifeUp : PowerUp {
+class LifeUp: PowerUp {
     let type: PowerTypes = PowerTypes.life
     let icon: SKTexture = Config.PowerUp.LifeUp.LIFEUP_ICON
     let label: String = Config.PowerUp.LifeUp.LIFEUP_NAME
@@ -27,10 +27,12 @@ class LifeUp : PowerUp {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func boost(_ player: Player) {
+    override func boost(_ player: Player) -> Bool {
         if self.active && player.life < player.maxLife {
             self.active = false
             player.life += 1
+            return true
         }
+        return false
     }
 }

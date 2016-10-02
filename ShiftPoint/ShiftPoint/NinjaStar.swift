@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class NinjaStar : Enemy {
+class NinjaStar: Enemy {
     let points: Int = Config.Enemy.NinjaStar.NINJA_SCORE
     let hp: Int = Config.Enemy.NinjaStar.NINJA_HEALTH
     let color: SKColor = Config.Enemy.NinjaStar.NINJA_COLOR
