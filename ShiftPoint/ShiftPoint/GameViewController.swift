@@ -56,7 +56,7 @@ class GameViewController: UIViewController, GameManager, GameViewManager {
     }
     
     func loadGameOverScene(_ score: Int) {
-        let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, score: score)
+        let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, gameViewManager: self, score: score)
         let reveal = SKTransition.crossFade(withDuration: 1.0)
         skView.presentScene(gameOverScene, transition: reveal)
     }

@@ -255,7 +255,7 @@
         <!--High Score View Controller-->
         <scene sceneID="ea6-W2-Pzh">
             <objects>
-                <viewController id="yRb-gp-8ja" customClass="HighScoreViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="highScoreView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yRb-gp-8ja" customClass="HighScoreViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CfV-3v-zJq"/>
                         <viewControllerLayoutGuide type="bottom" id="jTc-CT-4W4"/>

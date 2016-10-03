@@ -9,17 +9,21 @@
 import SpriteKit
 
 class GameOverScene: SKScene {
-    var gameManager: GameManager
     let userDefaults = UserDefaults.standard
-    let highscore: Int
-    let score: Int
-    let playButton: SKLabelNode
+    var gameViewManager: GameViewManager
+    var gameManager: GameManager
     
-    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, score: Int) {
+    var playButton: SKLabelNode?
+    var highScoreButton: SKLabelNode?
+    var mainMenuButton: SKLabelNode?
+    var highscore: Int
+    var score: Int
+    
+    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, gameViewManager: GameViewManager, score: Int) {
+        self.gameViewManager = gameViewManager
         self.gameManager = gameManager
-        self.score = score
         self.highscore = userDefaults.object(forKey: "highScore") != nil ? (userDefaults.value(forKey: "highScore") as? Int)! : 0
-        self.playButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        self.score = score
         super.init(size: size)
     }
 
@@ -30,14 +34,14 @@ class GameOverScene: SKScene {
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "GameOver.png")
         background.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        background.zPosition = 0
+        background.zPosition = Config.GameLayer.Background
         background.xScale = 2
         background.yScale = 2
         addChild(background)
         
         let gameover = SKLabelNode(fontNamed: Config.Font.GameOverFont)
         gameover.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        gameover.zPosition = 1
+        gameover.zPosition = Config.GameLayer.HUD
         gameover.horizontalAlignmentMode = .center
         gameover.verticalAlignmentMode = .center
         gameover.fontColor = UIColor.red
@@ -47,7 +51,7 @@ class GameOverScene: SKScene {
         
         let tagLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         tagLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2+50)
-        tagLabel.zPosition = 1
+        tagLabel.zPosition = Config.GameLayer.HUD
         tagLabel.fontColor = UIColor.green
         tagLabel.fontSize = 50
         if score > highscore {
@@ -62,50 +66,79 @@ class GameOverScene: SKScene {
         
         let scoreLabel = SKLabelNode(fontNamed: Config.Font.MainFont)
         scoreLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2-50)
-        scoreLabel.zPosition = 1
+        scoreLabel.zPosition = Config.GameLayer.HUD
         scoreLabel.fontColor = UIColor.green
         scoreLabel.fontSize = 100
         scoreLabel.text = "\(score)"
         scoreLabel.alpha = 0
         addChild(scoreLabel)
         
-        playButton.position = CGPoint(x: self.size.width/2, y: self.size.height/2-400)
-        playButton.zPosition = 1
-        playButton.fontSize = 75
-        playButton.text = "Play Again"
-        playButton.alpha = 0
-        addChild(playButton)
+        playButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        playButton?.position = CGPoint(x: self.size.width/2, y: self.size.height/2-400)
+        playButton?.zPosition = Config.GameLayer.HUD
+        playButton?.fontSize = 60
+        playButton?.text = "Play Again"
+        playButton?.alpha = 0
+        addChild(playButton!)
+        
+        highScoreButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        highScoreButton?.position = CGPoint(x: self.size.width/2, y: self.size.height/2-500)
+        highScoreButton?.zPosition = Config.GameLayer.HUD
+        highScoreButton?.fontSize = 60
+        highScoreButton?.text = "High Score"
+        highScoreButton?.alpha = 0
+        addChild(highScoreButton!)
+        
+        mainMenuButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        mainMenuButton?.position = CGPoint(x: self.size.width/2, y: self.size.height/2-600)
+        mainMenuButton?.zPosition = Config.GameLayer.HUD
+        mainMenuButton?.fontSize = 60
+        mainMenuButton?.text = "Main Menu"
+        mainMenuButton?.alpha = 0
+        addChild(mainMenuButton!)
         
         run(SKAction.sequence([
-            SKAction.run() {
-                gameover.run(SKAction.moveTo(y: self.size.height/2+400, duration: 1.0))
-            },
+            SKAction.run { gameover.run(SKAction.moveTo(y: self.size.height/2+400, duration: 1.0)) },
             SKAction.wait(forDuration: 1.0),
             SKAction.run() {
                 tagLabel.run(SKAction.fadeIn(withDuration: 1.0))
                 scoreLabel.run(SKAction.fadeIn(withDuration: 1.0))
             },
             SKAction.wait(forDuration: 1.0),
-            SKAction.run() {
-                self.playButton.run(SKAction.fadeIn(withDuration: 1.0))
-            }
+            SKAction.run { self.playButton?.run(SKAction.fadeIn(withDuration: 1.0)) },
+            SKAction.wait(forDuration: 0.5),
+            SKAction.run { self.highScoreButton?.run(SKAction.fadeIn(withDuration: 1.0)) },
+            SKAction.wait(forDuration: 0.5),
+            SKAction.run { self.mainMenuButton?.run(SKAction.fadeIn(withDuration: 1.0)) }
         ]))
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch: AnyObject in touches {
-            if atPoint(touch.location(in: self)) == playButton {
-                playButton.fontColor = UIColor.cyan
+            let location = touch.location(in: self)
+            if atPoint(location) == playButton {
+                playButton?.fontColor = UIColor.cyan
+            } else if atPoint(location) == highScoreButton {
+                highScoreButton?.fontColor = UIColor.cyan
+            } else if atPoint(location) == mainMenuButton {
+                mainMenuButton?.fontColor = UIColor.cyan
             }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        playButton.fontColor = UIColor.white
+        playButton?.fontColor = UIColor.white
         for touch: AnyObject in touches {
-            if atPoint(touch.location(in: self)) == playButton {
-                playButton.fontColor = UIColor.white
+            let location = touch.location(in: self)
+            if atPoint(location) == playButton {
+                playButton?.fontColor = UIColor.white
                 gameManager.loadGameScene()
+            } else if atPoint(location) == highScoreButton {
+                highScoreButton?.fontColor = UIColor.white
+                gameViewManager.showHighScoreView()
+            } else if atPoint(location) == mainMenuButton {
+                mainMenuButton?.fontColor = UIColor.white
+                gameViewManager.showMainMenuView()
             }
         }
     }
