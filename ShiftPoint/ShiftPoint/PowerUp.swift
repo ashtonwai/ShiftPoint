@@ -11,6 +11,7 @@ import SpriteKit
 class PowerUp: SKSpriteNode {
     var powerType: PowerTypes
     var powerName: String
+    var powerScore: Int
     var enemyCount: Int
     var powerTime: Int
     
@@ -19,10 +20,13 @@ class PowerUp: SKSpriteNode {
     var active: Bool = true
     var ninjas: [NinjaStar] = []
     
+    let pickUpSound: SKAction = SKAction.playSoundFileNamed("PickUp.wav", waitForCompletion: false)
+    
     // MARK: - Initialization -
-    init(texture: SKTexture, powerType: PowerTypes, powerName: String, enemyCount: Int, powerTime: Int) {
+    init(texture: SKTexture, powerType: PowerTypes, powerName: String, powerScore: Int, enemyCount: Int, powerTime: Int) {
         self.powerType = powerType
         self.powerName = powerName
+        self.powerScore = powerScore
         self.enemyCount = enemyCount
         self.powerTime = powerTime
         super.init(texture: texture, color: UIColor.clear, size: texture.size())
@@ -44,6 +48,7 @@ class PowerUp: SKSpriteNode {
     // MARK: - Particles -
     func powerMarker() -> SKLabelNode {
         let powerMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
+        powerMarker.verticalAlignmentMode = .center
         powerMarker.fontColor = UIColor.yellow
         powerMarker.fontSize = 30
         powerMarker.text = "\(powerName)"
@@ -89,17 +94,17 @@ class PowerUp: SKSpriteNode {
                     }
                 },
                 SKAction.removeFromParent()
-                ]))
+            ]))
         }
     }
     
-    func onPickUp(_ player: Player) -> Bool {
+    func onPickUp(_ player: Player) {
         timer!.invalidate()
         run(pickUpAnimation())
-        return boost(player)
+        boost(player)
     }
     
-    func boost(_ player: Player) -> Bool {
+    func boost(_ player: Player) {
         fatalError("Must override!")
     }
     

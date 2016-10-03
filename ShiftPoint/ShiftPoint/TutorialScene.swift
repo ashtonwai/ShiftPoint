@@ -62,7 +62,6 @@ class TutorialScene: SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDeleg
         if touches.count > 0 {
             let location = touches.first!.location(in: self)
             
-            
             if atPoint(location) == skipButton {
                 skipButton.fontColor = SKColor.cyan
                 return
@@ -110,6 +109,7 @@ class TutorialScene: SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDeleg
         for touch: AnyObject in touches {
             if atPoint(touch.location(in: self)) == skipButton {
                 skipButton.fontColor = SKColor.white
+                userDefaults.set(true, forKey: "skipTutorial")
                 gameManager.loadGameScene()
             }
         }

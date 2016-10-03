@@ -58,6 +58,7 @@ struct Config {
     
     struct Enemy {
         static let ENEMY_MAX_SIZE     : CGSize = CGSize(width: 100, height: 100)
+        static let ENEMY_HIT_SCORE    : Int = 50
         struct Bouncer {
             static let BOUNCER_SCORE  : Int = 100
             static let BOUNCER_HEALTH : Int = 1
@@ -82,6 +83,7 @@ struct Config {
         struct LifeUp {
             static let LIFEUP_ICON        : SKTexture = SKTexture.init(imageNamed: "LifeUp")
             static let LIFEUP_NAME        : String = "LIFE UP"
+            static let LIFEUP_SCORE       : Int = 100
             static let LIFEUP_TIME        : Int = 7
             static let LIFEUP_ENEMY_COUNT : Int = 4
         }

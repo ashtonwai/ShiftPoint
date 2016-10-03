@@ -10,12 +10,14 @@ import SpriteKit
 
 class Enemy : SKShapeNode {
     var size: CGSize
+    var typeColor: SKColor
     var scorePoints: Int
     var hitPoints: Int
-    var typeColor: SKColor
+    let basePoints = Config.Enemy.ENEMY_HIT_SCORE
     var forward: CGPoint = CGPoint(x: 0.0, y: 1.0)
     var gameScene: GameScene
     
+    let hitSound: SKAction = SKAction.playSoundFileNamed("Hit.wav", waitForCompletion: false)
     let scoreSound: SKAction = SKAction.playSoundFileNamed("Score.mp3", waitForCompletion: false)
     
     // MARK: - Initialization -
@@ -48,6 +50,7 @@ class Enemy : SKShapeNode {
     
     func scoreMarker() -> SKLabelNode {
         let scoreMarker = SKLabelNode(fontNamed: Config.Font.MainFont)
+        scoreMarker.verticalAlignmentMode = .center
         scoreMarker.fontColor = UIColor.cyan
         scoreMarker.fontSize = 30
         scoreMarker.text = "\(scorePoints)"
@@ -66,12 +69,19 @@ class Enemy : SKShapeNode {
         hitPoints -= damage
         if hitPoints <= 0 {
             onDestroy()
+        } else {
+            run(SKAction.sequence([
+                self.hitSound,
+                SKAction.fadeAlpha(to: 0.5, duration: 0.05),
+                SKAction.fadeIn(withDuration: 0.05)
+            ]))
         }
         return hitPoints
     }
     
     func onDestroy() {
         gameScene.numOfEnemies -= 1
+        gameScene.checkEnemyCount()
         self.removeFromParent()
     }
 }

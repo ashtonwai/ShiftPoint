@@ -290,9 +290,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     SKAction.run() {
                         self.addChild(emitter)
                         self.addChild(scoreMarker)
-                        
                         self.updateScore(thisEnemy.scorePoints)
-                        self.checkEnemyCount()
                     }
                 ]),
                 SKAction.wait(forDuration: 0.3),
@@ -305,6 +303,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.spawnPowerUp(thisEnemy.position)
                 }
             ]))
+        } else {
+            updateScore(thisEnemy.basePoints)
         }
     }
     
@@ -324,20 +324,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 return
             }
         }
-        
-        checkEnemyCount()
     }
     
     func playerDidCollideWithPowerUp(_ thisPlayer: Player, thisPower: PowerUp) {
         switch thisPower.powerType {
         case .life:
             if let power = thisPower as? LifeUp {
-                if power.onPickUp(thisPlayer) {
-                    lives[thisPlayer.life-1].run(SKAction.fadeAlpha(to: 0.75, duration: 0.2))
-                }
+                power.onPickUp(thisPlayer)
+                lives[thisPlayer.life-1].run(SKAction.fadeAlpha(to: 0.75, duration: 0.2))
             }
             break
         }
+        
+        let powerMarker = thisPower.powerMarker()
+        run(SKAction.sequence([
+            thisPower.pickUpSound,
+            SKAction.run() {
+                self.addChild(powerMarker)
+                self.updateScore(thisPower.powerScore)
+            },
+            SKAction.wait(forDuration: 0.5),
+            SKAction.run() {
+                powerMarker.run(SKAction.sequence([
+                    SKAction.fadeOut(withDuration: 0.5),
+                    SKAction.removeFromParent()
+                ]))
+            }
+        ]))
     }
     
     func checkBounds(_ enemy: Enemy) {
