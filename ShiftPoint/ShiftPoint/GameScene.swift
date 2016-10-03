@@ -283,7 +283,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if thisEnemy.onHit(bulletPower) <= 0 {
             let emitter = thisEnemy.explosion()
             let scoreMarker = thisEnemy.scoreMarker()
-            
             run(SKAction.sequence([
                 SKAction.group([
                     thisEnemy.scoreSound,
@@ -410,13 +409,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if self.wave > 5 && self.wave % 3 == 0 {
                     // Spawn half of enemies as Seekers
                     waveEnemyCount /= 2
-                    let circleEnemyCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
-                    //let location = CGPoint(x: self.playableRect.width/2, y: self.playableRect.height/2)
-                    let location = self.player.position
-                    _ = self.spawnEnemyCircle(EnemyTypes.seeker, count: circleEnemyCount, center: location, radius: 500)
+                    let seekerCount = self.wave < 16 ? CGFloat(waveEnemyCount) : 16.0
+                    self.spawnEnemy(.seeker, count: Int(seekerCount))
                 }
                 else if self.wave > 10 && self.wave % 3 == 2 {
-                    // Spawn Ninja Stars
+                    self.spawnInnerEnemy(.giant, count: Int.random(1...4))
                 }
                 self.spawnEnemy(.bouncer, count: waveEnemyCount)
             }
@@ -427,7 +424,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for _ in 0..<count {
             let enemy = createEnemy(type, location: getRandomOutsideSpawnLocation(), gameScene: self)
             addChild(enemy)
-            enemy.move()
+            if type == .bouncer {
+                enemy.move()
+            }
         }
     }
     
@@ -446,6 +445,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         return circleEnemies
+    }
+    
+    func spawnInnerEnemy(_ type: EnemyTypes, count: Int) {
+        for _ in 0..<count {
+            var location = getRandomInsideSpawnLocation()
+            while location < player.frame {
+                location = getRandomInsideSpawnLocation()
+            }
+            let enemy = createEnemy(type, location: location, gameScene: self)
+            addChild(enemy)
+        }
     }
     
     func spawnPowerUp(_ location: CGPoint) {

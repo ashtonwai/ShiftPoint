@@ -72,10 +72,16 @@ struct Config {
             static let SEEKER_SIZE    : CGSize = CGSize(width: 50, height: 50)
         }
         struct NinjaStar {
-            static let NINJA_SCORE    : Int = 500
+            static let NINJA_SCORE    : Int = 300
             static let NINJA_HEALTH   : Int = 3
             static let NINJA_COLOR    : SKColor = SKColor.yellow
             static let NINJA_SIZE     : CGSize = CGSize(width: 50, height: 50)
+        }
+        struct Giant {
+            static let GIANT_SCORE    : Int = 1000
+            static let GIANT_HEALTH   : Int = 10
+            static let GIANT_COLOR    : SKColor = SKColor.purple
+            static let GIANT_SIZE     : CGSize = CGSize(width: 50, height: 50)
         }
     }
     

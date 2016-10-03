@@ -14,6 +14,7 @@ class NinjaStar: Enemy {
     let color: SKColor = Config.Enemy.NinjaStar.NINJA_COLOR
     let ninjaSize: CGSize = Config.Enemy.NinjaStar.NINJA_SIZE
     
+    // MARK: - Initialization -
     init(pos: CGPoint, gameScene: GameScene) {
         super.init(size: ninjaSize, scorePoints: points, hitPoints: hp, typeColor: color, gameScene: gameScene)
         

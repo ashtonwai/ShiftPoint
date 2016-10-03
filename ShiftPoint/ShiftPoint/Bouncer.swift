@@ -31,14 +31,11 @@ class Bouncer: Enemy {
         self.forward = vector.normalized() // bottom facing up
         //self.forward = CGPoint.randomUnitVector()
         
-        let width = bouncerSize.width
-        let height = bouncerSize.height
-        let center = CGPoint(x: -width/2, y: -height/2)
-        
         self.name = "bouncer"
         self.position = pos
         self.zPosition = Config.GameLayer.Sprite
         
+        let center = CGPoint(x: -bouncerSize.width/2, y: -bouncerSize.height/2)
         self.path = CGPath(rect: CGRect(origin: center, size: bouncerSize), transform: nil)
         self.fillColor = SKColor.clear
         self.strokeColor = color

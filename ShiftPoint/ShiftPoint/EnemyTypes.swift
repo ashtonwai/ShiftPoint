@@ -12,6 +12,7 @@ enum EnemyTypes {
     case bouncer
     case seeker
     case ninjaStar
+    case giant
 }
 
 func createEnemy(_ enemyType: EnemyTypes, location: CGPoint, gameScene: GameScene) -> Enemy {
@@ -26,7 +27,10 @@ func createEnemy(_ enemyType: EnemyTypes, location: CGPoint, gameScene: GameScen
         break
     case .ninjaStar:
         enemy = NinjaStar(pos: location, gameScene: gameScene)
-        break;
+        break
+    case .giant:
+        enemy = Giant(pos: location, gameScene: gameScene)
+        break
     }
     
     return enemy
