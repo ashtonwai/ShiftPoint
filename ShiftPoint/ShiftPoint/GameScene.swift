@@ -19,8 +19,9 @@ struct PhysicsCategory {
 
 import SpriteKit
 
-class GameScene : SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameManager         : GameManager
+    var gameViewManager     : GameViewManager
     var gamePaused          : Bool = false
     var gameOver            : Bool = false
     
@@ -48,8 +49,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: - Initialization -
-    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager) {
+    init(size: CGSize, scaleMode: SKSceneScaleMode, gameManager: GameManager, gameViewManager: GameViewManager) {
         self.gameManager = gameManager
+        self.gameViewManager = gameViewManager
         
         // make constant for max aspect ratio support 4:3
         let maxAspectRatio: CGFloat = 4.0 / 3.0
@@ -153,36 +155,69 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Event Handlers -
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !gameOver else {
+            return
+        }
+        
         if touches.count > 0 {
             let location = touches.first!.location(in: self)
             
-            if atPoint(location) == pauseButton {
-                pauseButton?.run(SKAction.colorize(with: UIColor.cyan, colorBlendFactor: 1.0, duration: 0.1))
-                return
-            } else if atPoint(location) == pauseOverlay?.resumeButton {
-                pauseOverlay?.resumeButton?.fontColor = UIColor.cyan
-                return
-            }
-            
-            if !gamePaused && !gameOver {
+            if !gamePaused {
+                if atPoint(location) == pauseButton {
+                    pauseButton?.run(SKAction.colorize(with: UIColor.cyan, colorBlendFactor: 1.0, duration: 0.1))
+                    return
+                }
+                
                 player.onTeleport(location)
+            } else {
+                if atPoint(location) == pauseOverlay?.resumeButton {
+                    pauseOverlay?.resumeButton?.fontColor = UIColor.cyan
+                } else if atPoint(location) == pauseOverlay?.restartButton {
+                    pauseOverlay?.restartButton?.fontColor = UIColor.cyan
+                } else if atPoint(location) == pauseOverlay?.settingsButton {
+                    pauseOverlay?.settingsButton?.fontColor = UIColor.cyan
+                } else if atPoint(location) == pauseOverlay?.mainMenuButton {
+                    pauseOverlay?.mainMenuButton?.fontColor = UIColor.cyan
+                }
             }
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { 
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !gameOver else {
+            return
+        }
+        
         for touch: AnyObject in touches {
-            if atPoint(touch.location(in: self)) == pauseButton {
-                pauseButton?.run(SKAction.colorize(with: Config.Font.GameUIColor, colorBlendFactor: 1.0, duration: 0.1))
-                onGamePaused()
-            } else if atPoint(touch.location(in: self)) == pauseOverlay?.resumeButton {
-                pauseOverlay?.resumeButton?.fontColor = UIColor.white
-                onGameResume()
+            let location = touch.location(in: self)
+            if !gamePaused {
+                if atPoint(location) == pauseButton {
+                    pauseButton?.run(SKAction.colorize(with: Config.Font.GameUIColor, colorBlendFactor: 1.0, duration: 0.1))
+                    onGamePaused()
+                }
+            } else {
+                if atPoint(location) == pauseOverlay?.resumeButton {
+                    pauseOverlay?.resumeButton?.fontColor = UIColor.white
+                    onGameResume()
+                } else if atPoint(location) == pauseOverlay?.restartButton {
+                    pauseOverlay?.restartButton?.fontColor = UIColor.white
+                    pauseOverlay?.onRestart()
+                } else if atPoint(location) == pauseOverlay?.settingsButton {
+                    pauseOverlay?.settingsButton?.fontColor = UIColor.white
+                    pauseOverlay?.onSettings()
+                } else if atPoint(location) == pauseOverlay?.mainMenuButton {
+                    pauseOverlay?.mainMenuButton?.fontColor = UIColor.white
+                    pauseOverlay?.onMainMenu()
+                }
             }
         }
     }
     
     func panDetected(_ recognizer: UIPanGestureRecognizer) {
+        guard !gameOver else {
+            return
+        }
+        
         if !gamePaused {
             if recognizer.state == .changed {
                 var touchLocation = recognizer.location(in: recognizer.view)
@@ -277,6 +312,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         if !thisPlayer.teleporting {
             thisEnemy.onDestroy()
         }
+        
         if thisPlayer.onDamaged() {
             let damageOverlay = DamageOverlay(size: self.size)
             addChild(damageOverlay)
@@ -284,17 +320,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             lives[thisPlayer.life].run(SKAction.fadeOut(withDuration: 0.2))
             
             if thisPlayer.life <= 0 && !Config.Developer.Endless {
-                gameOver = true
-                run(SKAction.sequence([
-                    SKAction.run() {
-                        self.physicsWorld.speed = 0
-                        thisPlayer.onDestroy()
-                    },
-                    SKAction.wait(forDuration: 3.5),
-                    SKAction.run {
-                        self.onGameOver()
-                    }
-                ]))
+                onGameOver()
                 return
             }
         }
@@ -327,7 +353,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         gamePaused = true
         physicsWorld.speed = 0
         backgroundMusicPlayer.pause()
-        pauseOverlay = PauseOverlay(size: size, gameScene: self)
+        pauseOverlay = PauseOverlay(size: self.size, gameManager: self.gameManager, gameViewManager: self.gameViewManager)
         addChild(pauseOverlay!)
     }
     
@@ -344,8 +370,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     }
     
     func onGameOver() {
-        backgroundMusicPlayer.stop()
-        gameManager.loadGameOverScene(score)
+        gameOver = true
+        physicsWorld.speed = 0
+        run(SKAction.sequence([
+            SKAction.run { self.player.onDestroy() },
+            SKAction.wait(forDuration: 3.5),
+            SKAction.run() {
+                backgroundMusicPlayer.stop()
+                self.gameManager.loadGameOverScene(self.score)
+            }
+        ]))
     }
     
     

@@ -62,12 +62,13 @@ class TutorialScene: SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDeleg
         if touches.count > 0 {
             let location = touches.first!.location(in: self)
             
-            player.onTeleport(location)
             
             if atPoint(location) == skipButton {
                 skipButton.fontColor = SKColor.cyan
-                gameManager.loadGameScene()
+                return
             }
+            
+            player.onTeleport(location)
             
             if atPoint(location) == targetCircle {
                 if currentPoint < 3 {
@@ -101,6 +102,15 @@ class TutorialScene: SKScene, UIGestureRecognizerDelegate, SKPhysicsContactDeleg
                         SKAction.fadeAlpha(to: 0.75, duration: 0)
                     ])
                 ])))
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch: AnyObject in touches {
+            if atPoint(touch.location(in: self)) == skipButton {
+                skipButton.fontColor = SKColor.white
+                gameManager.loadGameScene()
             }
         }
     }

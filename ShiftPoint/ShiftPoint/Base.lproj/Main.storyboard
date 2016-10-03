@@ -140,7 +140,7 @@
         <!--Setting View Controller-->
         <scene sceneID="d6A-ID-ABE">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" id="SDz-v3-WyL" customClass="SettingViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="settingsView" modalTransitionStyle="crossDissolve" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SDz-v3-WyL" customClass="SettingViewController" customModule="Shift_Point" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iUs-Py-YBj"/>
                         <viewControllerLayoutGuide type="bottom" id="h2J-8k-nqd"/>

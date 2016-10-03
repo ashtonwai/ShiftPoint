@@ -34,6 +34,7 @@
 		2DB106491D9CB8E9003C415D /* LifeUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106481D9CB8E9003C415D /* LifeUp.swift */; };
 		2DB1064B1D9D6D83003C415D /* DamageOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */; };
 		2DB1064D1DA025C8003C415D /* PauseOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1064C1DA025C8003C415D /* PauseOverlay.swift */; };
+		2DB106531DA1D6E8003C415D /* GameViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB106521DA1D6E8003C415D /* GameViewManager.swift */; };
 		2DB1E23F1CDF078B00655701 /* EnemyTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */; };
 		2DCB13CF1CEA7459001C109B /* NinjaStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCB13CE1CEA7459001C109B /* NinjaStar.swift */; };
 		2DE0884E1C88895800BE051C /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE0884D1C88895800BE051C /* Player.swift */; };
@@ -76,6 +77,7 @@
 		2DB106481D9CB8E9003C415D /* LifeUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifeUp.swift; sourceTree = "<group>"; };
 		2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DamageOverlay.swift; sourceTree = "<group>"; };
 		2DB1064C1DA025C8003C415D /* PauseOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseOverlay.swift; sourceTree = "<group>"; };
+		2DB106521DA1D6E8003C415D /* GameViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewManager.swift; sourceTree = "<group>"; };
 		2DB1E23E1CDF078B00655701 /* EnemyTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyTypes.swift; sourceTree = "<group>"; };
 		2DCB13CE1CEA7459001C109B /* NinjaStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NinjaStar.swift; sourceTree = "<group>"; };
 		2DE0884D1C88895800BE051C /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				2D013BB11CEACC4A00FE68D2 /* TutorialScene.swift */,
 				2D430A241C7F50BD0075F316 /* GameScene.swift */,
 				2DE088551C8ABE1A00BE051C /* GameOverScene.swift */,
+				2DB1064F1DA1B240003C415D /* Overlays */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -124,8 +127,6 @@
 		2D05EED61C850EE00093A3A3 /* Sprites */ = {
 			isa = PBXGroup;
 			children = (
-				2DB1064C1DA025C8003C415D /* PauseOverlay.swift */,
-				2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */,
 				2DE0884D1C88895800BE051C /* Player.swift */,
 				2DE0884F1C8A45C800BE051C /* Bullet.swift */,
 				2D5488D11D766D3500E81EC0 /* Enemies */,
@@ -215,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				2DAAEC0E1CD860A70080A957 /* GameManager.swift */,
+				2DB106521DA1D6E8003C415D /* GameViewManager.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -236,6 +238,15 @@
 				2DAAEC171CD96CB60080A957 /* Emitter */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		2DB1064F1DA1B240003C415D /* Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				2DB1064C1DA025C8003C415D /* PauseOverlay.swift */,
+				2DB1064A1D9D6D83003C415D /* DamageOverlay.swift */,
+			);
+			name = Overlays;
 			sourceTree = "<group>";
 		};
 		2DB1E2401CDF158700655701 /* Enums */ = {
@@ -340,6 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DB106531DA1D6E8003C415D /* GameViewManager.swift in Sources */,
 				2DB106411D9C7790003C415D /* HighScoreViewController.swift in Sources */,
 				2DFEA0541CDECD1E00C4FEC9 /* Enemy.swift in Sources */,
 				2DB106471D9CB865003C415D /* PowerUp.swift in Sources */,

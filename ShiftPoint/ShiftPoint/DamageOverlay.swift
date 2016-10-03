@@ -11,6 +11,7 @@ import SpriteKit
 class DamageOverlay: SKSpriteNode {
     var duration: TimeInterval = Config.Player.PLAYER_DAMAGE_DURATION
     
+    // MARK: - Initialization -
     init(size: CGSize) {
         self.duration += duration / 2
         
@@ -29,6 +30,8 @@ class DamageOverlay: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Animations -
     func fadeOutOverlay() {
         self.run(SKAction.sequence([
             SKAction.fadeOut(withDuration: duration),

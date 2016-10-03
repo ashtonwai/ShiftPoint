@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController, GameManager {
+class GameViewController: UIViewController, GameManager, GameViewManager {
     let userDefaults = UserDefaults.standard
     let screenSize = CGSize(width: 2048, height: 1536)
     let scaleMode = SKSceneScaleMode.aspectFill
@@ -43,7 +43,7 @@ class GameViewController: UIViewController, GameManager {
     }
     
     func loadGameScene() {
-        gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self)
+        gameScene = GameScene(size: screenSize, scaleMode: scaleMode, gameManager: self, gameViewManager: self)
         let reveal = SKTransition.crossFade(withDuration: 1.0)
         if Config.Developer.DebugMode {
             skView.showsFPS = true
@@ -59,6 +59,26 @@ class GameViewController: UIViewController, GameManager {
         let gameOverScene = GameOverScene(size: screenSize, scaleMode: scaleMode, gameManager: self, score: score)
         let reveal = SKTransition.crossFade(withDuration: 1.0)
         skView.presentScene(gameOverScene, transition: reveal)
+    }
+    
+    
+    // MARK: - View Navigation -
+    func showMainMenuView() {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    func showSettingsView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let settingsView = storyboard.instantiateViewController(withIdentifier: "settingsView")
+        settingsView.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+        self.navigationController?.present(settingsView, animated: true, completion: nil)
+    }
+    
+    func showHighScoreView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let highScoreView = storyboard.instantiateViewController(withIdentifier: "highScoreView")
+        highScoreView.modalTransitionStyle = UIModalTransitionStyle.flipHorizontal
+        self.navigationController?.present(highScoreView, animated: true, completion: nil)
     }
     
     

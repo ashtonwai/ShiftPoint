@@ -9,9 +9,18 @@
 import SpriteKit
 
 class PauseOverlay: SKSpriteNode {
-    var resumeButton: SKLabelNode?
+    var gameManager: GameManager
+    var gameViewManager: GameViewManager
     
-    init(size: CGSize, gameScene: GameScene) {
+    var resumeButton: SKLabelNode?
+    var restartButton: SKLabelNode?
+    var mainMenuButton: SKLabelNode?
+    var settingsButton: SKLabelNode?
+    
+    // MARK: - Initialization -
+    init(size: CGSize, gameManager: GameManager, gameViewManager: GameViewManager) {
+        self.gameManager = gameManager
+        self.gameViewManager = gameViewManager
         super.init(texture: nil, color: UIColor.clear, size: size)
         
         self.name = "pauseOverlay"
@@ -39,6 +48,27 @@ class PauseOverlay: SKSpriteNode {
         resumeButton?.text = "Resume"
         addChild(resumeButton!)
         
+        restartButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        restartButton?.position = CGPoint(x: size.width/2, y: size.height/2-350)
+        restartButton?.zPosition = Config.GameLayer.Overlay
+        restartButton?.fontSize = 60
+        restartButton?.text = "Restart"
+        addChild(restartButton!)
+        
+        settingsButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        settingsButton?.position = CGPoint(x: size.width/2, y: size.height/2-450)
+        settingsButton?.zPosition = Config.GameLayer.Overlay
+        settingsButton?.fontSize = 60
+        settingsButton?.text = "Settings"
+        addChild(settingsButton!)
+        
+        mainMenuButton = SKLabelNode(fontNamed: Config.Font.MainFont)
+        mainMenuButton?.position = CGPoint(x: size.width/2, y: size.height/2-550)
+        mainMenuButton?.zPosition = Config.GameLayer.Overlay
+        mainMenuButton?.fontSize = 60
+        mainMenuButton?.text = "Main Menu"
+        addChild(mainMenuButton!)
+        
         run(SKAction.fadeIn(withDuration: 0.25))
     }
     
@@ -46,10 +76,24 @@ class PauseOverlay: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Event Handlers -
     func onResume() {
         run(SKAction.sequence([
             SKAction.fadeOut(withDuration: 0.25),
             SKAction.removeFromParent()
         ]))
+    }
+    
+    func onRestart() {
+        gameManager.loadGameScene()
+    }
+    
+    func onSettings() {
+        gameViewManager.showSettingsView()
+    }
+    
+    func onMainMenu() {
+        gameViewManager.showMainMenuView()
     }
 }

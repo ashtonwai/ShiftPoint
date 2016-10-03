@@ -58,7 +58,7 @@ class Player: SKSpriteNode {
     }
     
     
-    // MARK: - Event Handler -
+    // MARK: - Event Handlers -
     func onTeleport(_ location: CGPoint) {
         let teleport = SKAction.sequence([
             SKAction.group([

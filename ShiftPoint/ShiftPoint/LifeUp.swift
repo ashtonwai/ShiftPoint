@@ -15,6 +15,7 @@ class LifeUp: PowerUp {
     let count: Int = Config.PowerUp.LifeUp.LIFEUP_ENEMY_COUNT
     let time: Int = Config.PowerUp.LifeUp.LIFEUP_TIME
     
+    // MARK: - Initialization -
     init(pos: CGPoint) {
         super.init(texture: icon, powerType: type, powerName: label, enemyCount: count, powerTime: time)
         
@@ -27,6 +28,8 @@ class LifeUp: PowerUp {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - Event Handlers -
     override func boost(_ player: Player) -> Bool {
         if self.active && player.life < player.maxLife {
             self.active = false

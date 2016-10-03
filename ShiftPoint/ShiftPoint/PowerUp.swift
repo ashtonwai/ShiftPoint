@@ -53,7 +53,7 @@ class PowerUp: SKSpriteNode {
     }
     
     
-    // MARK: - Helper Functions -
+    // MARK: - Event Handlers -
     func countdown() {
         if remainTime > 1 {
             remainTime -= 1
@@ -66,7 +66,7 @@ class PowerUp: SKSpriteNode {
                             ninja.rotate(1.5)
                         }
                     }
-                ]))
+                    ]))
             } else if remainTime < powerTime / 3 {
                 run(SKAction.group([
                     SKAction.fadeAlpha(to: 0.25, duration: 0.5),
@@ -75,7 +75,7 @@ class PowerUp: SKSpriteNode {
                             ninja.rotate(1.0)
                         }
                     }
-                ]))
+                    ]))
             }
         } else {
             timer!.invalidate()
@@ -89,12 +89,10 @@ class PowerUp: SKSpriteNode {
                     }
                 },
                 SKAction.removeFromParent()
-            ]))
+                ]))
         }
     }
     
-    
-    // MARK: - Event Handlers -
     func onPickUp(_ player: Player) -> Bool {
         timer!.invalidate()
         run(pickUpAnimation())
